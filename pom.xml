@@ -25,6 +25,8 @@
         <module>TDM</module>
         <module>CTF</module>
         <module>HardPoint</module>
+        <module>Infected</module>
+        <module>SAD</module>
     </modules>
     <!-- Properties. -->
     <properties>
