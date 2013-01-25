@@ -14,14 +14,4 @@
     <properties>
         <project.mainclass>com.CodCraft.ctf.CodCraft</project.mainclass>
     </properties>
-    <!-- Dependencies -->
-    <dependencies>
-        <dependency>
-            <groupId>org.kitteh.tag</groupId>
-            <artifactId>TagAPI</artifactId>
-            <version>1.8</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/TagAPI.jar</systemPath>
-        </dependency>
-    </dependencies>
 </project>
