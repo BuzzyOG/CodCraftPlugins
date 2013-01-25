@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- Project information. -->
+    <groupId>com.CodCraft</groupId>
+    <artifactId>CodCraftPlugins</artifactId>
+    <version>${codcraft.plugin.version}</version>
+    <name>CCPlugins</name>
+    <description>Parent project for CodCraft plugins.</description>
+    <packaging>pom</packaging>
+    <!-- Developers. -->
+    <developers>
+        <developer>
+            <id>Joby</id>
+        </developer>
+        <developer>
+            <id>Mitsugaru</id>
+            <email>mitsugaru@gmail.com</email>
+            <timezone>-7</timezone>
+        </developer>
+    </developers>
+    <!-- Modules. -->
+    <modules>
+        <module>FFA</module>
+        <module>TDM</module>
+        <module>CTF</module>
+        <module>HardPoint</module>
+    </modules>
+    <!-- Properties. -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <codcraft.plugin.version>0.5</codcraft.plugin.version>
+    </properties>
+    <!-- Dependencies. -->
+    <dependencies>
+        <dependency>
+            <groupId>com.CodCraft</groupId>
+            <artifactId>CodCraftAPI</artifactId>
+            <version>9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.4.6-R0.3</version>
+        </dependency>
+    </dependencies>
+    <!-- Repositories for dependencies. -->
+    <repositories>
+        <repository>
+            <id>Bukkit</id>
+            <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
+    </repositories>
+    <!-- Reporting plugins. -->
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.7.1</version>
+                <configuration>
+                    <minimumTokens>50</minimumTokens>
+                    <ignoreIdentifiers>true</ignoreIdentifiers>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+    <!-- Build configuration. -->
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
