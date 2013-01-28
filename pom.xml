@@ -31,7 +31,7 @@
     <!-- Properties. -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <codcraft.plugin.version>0.5</codcraft.plugin.version>
+        <codcraft.plugin.version>10</codcraft.plugin.version>
     </properties>
     <!-- Dependencies. -->
     <dependencies>

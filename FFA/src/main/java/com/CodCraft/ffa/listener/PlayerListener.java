@@ -42,19 +42,27 @@ import com.CodCraft.api.modules.Weapons;
 import com.CodCraft.ffa.CodCraft;
 import com.CodCraft.ffa.Users;
 
-public class PlayerListener extends CodCraft implements Listener {
-   private PlayerListener instance;
-   private GameManager gm = instance.getApi().getModuleForClass(GameManager.class);
-   private Weapons weap = instance.getApi().getModuleForClass(Weapons.class);
-   private TeamPlayer player = instance.getApi().getModuleForClass(TeamPlayer.class);
-   private Perks perk = instance.getApi().getModuleForClass(Perks.class);
-   private Teleport t = instance.getApi().getModuleForClass(Teleport.class);
-   private Teams team = instance.getApi().getModuleForClass(Teams.class);
-   private KillStreaks killStreaks = instance.getApi().getModuleForClass(KillStreaks.class);
-
-   public PlayerListener getInstance() {
-      return instance;
+public class PlayerListener implements Listener {
+   private CodCraft instance;
+   private GameManager gm;
+   private Weapons weap;
+   private TeamPlayer player;
+   private Perks perk;
+   private Teleport t;
+   private Teams team;
+   private KillStreaks killStreaks;
+   
+   public PlayerListener(CodCraft codCraft) {
+	      instance = codCraft;
+	      gm = instance.getApi().getModuleForClass(GameManager.class);
+	      weap = instance.getApi().getModuleForClass(Weapons.class);
+	      player = instance.getApi().getModuleForClass(TeamPlayer.class);
+	      perk = instance.getApi().getModuleForClass(Perks.class);
+	      t = instance.getApi().getModuleForClass(Teleport.class);
+	      team = instance.getApi().getModuleForClass(Teams.class);
+	      killStreaks = instance.getApi().getModuleForClass(KillStreaks.class);
    }
+
 
    @EventHandler
    public void onJoin(PlayerJoinEvent e) {
@@ -88,10 +96,10 @@ public class PlayerListener extends CodCraft implements Listener {
       player.Addplaying(p);
       @SuppressWarnings("unchecked")
       HashMap<String, String> hm = (HashMap<String, String>) MYSQL.SinglePlayerALLData(p).clone();
-      getGame().PlayerKills.put(p.getName(), Integer.parseInt(hm.get("PlayerKills")));
-      getGame().PlayerDeaths.put(p.getName(), Integer.parseInt(hm.get("PlayerDeaths")));
-      getGame().PlayerWins.put(p.getName(), Integer.parseInt(hm.get("PlayerWins")));
-      getGame().PlayerLoses.put(p.getName(), Integer.parseInt(hm.get("Playerlosses")));
+      instance.getGame().PlayerKills.put(p.getName(), Integer.parseInt(hm.get("PlayerKills")));
+      instance. getGame().PlayerDeaths.put(p.getName(), Integer.parseInt(hm.get("PlayerDeaths")));
+      instance.getGame().PlayerWins.put(p.getName(), Integer.parseInt(hm.get("PlayerWins")));
+      instance.getGame().PlayerLoses.put(p.getName(), Integer.parseInt(hm.get("Playerlosses")));
       Users.PlayerGun.put(p, hm.get("PlayerGun"));
       Users.PlayerAttactment.put(p, hm.get("PlayerAttactment"));
       Users.PlayerPerk1.put(p, hm.get("PlayerPerk1"));
@@ -333,12 +341,22 @@ public class PlayerListener extends CodCraft implements Listener {
 
    @EventHandler
 	public void Scavenger(PlayerPickupItemEvent e) {
-		Player p = e.getPlayer();
-		if(e.getItem().getItemStack().getType() == Material.CHEST) {
+		final Player p = e.getPlayer();
+		instance.getLogger().info(e.getItem().getItemStack().getType().toString());
+		if(e.getItem().getItemStack().getType().equals(Material.CHEST)) {
+			instance.getLogger().info(e.getItem().getItemStack().getType().toString());
 			if (Users.PlayerPerk2.get(p).equalsIgnoreCase("Scavenger")) {
 				perk.Scavenger(p, Users.Playerequipment.get(p));
 			}
-			p.getInventory().remove(new ItemStack(Material.CHEST));
+			Bukkit.getScheduler().runTaskLater(instance, new Runnable() {
+				
+				@Override
+				public void run() {
+					p.getInventory().remove(new ItemStack(Material.CHEST));
+					
+				}
+			}, 2);
+			
 		}
  	}
 

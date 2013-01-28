@@ -52,6 +52,12 @@ public void setApi(CCAPI api) {
 private Game game;
 
    public void onEnable() {
+	   final Plugin apiplugin = this.getServer().getPluginManager().getPlugin("CodCraftAPI");
+	   if(apiplugin != null) {
+		   api =  (CCAPI) apiplugin;
+	   } else {
+		   System.out.println("Did Not Get Plugin");
+	   }
       getCommand("CaC").setExecutor(new CacComamnd(this));
       getCommand("EndRound").setExecutor(new EndRoundCommand(this));
       getCommand("Spec").setExecutor(new SpecCommand(this));
@@ -62,12 +68,14 @@ private Game game;
       getCommand("buddy").setExecutor(new BuddyCommand(this));
       getCommand("switch").setExecutor(new SwitchCommand(this));
       new MapLoader();
+      getLogger().info(MapLoader.Maps.toString());
       api.getModuleForClass(GameManager.class).SetCurrentWorld("Nuketown");
       plugin = this;
       PluginManager pm = this.getServer().getPluginManager();
-      pm.registerEvents(new PlayerListener(), this);
-      pm.registerEvents(new BlockListener(), this);
+      pm.registerEvents(new PlayerListener(this), this);
+      pm.registerEvents(new BlockListener(this), this);
       pm.registerEvents(new GameListener(this), this);
+      game = new Game(this);
       game.Lobby();
       game.MainTimer();
       spawnLoad();

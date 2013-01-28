@@ -1,7 +1,5 @@
 package com.CodCraft.ffa.GM;
 
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -23,7 +21,7 @@ import com.CodCraft.ffa.CodCraft;
 import com.CodCraft.ffa.MapLoader;
 import com.CodCraft.ffa.Users;
 
-public class Game extends CodCraft {
+public class Game {
 	public  String  world1;
 	public  String  world2;
 	public  ArrayList<World> worlds = new ArrayList<World>();
@@ -34,10 +32,20 @@ public class Game extends CodCraft {
 	public  HashMap<String, Integer> PlayerDeaths = new HashMap<String, Integer>();
 	public  HashMap<String, Integer> PlayerWins = new HashMap<String, Integer>();
 	public  HashMap<String, Integer> PlayerLoses = new HashMap<String, Integer>();
-	private GameManager gm = api.getModuleForClass(GameManager.class);
-	private Weapons weap = api.getModuleForClass(Weapons.class);
-	private TeamPlayer player = api.getModuleForClass(TeamPlayer.class);
-	private Perks perk = api.getModuleForClass(Perks.class);
+	private CodCraft API;
+	private GameManager gm;
+	private Weapons weap;
+	private TeamPlayer player;
+	private Perks perk;
+	
+	public Game(CodCraft plugin) {
+		API = plugin;
+		gm = API.api.getModuleForClass(GameManager.class);
+		weap = API.api.getModuleForClass(Weapons.class);
+		player = API.api.getModuleForClass(TeamPlayer.class);
+		perk = API.api.getModuleForClass(Perks.class);
+	}
+	
 	public void Lobby() {
 		gm.setLobbyTime(60);
 		for(World w : MapLoader.Maps) {
@@ -52,27 +60,12 @@ public class Game extends CodCraft {
 	    world1 = "";
 	    world2 = "";	    	    	
 	    world1 = worlds.get(rnd.nextInt(worlds.size())).getName();
-	    while (world1.equalsIgnoreCase("CreateAClass")) {
-	    	
-	    	world1 = worlds.get(rnd.nextInt(worlds.size())).getName();
-	    }
+	    API.getLogger().info(world1);
 	    world2 = worlds.get(rnd.nextInt(worlds.size())).getName();
-	    while (world2.equalsIgnoreCase("CreateAClass")) {
-	    	world2 = worlds.get(rnd.nextInt(worlds.size())).getName();
-	    	}
-	    if(world1.equalsIgnoreCase("CreateAClass")) {
-	    	while (world1.equalsIgnoreCase("CreateAClass")) {
-	    		
-	    		world1 = worlds.get(rnd.nextInt(worlds.size())).getName();
-	    		}
-	    	}
-	    if(world2.equalsIgnoreCase("CreateAClass")) {
-	    	while (world2.equalsIgnoreCase("CreateAClass")) {
-	    		world2 = worlds.get(rnd.nextInt(worlds.size())).getName();
-	    		}
-	    	}
+	    API.getLogger().info(world2);
 	    while(world1.equals(world2)) {
 	    	world2 = worlds.get(rnd.nextInt(worlds.size())).getName();
+	    	 API.getLogger().info(world2);
 	    	}
 	    Bukkit.broadcastMessage(ChatColor.DARK_RED +"[CodCraft]" + ChatColor.WHITE + "Please vote for the next map:");
 	    Bukkit.broadcastMessage(ChatColor.DARK_RED +"[CodCraft]" + ChatColor.WHITE +    world1);
@@ -103,12 +96,12 @@ public class Game extends CodCraft {
 		gm.setGameTimer(600);
 		perk.StartMaratonTimer();
 		perk.StartLightWightTimer();
-		api.getModuleForClass(Teleport.class).RespawnAll(gm.GetCurrentWorld());
+		API.api.getModuleForClass(Teleport.class).RespawnAll(gm.GetCurrentWorld());
 		
 	}
 	public  void MainTimer() {
 		@SuppressWarnings({ "unused", "deprecation" })
-		int TaskID = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {		
+		int TaskID = API.getServer().getScheduler().scheduleAsyncRepeatingTask(API, new Runnable() {		
 			@Override
 			public void run() {
 				//Bukkit.broadcastMessage(CCGameManger.getGameTime() + " " + CCGameManger.getLobbyTime());

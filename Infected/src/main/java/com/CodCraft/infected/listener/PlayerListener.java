@@ -277,16 +277,26 @@ public class PlayerListener implements Listener {
 			}
 		}
 	}
-	@EventHandler
-	public void Scavenger(PlayerPickupItemEvent e) {
-		Player p = e.getPlayer();
-		if(e.getItem().getItemStack().getType() == Material.CHEST) {
-			if (Users.PlayerPerk2.get(p).equalsIgnoreCase("Scavenger")) {
-				plugin.api.getPerks().Scavenger(p, Users.Playerequipment.get(p));
+	   @EventHandler
+		public void Scavenger(PlayerPickupItemEvent e) {
+			final Player p = e.getPlayer();
+			plugin.getLogger().info(e.getItem().getItemStack().getType().toString());
+			if(e.getItem().getItemStack().getType().equals(Material.CHEST)) {
+				plugin.getLogger().info(e.getItem().getItemStack().getType().toString());
+				if (Users.PlayerPerk2.get(p).equalsIgnoreCase("Scavenger")) {
+					perk.Scavenger(p, Users.Playerequipment.get(p));
+				}
+				Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+					
+					@Override
+					public void run() {
+						p.getInventory().remove(new ItemStack(Material.CHEST));
+						
+					}
+				}, 2);
+				
 			}
-			p.getInventory().remove(new ItemStack(Material.CHEST));
-		}
- 	}
+	 	}
 	@EventHandler
 	public void EggHit(ProjectileHitEvent e) {
 		Entity entity = e.getEntity();

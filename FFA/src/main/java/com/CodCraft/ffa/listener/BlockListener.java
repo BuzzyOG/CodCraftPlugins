@@ -13,11 +13,12 @@ import org.bukkit.inventory.ItemStack;
 import com.CodCraft.api.modules.Weapons;
 import com.CodCraft.ffa.CodCraft;
 
-public class BlockListener extends CodCraft implements Listener {
-	private static PlayerListener instance;
-    public static PlayerListener getInstance() {
-        return instance;
-    }
+public class BlockListener implements Listener {
+	private CodCraft plugin;
+	public BlockListener(CodCraft plugin) {
+		this.plugin = plugin;
+	}
+
     @EventHandler
     public void onExsplotion(EntityExplodeEvent  e) {
     	e.blockList().clear();
@@ -38,7 +39,7 @@ public class BlockListener extends CodCraft implements Listener {
 	@EventHandler
     public void SwitchPlaceE(BlockPlaceEvent e) {
     	if(e.getBlockPlaced().getType() == Material.LEVER) {
-    		api.getModuleForClass(Weapons.class).setC4Spot(e.getPlayer(), e.getBlockPlaced().getLocation());
+    		plugin.api.getModuleForClass(Weapons.class).setC4Spot(e.getPlayer(), e.getBlockPlaced().getLocation());
     		e.getPlayer().getInventory().setItemInHand(new ItemStack(Material.STICK));
     		e.getPlayer().updateInventory();
     	}
