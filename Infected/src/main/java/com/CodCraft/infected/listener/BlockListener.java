@@ -10,11 +10,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.CodCraft.api.modules.Weapons;
 import com.CodCraft.infected.CodCraft;
-import com.CodCraft.infected.api.modules.BlockManger;
 
 public class BlockListener extends CodCraft implements Listener {
-	   @SuppressWarnings("unused")
 	private CodCraft plugin;
 
 	   public BlockListener(CodCraft plugin) {
@@ -30,7 +29,6 @@ public class BlockListener extends CodCraft implements Listener {
     	if (p.getGameMode() == GameMode.CREATIVE) {	
     	} else {
     		if(event.getBlock().getType() == Material.THIN_GLASS) {
-    			BlockManger.addGlassPlace(event.getBlock().getLocation());
     		} else {
         		event.setCancelled(true);
     		}
@@ -40,7 +38,7 @@ public class BlockListener extends CodCraft implements Listener {
 	@EventHandler
     public void SwitchPlaceE(BlockPlaceEvent e) {
     	if(e.getBlockPlaced().getType() == Material.LEVER) {
-    		api.getWeapons().setC4Spot(e.getPlayer(), e.getBlockPlaced().getLocation());
+    		plugin.api.getModuleForClass(Weapons.class).setC4Spot(e.getPlayer(), e.getBlockPlaced().getLocation());
     		e.getPlayer().getInventory().setItemInHand(new ItemStack(Material.STICK));
     		e.getPlayer().updateInventory();
     	}

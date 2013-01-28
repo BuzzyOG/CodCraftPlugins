@@ -14,6 +14,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.CodCraft.api.CCAPI;
+import com.CodCraft.api.modules.Cac;
+import com.CodCraft.api.modules.GameManager;
+import com.CodCraft.api.modules.Teleport;
+import com.CodCraft.api.modules.Weapons;
 import com.CodCraft.infected.GM.Game;
 import com.CodCraft.infected.commands.AdminCommands;
 import com.CodCraft.infected.commands.BuddyCommand;
@@ -63,7 +67,7 @@ public class CodCraft extends JavaPlugin {
 	      getCommand("buddy").setExecutor(new BuddyCommand(this));
 	      getCommand("switch").setExecutor(new SwitchCommand(this));
 	      new MapLoader();
-	      api.getGameManager().SetCurrentWorld("Nuketown");
+	      api.getModuleForClass(GameManager.class).SetCurrentWorld("Nuketown");
 	      PluginManager pm = this.getServer().getPluginManager();
 	      pm.registerEvents(new PlayerListener(this), this);
 	      pm.registerEvents(new BlockListener(this), this);
@@ -71,14 +75,13 @@ public class CodCraft extends JavaPlugin {
 	      game.Lobby();
 	      game.MainTimer();
 	      spawnLoad();
-	      api.getTelport().setLocations1(Teamone);
-	      api.getTelport().setLocations2(Teamtwo);
-	      api.getCac().usedefaultspawns();
-	      api.getWeapons().LoadGuns();
-	      api.getGameManager().setAmmontofTeams(2);
+	      api.getModuleForClass(Teleport.class).setLocations1(Teamone);
+	      api.getModuleForClass(Teleport.class).setLocations2(Teamtwo);
+	      api.getModuleForClass(Cac.class).usedefaultspawns();
+	      api.getModuleForClass(Weapons.class).LoadGuns();
+	      api.getModuleForClass(GameManager.class).setAmmontofTeams(2);
 	}
 	public void onDisable() {
-		BlockManger.AllRespawnGlassblocks();
 		getGame().Savedata();
 	}
     @SuppressWarnings("unchecked")

@@ -42,18 +42,25 @@ import com.CodCraft.api.modules.Weapons;
 import com.CodCraft.tdm.CodCraft;
 import com.CodCraft.tdm.Users;
 
-public class PlayerListener extends CodCraft implements Listener {
-   private static PlayerListener instance;
-   private GameManager gm = instance.getApi().getModuleForClass(GameManager.class);
-   private Weapons weap = instance.getApi().getModuleForClass(Weapons.class);
-   private TeamPlayer player = instance.getApi().getModuleForClass(TeamPlayer.class);
-   private Perks perk = instance.getApi().getModuleForClass(Perks.class);
-   private Teleport t = instance.getApi().getModuleForClass(Teleport.class);
-   private Teams team = instance.getApi().getModuleForClass(Teams.class);
-   private KillStreaks killStreaks = instance.getApi().getModuleForClass(KillStreaks.class);
+public class PlayerListener implements Listener {
+   private CodCraft plugin;
+   private GameManager gm;
+   private Weapons weap;
+   private TeamPlayer player;
+   private Perks perk;
+   private Teleport t ;
+   private Teams team;
+   private KillStreaks killStreaks;
 
-   public static PlayerListener getInstance() {
-      return instance;
+   public PlayerListener(CodCraft plugin) {
+	   this.plugin = plugin;
+	   gm = plugin.getApi().getModuleForClass(GameManager.class);
+	   weap = plugin.getApi().getModuleForClass(Weapons.class);
+	   player = plugin.getApi().getModuleForClass(TeamPlayer.class);
+	   perk = plugin.getApi().getModuleForClass(Perks.class);
+	   t = plugin.getApi().getModuleForClass(Teleport.class);
+	   team = plugin.getApi().getModuleForClass(Teams.class);
+	   killStreaks = plugin.getApi().getModuleForClass(KillStreaks.class);
    }
 
    @EventHandler
@@ -75,10 +82,10 @@ public class PlayerListener extends CodCraft implements Listener {
       player.Addplaying(p);
       @SuppressWarnings("unchecked")
       HashMap<String, String> hm = (HashMap<String, String>) MYSQL.SinglePlayerALLData(p).clone();
-      getGame().PlayerKills.put(p.getName(), Integer.parseInt(hm.get("PlayerKills")));
-      getGame().PlayerDeaths.put(p.getName(), Integer.parseInt(hm.get("PlayerDeaths")));
-      getGame().PlayerWins.put(p.getName(), Integer.parseInt(hm.get("PlayerWins")));
-      getGame().PlayerLoses.put(p.getName(), Integer.parseInt(hm.get("Playerlosses")));
+      plugin.game.PlayerKills.put(p.getName(), Integer.parseInt(hm.get("PlayerKills")));
+      plugin.game.PlayerDeaths.put(p.getName(), Integer.parseInt(hm.get("PlayerDeaths")));
+      plugin.game.PlayerWins.put(p.getName(), Integer.parseInt(hm.get("PlayerWins")));
+      plugin.game.PlayerLoses.put(p.getName(), Integer.parseInt(hm.get("Playerlosses")));
       Users.PlayerGun.put(p, hm.get("PlayerGun"));
       Users.PlayerAttactment.put(p, hm.get("PlayerAttactment"));
       Users.PlayerPerk1.put(p, hm.get("PlayerPerk1"));
@@ -114,7 +121,7 @@ public class PlayerListener extends CodCraft implements Listener {
          player.AddDeath(p);
          gm.setTeamscore(team.getTeam(k),
                gm.getTeamScore(team.getTeam(k)) + 1);
-         api.getModuleForClass(GUI.class).updatelist();
+         plugin.api.getModuleForClass(GUI.class).updatelist();
          weap.SetSniperStage(p, 1);
          gm.DetectWin(75);
          weap.RemoveC4(p);
@@ -233,7 +240,7 @@ public class PlayerListener extends CodCraft implements Listener {
       if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
          if(e.getClickedBlock().getType() == Material.WALL_SIGN) {
             Sign s = (Sign) e.getClickedBlock().getState();
-            Integer j = instance.api.getModuleForClass(Cac.class).GetBox(p);
+            Integer j = plugin.api.getModuleForClass(Cac.class).GetBox(p);
             if(s.getLine(0).equals("Lobby" + j)) {
                if(s.getLine(1).equals("Class")) {
                   if(s.getLine(3).equals("1"))

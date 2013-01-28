@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.CodCraft.api.modules.GUI;
 import com.CodCraft.infected.CodCraft;
 
 public class GuiCommand implements CommandExecutor {
@@ -22,10 +23,11 @@ public class GuiCommand implements CommandExecutor {
       }
       Player p = (Player) sender;
       if(label.equalsIgnoreCase("gui")) {
-         if(plugin.getApi().getGui().isModeUser(p)) {
-            plugin.getApi().getGui().removeModeuser(p);
+    	  GUI gui = plugin.getApi().getModuleForClass(GUI.class);
+         if(gui.isModeUser(p)) {
+        	 gui.removeModeuser(p);
          } else {
-            plugin.getApi().getGui().AddModeUser(p);
+        	 gui.AddModeUser(p);
          }
          return true;
       }

@@ -1,5 +1,6 @@
 package com.CodCraft.infected.commands;
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -7,6 +8,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.kitteh.tag.TagAPI;
 
+
+import com.CodCraft.api.modules.GUI;
+import com.CodCraft.api.modules.GameManager;
+import com.CodCraft.api.modules.KillStreaks;
+import com.CodCraft.api.modules.TeamPlayer;
+import com.CodCraft.api.modules.Teams;
 import com.CodCraft.infected.CodCraft;
 
 public class AdminCommands implements CommandExecutor {
@@ -28,19 +35,30 @@ public class AdminCommands implements CommandExecutor {
                if(p.hasPermission("CodCraft.setKills") || p.isOp()) {
                   if(args.length == 3) {
                      int amount = Integer.parseInt(args[2]);
-                     plugin.getApi().getPlayers().setKills(p, amount);
-                     plugin.getApi().getKillStreaks().setKills(p, amount);
-                     plugin.getApi().getGui().updatelist();
-                     plugin.getApi().getGameManager().setTeamscore(plugin.getApi().getTeams().getTeam(p), amount);
-                     plugin.getApi().getGameManager().DetectWin(75);
+                     TeamPlayer player = plugin.getApi().getModuleForClass(TeamPlayer.class);
+                     KillStreaks killStreaks = plugin.getApi().getModuleForClass(KillStreaks.class);
+                     GUI GUI = plugin.getApi().getModuleForClass(GUI.class);
+                     GameManager manger = plugin.getApi().getModuleForClass(GameManager.class);
+                     Teams t = plugin.getApi().getModuleForClass(Teams.class);
+                     player.setKills(p, amount);
+                     killStreaks.setKills(p, amount);
+                     GUI.updatelist();
+                     manger.setTeamscore(t.getTeam(p), amount);
+                     manger.DetectWin(75);
                      return true;
                   } else if(args.length == 4) {
+                      TeamPlayer player = plugin.getApi().getModuleForClass(TeamPlayer.class);
+                      KillStreaks killStreaks = plugin.getApi().getModuleForClass(KillStreaks.class);
+                      GUI GUI = plugin.getApi().getModuleForClass(GUI.class);
+                      GameManager manger = plugin.getApi().getModuleForClass(GameManager.class);
+                      Teams t = plugin.getApi().getModuleForClass(Teams.class);
                      int amount = Integer.parseInt(args[2]);
                      Player k = Bukkit.getPlayer(args[3]);
-                     plugin.getApi().getPlayers().setKills(k, amount);
-                     plugin.getApi().getGui().updatelist();
-                     plugin.getApi().getGameManager().setTeamscore(plugin.getApi().getTeams().getTeam(k), amount);
-                     plugin.getApi().getGameManager().DetectWin(75);
+                     player.setKills(k, amount);
+                     killStreaks.setKills(p, amount);
+                     GUI.updatelist();
+                     manger.setTeamscore(t.getTeam(k), amount);
+                     manger.DetectWin(75);
                      return true;
                   }
 
@@ -50,17 +68,19 @@ public class AdminCommands implements CommandExecutor {
             if(args[1].equalsIgnoreCase("team")) {
                Player p = (Player) sender;
                if(p.hasPermission("CodCraft.setTeam") || p.isOp()) {
+            	   GUI GUI = plugin.getApi().getModuleForClass(GUI.class);
+            	   Teams t = plugin.getApi().getModuleForClass(Teams.class);
                   if(args.length == 3) {
                      int team = Integer.parseInt(args[2]);
-                     plugin.getApi().getTeams().setTeam(p, team);
-                     plugin.getApi().getGui().updatelist();
+                     t.setTeam(p, team);
+                     GUI.updatelist();
                      TagAPI.refreshPlayer(p);
                      return true;
                   } else if(args.length == 4) {
                      int team = Integer.parseInt(args[2]);
                      Player k = Bukkit.getPlayer(args[3]);
-                     plugin.getApi().getTeams().setTeam(k, team);
-                     plugin.getApi().getGui().updatelist();
+                     t.setTeam(k, team);
+                     GUI.updatelist();
                      TagAPI.refreshPlayer(k);
                      return true;
                   }

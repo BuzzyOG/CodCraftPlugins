@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.infected.CodCraft;
 
 public class EndRoundCommand implements CommandExecutor {
@@ -16,7 +17,7 @@ public class EndRoundCommand implements CommandExecutor {
    @Override
    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
       if(label.equalsIgnoreCase("endround") && args.length == 0) {
-         plugin.getApi().getGameManager().endRound();
+         plugin.getApi().getModuleForClass(GameManager.class).endRound();
          plugin.getGame().Savedata();
       }
       return false;

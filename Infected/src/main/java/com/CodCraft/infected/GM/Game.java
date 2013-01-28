@@ -10,14 +10,17 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.modules.MYSQL;
+import com.CodCraft.api.modules.Perks;
+import com.CodCraft.api.modules.TeamPlayer;
+import com.CodCraft.api.modules.Teleport;
+import com.CodCraft.api.modules.Weapons;
 import com.CodCraft.infected.CodCraft;
 import com.CodCraft.infected.MapLoader;
 import com.CodCraft.infected.Users;
-import com.CodCraft.infected.api.GameState.Gamemodes;
 
 public class Game {
-	private CodCraft plugin;
 	public static  String  world1;
 	public static String  world2;
 	public  ArrayList<World> worlds = new ArrayList<World>();
@@ -28,21 +31,30 @@ public class Game {
 	public  HashMap<String, Integer> PlayerDeaths = new HashMap<String, Integer>();
 	public  HashMap<String, Integer> PlayerWins = new HashMap<String, Integer>();
 	public  HashMap<String, Integer> PlayerLoses = new HashMap<String, Integer>();
+	private CodCraft plugin;
+	private GameManager gm;
+	private Weapons weap;
+	private TeamPlayer player;
+	private Perks perk;
 	
 	public Game(CodCraft plugin) {
 		this.plugin = plugin;
+		gm = plugin.api.getModuleForClass(GameManager.class);
+		weap = plugin.api.getModuleForClass(Weapons.class);
+		player = plugin.api.getModuleForClass(TeamPlayer.class);
+		perk = plugin.api.getModuleForClass(Perks.class);
 	}
 
 	public  void Lobby() {
-		plugin.getApi().getGameManager().setLobbyTime(60);
+		gm.setLobbyTime(60);
 		for(World w : MapLoader.Maps) {
         	if(!(w.getName().equals("lobby"))) {
         		worlds.add(w);
         	} else {
         	}	
         }
-		plugin.getApi().getGameManager().RemoveVotes();
-	    plugin.getApi().getGameManager().RemoveVoters();
+		gm.RemoveVotes();
+	    gm.RemoveVoters();
 	    world1 = "";
 	    world2 = "";	    	    	
 	    world1 = worlds.get(rnd.nextInt(worlds.size())).getName();
@@ -74,31 +86,30 @@ public class Game {
 	    Bukkit.broadcastMessage(ChatColor.DARK_RED +"[CodCraft]" + ChatColor.WHITE +    world2);
 	    Bukkit.broadcastMessage(ChatColor.DARK_RED +"[CodCraft]" + ChatColor.WHITE + "using /vote <mapName>");
 
-	    plugin.getApi().getGameManager().setVotes(0, world1);
-	    plugin.getApi().getGameManager().setVotes(0, world2);
+	    gm.setVotes(0, world1);
+	    gm.setVotes(0, world2);
     			
 		}
 	public  void PreGame() {
-		for(String s : plugin.getApi().getPlayers().Whoplaying()) {
+		for(String s : player.Whoplaying()) {
 			Player p = Bukkit.getPlayer(s);
-			plugin.getApi().getPlayers().ClearInventory(p);
+			player.ClearInventory(p);
 			PreGameLocation.put(p, p.getLocation());
-	    	plugin.getApi().getWeapons().GiveKnife(p);
-	    	plugin.getApi().getWeapons().GiveWeapons(p, Users.PlayerGun.get(p), Users.Playerequipment.get(p), Users.PlayerPerk1.get(p), Users.PlayerPerk2.get(p), Users.PlayerPerk3.get(p), Users.PlayerKIllStreaks.get(p));
+	    	weap.GiveKnife(p);
+	    	weap.GiveWeapons(p, Users.PlayerGun.get(p), Users.Playerequipment.get(p), Users.PlayerPerk1.get(p), Users.PlayerPerk2.get(p), Users.PlayerPerk3.get(p), Users.PlayerKIllStreaks.get(p));
 		}
 		PreGame = 3;
 	}
 	public  void Games() {
-		if(plugin.getApi().getGameManager().getVotes(world2) > plugin.getApi().getGameManager().getVotes(world1)) {
-			plugin.getApi().getGameManager().SetCurrentWorld(world2);	
+		if(gm.getVotes(world2) > gm.getVotes(world1)) {
+			gm.SetCurrentWorld(world2);	
 		} else {
-			plugin.getApi().getGameManager().SetCurrentWorld(world1);	
+			gm.SetCurrentWorld(world1);	
 		}
-		plugin.getApi().getGameManager().setGameTimer(600);
-		plugin.getApi().getGamemode().setGameMode(Gamemodes.INGAME);
-		plugin.getApi().getPerks().StartMaratonTimer();
-		plugin.getApi().getPerks().StartLightWightTimer();
-		plugin.getApi().getTelport().RespawnAll(plugin.getApi().getGameManager().GetCurrentWorld());
+		gm.setGameTimer(600);
+		perk.StartMaratonTimer();
+		perk.StartLightWightTimer();
+		plugin.getApi().getModuleForClass(Teleport.class).RespawnAll(gm.GetCurrentWorld());
 		
 	}
 	public  void MainTimer() {
@@ -106,31 +117,31 @@ public class Game {
 		int TaskID = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {		
 			@Override
 			public void run() {
-				//Bukkit.broadcastMessage(plugin.getApi().getGameManager().getGameTime() + " " + plugin.getApi().getGameManager().getLobbyTime());
-				if(plugin.getApi().getGameManager().getLobbyTime() >= 1) {
-					for (String s : plugin.getApi().getPlayers().Whoplaying()) {
+				//Bukkit.broadcastMessage(gm.getGameTime() + " " + gm.getLobbyTime());
+				if(gm.getLobbyTime() >= 1) {
+					for (String s : player.Whoplaying()) {
 						Player p = Bukkit.getPlayer(s);
-						p.setLevel(plugin.getApi().getGameManager().getLobbyTime());
+						p.setLevel(gm.getLobbyTime());
 					}
-					if(plugin.getApi().getGameManager().getLobbyTime() == 40) {
+					if(gm.getLobbyTime() == 40) {
 						DisplayMessage();
 					}
-					if(plugin.getApi().getGameManager().getLobbyTime() == 20) {
+					if(gm.getLobbyTime() == 20) {
 						DisplayMessage();
 					}
-					if(plugin.getApi().getGameManager().getLobbyTime() == 1) {
+					if(gm.getLobbyTime() == 1) {
 						PreGame();
 					}
-					int i = plugin.getApi().getGameManager().getLobbyTime();
+					int i = gm.getLobbyTime();
 					i--;
-					plugin.getApi().getGameManager().setLobbyTime(i);
+					gm.setLobbyTime(i);
 				}
 				if(PreGame >= 1) {
-					for(String s : plugin.getApi().getPlayers().Whoplaying()) {
+					for(String s : player.Whoplaying()) {
 						Player p = Bukkit.getPlayer(s);
 						p.teleport(PreGameLocation.get(p));
 					}
-					for (String s : plugin.getApi().getPlayers().Whoplaying()) {
+					for (String s : player.Whoplaying()) {
 						Player p = Bukkit.getPlayer(s);
 						p.setLevel(PreGame);
 					}
@@ -140,14 +151,14 @@ public class Game {
 					PreGame--;
 
 				}
-				if(plugin.getApi().getGameManager().getGameTime() >= 1) {
-					plugin.getApi().getGameManager().setGameTimer(plugin.getApi().getGameManager().getGameTime() - 1);
-					for (String s : plugin.getApi().getPlayers().Whoplaying()) {
+				if(gm.getGameTime() >= 1) {
+					gm.setGameTimer(gm.getGameTime() - 1);
+					for (String s : player.Whoplaying()) {
 						Player p = Bukkit.getPlayer(s);
-						p.setLevel(plugin.getApi().getGameManager().getGameTime());
+						p.setLevel(gm.getGameTime());
 					}
-					if(plugin.getApi().getGameManager().getGameTime() == 1) {
-						plugin.getApi().getGameManager().TimeDetectWin();
+					if(gm.getGameTime() == 1) {
+						gm.TimeDetectWin();
 					}
 				}
 			}
@@ -173,7 +184,7 @@ public class Game {
 				i++;
 				PlayerLoses.put(s, i);
 			}
-			plugin.getApi().getGameManager().endRound();
+			gm.endRound();
 			Savedata();
 
 		} else {
@@ -187,17 +198,17 @@ public class Game {
 				i++;
 				PlayerLoses.put(s, i);
 			}
-			plugin.getApi().getGameManager().endRound();
+			gm.endRound();
 			Savedata();
 		}		
 	}*/
 	public  void Savedata() {
 		
-		for(String s : plugin.getApi().getPlayers().Whoplaying()) {
+		for(String s : player.Whoplaying()) {
 			Player p = Bukkit.getPlayer(s);
 			
-			Integer i = PlayerKills.get(p.getName())+plugin.getApi().getPlayers().getKills(p);
-			Integer o = PlayerDeaths.get(p.getName())+plugin.getApi().getPlayers().getDeaths(p);
+			Integer i = PlayerKills.get(p.getName())+player.getKills(p);
+			Integer o = PlayerDeaths.get(p.getName())+player.getDeaths(p);
 			
 			MYSQL.SaveEveryOneData(p, i, o, PlayerWins.get(p.getName()), PlayerLoses.get(p.getName()), Users.PlayerGun.get(p), "null", Users.PlayerPerk1.get(p), Users.PlayerPerk2.get(p), Users.PlayerPerk3.get(p), Users.PlayerKIllStreaks.get(p), Users.Playerequipment.get(p));		
     		@SuppressWarnings("unchecked")
@@ -214,20 +225,20 @@ public class Game {
     		Users.PlayerKIllStreaks.put(p, hm.get("PlayerKIllStreaks"));
     		Users.Playerequipment.put(p, hm.get("Playerequipment"));
     		if(Users.PlayerPerk1.get(p).equalsIgnoreCase("Marathon")) {
-    			plugin.getApi().getPerks().addMarathon(p);
+    			perk.addMarathon(p);
         	} else {
-        		plugin.getApi().getPerks().removeMarathon(p);
+        		perk.removeMarathon(p);
         	}
     		if(Users.PlayerPerk2.get(p).equalsIgnoreCase("LightWeight")) {
-        		plugin.getApi().getPerks().AddLightuser(p);
+        		perk.AddLightuser(p);
         	} else {
-        		plugin.getApi().getPerks().RemoveLightuser(p);
+        		perk.RemoveLightuser(p);
         	}
 		}
 	}
 	protected  void DisplayMessage() {
-		Bukkit.broadcastMessage(plugin.getApi().getGameManager().DisplayVotes(world1));
-		Bukkit.broadcastMessage(plugin.getApi().getGameManager().DisplayVotes(world2));
+		Bukkit.broadcastMessage(gm.DisplayVotes(world1));
+		Bukkit.broadcastMessage(gm.DisplayVotes(world2));
 	}
 
 }

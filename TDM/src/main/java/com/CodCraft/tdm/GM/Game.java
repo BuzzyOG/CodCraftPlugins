@@ -22,7 +22,7 @@ import com.CodCraft.tdm.CodCraft;
 import com.CodCraft.tdm.MapLoader;
 import com.CodCraft.tdm.Users;
 
-public class Game extends CodCraft {
+public class Game {
 	public  String  world1;
 	public  String  world2;
 	public  ArrayList<World> worlds = new ArrayList<World>();
@@ -33,10 +33,21 @@ public class Game extends CodCraft {
 	public  HashMap<String, Integer> PlayerDeaths = new HashMap<String, Integer>();
 	public  HashMap<String, Integer> PlayerWins = new HashMap<String, Integer>();
 	public  HashMap<String, Integer> PlayerLoses = new HashMap<String, Integer>();
-	private GameManager gm = api.getModuleForClass(GameManager.class);
-	private Weapons weap = api.getModuleForClass(Weapons.class);
-	private TeamPlayer player = api.getModuleForClass(TeamPlayer.class);
-	private Perks perk = api.getModuleForClass(Perks.class);
+	private CodCraft plugin;
+	private GameManager gm;
+	private Weapons weap;
+	private TeamPlayer player;
+	private Perks perk;
+	
+	public Game(CodCraft plugin) {
+		this.plugin = plugin;
+		gm = plugin.api.getModuleForClass(GameManager.class);
+		weap = plugin.api.getModuleForClass(Weapons.class);
+		player = plugin.api.getModuleForClass(TeamPlayer.class);
+		perk = plugin.api.getModuleForClass(Perks.class);
+	}
+	
+
 	public  void Lobby() {
 		gm.setLobbyTime(60);
 		for(World w : MapLoader.Maps) {
@@ -101,7 +112,7 @@ public class Game extends CodCraft {
 		gm.setGameTimer(600);
 		perk.StartMaratonTimer();
 		perk.StartLightWightTimer();
-		api.getModuleForClass(Teleport.class).RespawnAll(gm.GetCurrentWorld());
+		plugin.api.getModuleForClass(Teleport.class).RespawnAll(gm.GetCurrentWorld());
 		
 	}
 	public  void MainTimer() {

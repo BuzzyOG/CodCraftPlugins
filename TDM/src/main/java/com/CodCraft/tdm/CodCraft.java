@@ -40,7 +40,7 @@ public class CodCraft extends JavaPlugin {
 	public static	HashMap<String,ArrayList<Location>>Teamone = new HashMap<String, ArrayList<Location>>();
 	public static	HashMap<String,ArrayList<Location>>Teamtwo = new HashMap<String, ArrayList<Location>>();
 	public CCAPI api;
-	private Game game;
+	public Game game;
 	public void onEnable() {
 		getCommand("CaC").setExecutor(new CacComamnd(this));
 		getCommand("EndRound").setExecutor(new EndRoundCommand(this));
@@ -55,8 +55,8 @@ public class CodCraft extends JavaPlugin {
 		api.getModuleForClass(GameManager.class).SetCurrentWorld("Nuketown");
 		plugin = this;
 		PluginManager pm = this.getServer().getPluginManager();
-		pm.registerEvents(new PlayerListener(), this);
-		pm.registerEvents(new BlockListener(), this);
+		pm.registerEvents(new PlayerListener(this), this);
+		pm.registerEvents(new BlockListener(this), this);
 		getGame().Lobby();
 		getGame().MainTimer();
 		spawnLoad();

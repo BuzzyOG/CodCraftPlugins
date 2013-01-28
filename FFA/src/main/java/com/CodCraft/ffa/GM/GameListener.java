@@ -20,6 +20,9 @@ public class GameListener implements Listener {
 			e.setWinMessage("TIE!!??!?!?");
 			return;
 		}
+		if(t.getTeams(e.getTeam()) == null){
+			return;
+		}
 		e.setWinMessage(""+t.getTeams(e.getTeam()).get(0)+" has won the Game!");
 	}
 
