@@ -9,19 +9,23 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerEvent;
 
 
+import com.CodCraft.api.model.Game;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.modules.MYSQL;
 import com.CodCraft.api.modules.Perks;
-import com.CodCraft.api.modules.TeamPlayer;
 import com.CodCraft.api.modules.Teleport;
 import com.CodCraft.api.modules.Weapons;
+import com.CodCraft.api.services.CCGamePlugin;
+import com.CodCraft.api.services.GameState;
 import com.CodCraft.ffa.CodCraft;
 import com.CodCraft.ffa.MapLoader;
 import com.CodCraft.ffa.Users;
+import com.CodCraft.ffa.listener.PlayerListener;
 
-public class Game {
+public class Round extends Game {
 	public  String  world1;
 	public  String  world2;
 	public  ArrayList<World> worlds = new ArrayList<World>();
@@ -35,19 +39,20 @@ public class Game {
 	private CodCraft API;
 	private GameManager gm;
 	private Weapons weap;
-	private TeamPlayer player;
 	private Perks perk;
+	private Game<CodCraft> game;
 	
-	public Game(CodCraft plugin) {
+	public Round(CodCraft plugin) {
+		game.addListener(new PlayerListener(plugin));
 		API = plugin;
 		gm = API.api.getModuleForClass(GameManager.class);
 		weap = API.api.getModuleForClass(Weapons.class);
-		player = API.api.getModuleForClass(TeamPlayer.class);
 		perk = API.api.getModuleForClass(Perks.class);
 	}
 	
 	public void Lobby() {
-		gm.setLobbyTime(60);
+		game.initialize();
+		game.
 		for(World w : MapLoader.Maps) {
         	if(!(w.getName().equals("lobby"))) {
         		worlds.add(w);
@@ -227,5 +232,17 @@ public void Savedata() {
 	protected  void DisplayMessage() {
 		Bukkit.broadcastMessage(gm.DisplayVotes(world1));
 		Bukkit.broadcastMessage(gm.DisplayVotes(world2));
+	}
+
+	@Override
+	public void preStateSwitch(GameState state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void postStateSwitch(GameState mode) {
+		// TODO Auto-generated method stub
+		
 	}
 }

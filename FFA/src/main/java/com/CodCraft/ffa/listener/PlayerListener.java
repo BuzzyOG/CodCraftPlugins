@@ -39,10 +39,12 @@ import com.CodCraft.api.modules.TeamPlayer;
 import com.CodCraft.api.modules.Teams;
 import com.CodCraft.api.modules.Teleport;
 import com.CodCraft.api.modules.Weapons;
+import com.CodCraft.api.services.CCGameListener;
+import com.CodCraft.api.services.CCModuleListener;
 import com.CodCraft.ffa.CodCraft;
 import com.CodCraft.ffa.Users;
 
-public class PlayerListener implements Listener {
+public class PlayerListener extends CCGameListener{
    private CodCraft instance;
    private GameManager gm;
    private Weapons weap;

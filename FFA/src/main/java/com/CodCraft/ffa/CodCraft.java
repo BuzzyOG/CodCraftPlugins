@@ -17,8 +17,9 @@ import com.CodCraft.api.modules.Cac;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.modules.Teleport;
 import com.CodCraft.api.modules.Weapons;
+import com.CodCraft.api.services.CCGamePlugin;
 import com.CodCraft.api.CCAPI;
-import com.CodCraft.ffa.GM.Game;
+import com.CodCraft.ffa.GM.Round;
 import com.CodCraft.ffa.GM.GameListener;
 import com.CodCraft.ffa.commands.AdminCommands;
 import com.CodCraft.ffa.commands.BuddyCommand;
@@ -32,7 +33,7 @@ import com.CodCraft.ffa.commands.VoteCommand;
 import com.CodCraft.ffa.listener.BlockListener;
 import com.CodCraft.ffa.listener.PlayerListener;
 
-public class CodCraft extends JavaPlugin {
+public class CodCraft extends CCGamePlugin {
    public static Plugin plugin;
    public static HashMap<Player, Integer> PlayerKills = new HashMap<Player, Integer>();
    public static HashMap<Player, Integer> PlayerDeaths = new HashMap<Player, Integer>();
@@ -49,7 +50,7 @@ public void setApi(CCAPI api) {
 	this.api = api;
 }
 
-private Game game;
+private Round game;
 
    public void onEnable() {
 	   final Plugin apiplugin = this.getServer().getPluginManager().getPlugin("CodCraftAPI");
@@ -75,7 +76,7 @@ private Game game;
       pm.registerEvents(new PlayerListener(this), this);
       pm.registerEvents(new BlockListener(this), this);
       pm.registerEvents(new GameListener(this), this);
-      game = new Game(this);
+      game = new Round(this);
       game.Lobby();
       game.MainTimer();
       spawnLoad();
@@ -131,11 +132,11 @@ private Game game;
       }
    }
 
-   public Game getGame() {
+   public Round getGame() {
       return game;
    }
 
-   public void setGame(Game game) {
+   public void setGame(Round game) {
       this.game = game;
    }
 
