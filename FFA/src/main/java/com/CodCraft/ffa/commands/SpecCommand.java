@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.CodCraft.api.modules.TeamPlayer;
+import com.CodCraft.api.model.Game;
 import com.CodCraft.ffa.CodCraft;
 
 public class SpecCommand implements CommandExecutor {
@@ -26,13 +26,11 @@ public class SpecCommand implements CommandExecutor {
             return true;
          }
          Player p = (Player) sender;
-         TeamPlayer tp = plugin.getApi().getModuleForClass(TeamPlayer.class);
-         if(tp.isSpectators(p)) {
-        	 tp.Addplaying(p);
-        	 tp.RemoveSpectators(p);
+         Game<CodCraft> tp = plugin.getGame().game;
+         if(tp.getSpectators().contains(p.getName())) {
+        	 tp.getSpectators().remove(p.getName());
          } else {
-        	 tp.AddSpectators(p);
-        	 tp.RemovePlayer(p);
+        	 tp.getSpectators().add(p.getName());
          }
       }
       if(label.equalsIgnoreCase("tpo")) {

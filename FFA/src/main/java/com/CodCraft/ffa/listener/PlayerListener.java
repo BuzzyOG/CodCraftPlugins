@@ -48,7 +48,6 @@ public class PlayerListener extends CCGameListener{
    private CodCraft instance;
    private GameManager gm;
    private Weapons weap;
-   private TeamPlayer player;
    private Perks perk;
    private Teleport t;
    private Teams team;
@@ -58,7 +57,6 @@ public class PlayerListener extends CCGameListener{
 	      instance = codCraft;
 	      gm = instance.getApi().getModuleForClass(GameManager.class);
 	      weap = instance.getApi().getModuleForClass(Weapons.class);
-	      player = instance.getApi().getModuleForClass(TeamPlayer.class);
 	      perk = instance.getApi().getModuleForClass(Perks.class);
 	      t = instance.getApi().getModuleForClass(Teleport.class);
 	      team = instance.getApi().getModuleForClass(Teams.class);
@@ -82,6 +80,7 @@ public class PlayerListener extends CCGameListener{
       }*/
       if(team.getTeam(p) != null) {
          int i = 0;
+         instance.getGame().get
          for(String s : player.Whoplaying()) {
             Player p1 = Bukkit.getPlayer(s);
             if(team.getTeam(p1) > i) {
@@ -165,7 +164,12 @@ public class PlayerListener extends CCGameListener{
 		   if(!e.isSameteam()) {
 			   e.setDamage(20);
 		   }
+	   } else if(e.getCause() == DamageCause.KNIFE) {
+		   if(e.isSameteam()) {
+			   e.setCancelled(true);
+		   }
 	   }
+	   
    }
 
    @EventHandler

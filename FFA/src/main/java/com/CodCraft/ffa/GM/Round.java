@@ -2,6 +2,7 @@ package com.CodCraft.ffa.GM;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -16,7 +17,6 @@ import com.CodCraft.api.model.Game;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.modules.MYSQL;
 import com.CodCraft.api.modules.Perks;
-import com.CodCraft.api.modules.Teleport;
 import com.CodCraft.api.modules.Weapons;
 import com.CodCraft.api.services.CCGamePlugin;
 import com.CodCraft.api.services.GameState;
@@ -25,7 +25,8 @@ import com.CodCraft.ffa.MapLoader;
 import com.CodCraft.ffa.Users;
 import com.CodCraft.ffa.listener.PlayerListener;
 
-public class Round extends Game {
+public class Round extends Game<CodCraft> {
+
 	public  String  world1;
 	public  String  world2;
 	public  ArrayList<World> worlds = new ArrayList<World>();
@@ -40,19 +41,35 @@ public class Round extends Game {
 	private GameManager gm;
 	private Weapons weap;
 	private Perks perk;
-	private Game<CodCraft> game;
+	public Game<CodCraft> game;
+	private Integer world1votes;
+	private Integer world2votes;
+	private Integer WinScore;
+
+
+	private List<String> voters = new ArrayList<>(); 
 	
 	public Round(CodCraft plugin) {
+		super(plugin);
 		game.addListener(new PlayerListener(plugin));
+		
 		API = plugin;
 		gm = API.api.getModuleForClass(GameManager.class);
 		weap = API.api.getModuleForClass(Weapons.class);
 		perk = API.api.getModuleForClass(Perks.class);
+		setWinScore(75);
 	}
 	
+	
+	
+	public Integer getWinScore() {
+		return WinScore;
+	}
+	public void setWinScore(Integer winScore) {
+		WinScore = winScore;
+	}
 	public void Lobby() {
 		game.initialize();
-		game.
 		for(World w : MapLoader.Maps) {
         	if(!(w.getName().equals("lobby"))) {
         		worlds.add(w);
@@ -232,6 +249,34 @@ public void Savedata() {
 	protected  void DisplayMessage() {
 		Bukkit.broadcastMessage(gm.DisplayVotes(world1));
 		Bukkit.broadcastMessage(gm.DisplayVotes(world2));
+	}
+
+	public Integer getWorld1votes() {
+		return world1votes;
+	}
+
+	public void setWorld1votes(Integer world1votes) {
+		this.world1votes = world1votes;
+	}
+	public Integer getWorld2votes() {
+		return world2votes;
+	}
+
+	public void setWorld2votes(Integer world2votes) {
+		this.world2votes = world2votes;
+	}
+	public void addvoter(Player p) {
+		voters.add(p.getName());
+	}
+	public void remotevoter(Player p) {
+		voters.remove(p.getName());
+	}
+	
+	public boolean hasvoted(Player p) {
+		if(voters.contains(p.getName())) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override

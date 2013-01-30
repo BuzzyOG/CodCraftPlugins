@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.CodCraft.api.modules.Teams;
+import com.CodCraft.api.model.Team;
 import com.CodCraft.ffa.CodCraft;
 
 public class TeamsCommand implements CommandExecutor {
@@ -18,7 +18,8 @@ public class TeamsCommand implements CommandExecutor {
    @Override
    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
       if(label.equalsIgnoreCase("team")) {
-         sender.sendMessage("You are on Team" + plugin.getApi().getModuleForClass(Teams.class).getTeam((Player) sender));
+    	  Team t = plugin.getGame().game.findTeamWithPlayer((Player) sender);
+         sender.sendMessage("You are on Team" + t.getName());
          return true;
       }
 

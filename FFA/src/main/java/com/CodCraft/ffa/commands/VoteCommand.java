@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.CodCraft.api.modules.GameManager;
+import com.CodCraft.api.services.GameState;
 import com.CodCraft.ffa.CodCraft;
 
 public class VoteCommand implements CommandExecutor {
@@ -24,18 +24,18 @@ public class VoteCommand implements CommandExecutor {
       }
       if(label.equalsIgnoreCase("vote")) {
          Player p = (Player) sender;
-         GameManager gm = plugin.getApi().getModuleForClass(GameManager.class);
-         if(!gm.hasvoted(p)) {
+
+         if(!plugin.getGame().hasvoted(p)) {
             if(args[0].equalsIgnoreCase(plugin.getGame().world1)) {
-            	gm.AddVote(plugin.getGame().world1);
-            	gm.AddVoter(p.getName());
-               sender.sendMessage("Your vote for " + plugin.getGame().world1 + "has been casted. The amount of votes now are " + gm.getVotes(plugin.getGame().world1));
+            	plugin.getGame().setWorld1votes(plugin.getGame().getWorld1votes() + 1);
+            	plugin.getGame().addvoter(p);
+               sender.sendMessage("Your vote for " + plugin.getGame().world1 + "has been casted. ");
                return true;
             }
             if(args[0].equalsIgnoreCase(plugin.getGame().world2)) {
-            	gm.AddVote(plugin.getGame().world2);
-               gm.AddVoter(p.getName());
-               sender.sendMessage("Your vote for " + plugin.getGame().world2 + "has been casted. The amount of votes now are " + gm.getVotes(plugin.getGame().world2));
+            	plugin.getGame().setWorld2votes(plugin.getGame().getWorld2votes() + 1);
+            	plugin.getGame().addvoter(p);
+               sender.sendMessage("Your vote for " + plugin.getGame().world2 + "has been casted. ");
                return true;
             }
          }

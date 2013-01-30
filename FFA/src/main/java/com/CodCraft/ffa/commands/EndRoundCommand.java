@@ -17,7 +17,7 @@ public class EndRoundCommand implements CommandExecutor {
    @Override
    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
       if(label.equalsIgnoreCase("endround") && args.length == 0) {
-         plugin.getApi().getModuleForClass(GameManager.class).endRound();
+    	 plugin.getGame().game.deinitialize();
          plugin.getGame().Savedata();
       }
       return false;
