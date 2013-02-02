@@ -1,0 +1,10 @@
+name: ${project.artifactId}
+author: Mitsugaru
+main: ${project.mainclass}
+version: ${project.version}
+depend: [CodCraftAPI]
+description: Demo of the CCAPI
+commands:
+   ccdemo:
+      description: Root command
+      usage: /ccdemo

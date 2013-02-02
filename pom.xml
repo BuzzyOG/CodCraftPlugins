@@ -27,6 +27,7 @@
         <module>HardPoint</module>
         <module>Infected</module>
         <module>SAD</module>
+        <module>Demo</module>
     </modules>
     <!-- Properties. -->
     <properties>
