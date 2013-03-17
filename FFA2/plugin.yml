@@ -1,0 +1,9 @@
+name: FFA
+main: com.codcraft.ffa.CodCraftFFA
+version: 1
+depend: [CodCraftAPI, TagAPI]
+description: First test of CodCraftAPI
+commands:
+   vote:
+      description: vote
+      usage: /vote

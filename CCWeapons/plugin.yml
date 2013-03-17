@@ -1,0 +1,4 @@
+name: CCWeapon
+main: com.codcraft.weapons.Weapons
+version: 1
+depend: [CodCraftAPI]

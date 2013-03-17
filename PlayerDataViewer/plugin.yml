@@ -1,0 +1,5 @@
+name: PDY
+author: Joby
+main: com.codcraft.PlayerDataViewer.Main
+version: 1
+depend: [CodCraftAPI, CCLobby]

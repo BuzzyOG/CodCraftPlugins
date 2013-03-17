@@ -1,0 +1,19 @@
+LobbyWorld:
+Games:
+  name:
+    Name:
+    Game:
+    Block1:
+      x:
+      y:
+      z:
+    Block2:
+      x:
+      y:
+      z:
+    SignBlock:
+      x:
+      y:
+      z:
+      
+    
