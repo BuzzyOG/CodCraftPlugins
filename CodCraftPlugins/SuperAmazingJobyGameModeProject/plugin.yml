@@ -1,0 +1,4 @@
+name: jobygame
+main: com.codcraft.SuperAmazingJobyGameModeProject.SAJGMP
+version: 1
+depend: [CodCraftAPI]

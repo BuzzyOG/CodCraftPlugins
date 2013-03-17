@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.codcraft</groupId>
+  <artifactId>CCChat</artifactId>
+  <version>1</version>
+  <name>CCChat</name>
+  <description>ADBlock system for CC servers.</description>
+  <packaging>jar</packaging>
+  <!-- Parent project -->
+    <parent>
+        <groupId>com.CodCraft</groupId>
+        <artifactId>CodCraftPlugins</artifactId>
+        <version>${codcraft.plugin.version}</version>
+    </parent>
+    <!-- Properties. -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.mainclass>com.CodCraft.api.CCAPI</project.mainclass>
+        <bukkit.version>1.4.7-R1.0</bukkit.version>
+    </properties>
+     <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>${bukkit.version}</version>
+        </dependency>
+    </dependencies>
+        <repositories>
+        <repository>
+            <id>Bukkit</id>
+            <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
+    </repositories>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

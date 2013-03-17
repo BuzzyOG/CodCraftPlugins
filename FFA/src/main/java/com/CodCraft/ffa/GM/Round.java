@@ -3,6 +3,7 @@ package com.CodCraft.ffa.GM;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -27,6 +28,8 @@ import com.CodCraft.ffa.listener.PlayerListener;
 
 public class Round extends Game<CodCraft> {
 
+	public Map<String, ArrayList<Location>> locations = new HashMap<>();
+	
 	public  String  world1;
 	public  String  world2;
 	public  ArrayList<World> worlds = new ArrayList<World>();
@@ -45,6 +48,8 @@ public class Round extends Game<CodCraft> {
 	private Integer world1votes;
 	private Integer world2votes;
 	private Integer WinScore;
+	
+	public World currentmap;
 
 
 	private List<String> voters = new ArrayList<>(); 
@@ -77,8 +82,8 @@ public class Round extends Game<CodCraft> {
         	}	
         }
 
-		gm.RemoveVotes();
-		gm.RemoveVoters();
+		setWorld1votes(0);
+		setWorld2votes(0);
 	    world1 = "";
 	    world2 = "";	    	    	
 	    world1 = worlds.get(rnd.nextInt(worlds.size())).getName();
@@ -94,9 +99,6 @@ public class Round extends Game<CodCraft> {
 	    Bukkit.broadcastMessage(ChatColor.DARK_RED +"[CodCraft]" + ChatColor.WHITE +    "or");
 	    Bukkit.broadcastMessage(ChatColor.DARK_RED +"[CodCraft]" + ChatColor.WHITE +    world2);
 	    Bukkit.broadcastMessage(ChatColor.DARK_RED +"[CodCraft]" + ChatColor.WHITE + "using /vote <mapName>");
-
-	    gm.setVotes(0, world1);
-	    gm.setVotes(0, world2);
     			
 		}
 	public  void PreGame() {
@@ -176,42 +178,7 @@ public class Round extends Game<CodCraft> {
 			
 		}, 20L, 20L);
 	}
-	/*private  void TimeLimitDetectwin() {
-		if(GlobalKills.get(1) == null) {
-			GlobalKills.put(1, 0);
-		}
-		if(GlobalKills.get(2) == null) {
-			GlobalKills.put(2, 0);
-		}
-		if(GlobalKills.get(1) > GlobalKills.get(2)) {
-			for(String s : CCTeams.getTeams(1)) {
-				int i = PlayerWins.get(s);
-				i++;
-				PlayerWins.put(s, i);
-			}
-			for(String s : CCTeams.getTeams(2)) {
-				int i = PlayerLoses.get(s);
-				i++;
-				PlayerLoses.put(s, i);
-			}
-			CCGameManger.endRound();
-			Savedata();
 
-		} else {
-			for(String s : CCTeams.getTeams(2)) {
-				int i = PlayerWins.get(s);
-				i++;
-				PlayerWins.put(s, i);
-			}
-			for(String s : CCTeams.getTeams(1)) {
-				int i = PlayerLoses.get(s);
-				i++;
-				PlayerLoses.put(s, i);
-			}
-			CCGameManger.endRound();
-			Savedata();
-		}		
-	}*/
 public void Savedata() {
 		
 		for(String s : player.Whoplaying()) {
@@ -287,6 +254,30 @@ public void Savedata() {
 
 	@Override
 	public void postStateSwitch(GameState mode) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void preStateSwitch(GameState<CodCraft> state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void postStateSwitch(GameState<CodCraft> state) {
 		// TODO Auto-generated method stub
 		
 	}

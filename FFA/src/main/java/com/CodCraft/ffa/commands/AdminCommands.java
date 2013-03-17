@@ -8,14 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.kitteh.tag.TagAPI;
 
-
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.modules.GUI;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.modules.KillStreaks;
-import com.CodCraft.api.modules.TeamPlayer;
-import com.CodCraft.api.modules.Teams;
 import com.CodCraft.ffa.CodCraft;
 
 public class AdminCommands implements CommandExecutor {
@@ -47,18 +44,18 @@ public class AdminCommands implements CommandExecutor {
                      killStreaks.setKills(p, amount);
                      GUI.updatelist();
                      plugin.getGame().game.getTeams().get(0);
-                     t.setTeamScore(amount);
+                     t.setScore(amount);
                      // GET max score
                      //TODO Check if the score is max
                      return true;
                   } else if(args.length == 4) {
-                      TeamPlayer player = plugin.api.getModuleForClass(TeamPlayer.class);
+                     
                       KillStreaks killStreaks = plugin.api.getModuleForClass(KillStreaks.class);
                       GUI GUI = plugin.api.getModuleForClass(GUI.class);
                       GameManager manger = plugin.api.getModuleForClass(GameManager.class);
-                      Teams t = plugin.api.getModuleForClass(Teams.class);
                      int amount = Integer.parseInt(args[2]);
                      Player k = Bukkit.getPlayer(args[3]);
+                     
                      player.setKills(k, amount);
                      killStreaks.setKills(p, amount);
                      GUI.updatelist();

@@ -1,7 +1,7 @@
 package com.CodCraft.demo.states;
 
 import com.CodCraft.api.model.Game;
-import com.CodCraft.api.services.GameState;
+import com.CodCraft.api.model.GameState;
 import com.CodCraft.demo.Demo;
 
 public class InGameState implements GameState<Demo> {

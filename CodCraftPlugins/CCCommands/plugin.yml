@@ -1,0 +1,13 @@
+name: CCCommands
+main: com.codcraft.ccommands.CCCommands
+version: 3
+depend: [CodCraftAPI]
+commands:
+   spawn:
+      description: Got to spawn
+      usage: /spawn
+   a:
+      description: Admin Commands Admin Only!
+      usage: /a
+      permission: CodCraft.Admin
+      permission-message: You can't use the Admin Commands

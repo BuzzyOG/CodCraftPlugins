@@ -1,0 +1,4 @@
+name: ccssbb
+main: com.codcraft.ccssbb.CCSSBB
+version: 1
+depend: [CodCraftAPI]

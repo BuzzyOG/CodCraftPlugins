@@ -15,7 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.CodCraft.api.modules.Cac;
 import com.CodCraft.api.modules.GameManager;
-import com.CodCraft.api.modules.Teleport;
 import com.CodCraft.api.modules.Weapons;
 import com.CodCraft.api.services.CCGamePlugin;
 import com.CodCraft.api.CCAPI;
@@ -34,6 +33,8 @@ import com.CodCraft.ffa.listener.BlockListener;
 import com.CodCraft.ffa.listener.PlayerListener;
 
 public class CodCraft extends CCGamePlugin {
+	
+	private static String TAG = "[FFA]";
    public static Plugin plugin;
    public static HashMap<Player, Integer> PlayerKills = new HashMap<Player, Integer>();
    public static HashMap<Player, Integer> PlayerDeaths = new HashMap<Player, Integer>();
@@ -70,7 +71,6 @@ private Round game;
       getCommand("switch").setExecutor(new SwitchCommand(this));
       new MapLoader();
       getLogger().info(MapLoader.Maps.toString());
-      api.getModuleForClass(GameManager.class).SetCurrentWorld("Nuketown");
       plugin = this;
       PluginManager pm = this.getServer().getPluginManager();
       pm.registerEvents(new PlayerListener(this), this);
@@ -80,9 +80,9 @@ private Round game;
       game.Lobby();
       game.MainTimer();
       spawnLoad();
-      api.getModuleForClass(Teleport.class).setLocations1(Teamone);
       api.getModuleForClass(Cac.class).usedefaultspawns();
       api.getModuleForClass(Weapons.class).LoadGuns();
+      getGame().locations = Teamone;
    }
 
    public void onDisable() {
@@ -138,6 +138,11 @@ private Round game;
 
    public void setGame(Round game) {
       this.game = game;
+   }
+
+   @Override
+   public String getTag() {
+	return TAG;
    }
 
 }
