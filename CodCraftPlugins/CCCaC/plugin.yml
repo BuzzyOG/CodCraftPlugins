@@ -1,0 +1,8 @@
+name: Cac
+main: com.codcraft.cac.Cac
+version: 1
+depend: [CodCraftAPI]
+commands: 
+    CaC:
+      description: Got to cac
+      usage: /Cac

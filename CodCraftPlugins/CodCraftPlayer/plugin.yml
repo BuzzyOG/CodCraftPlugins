@@ -1,0 +1,4 @@
+name: CodCraftPlayer
+main: com.codcraft.codcraftplayer.CCPlayerMain
+version: 1
+depend: [CodCraftAPI]

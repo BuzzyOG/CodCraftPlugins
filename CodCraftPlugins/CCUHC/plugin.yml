@@ -1,0 +1,4 @@
+name: CCUHC
+main: com.codcraft.ccuhc.UHC
+version: 1
+depend: [CodCraftAPI]

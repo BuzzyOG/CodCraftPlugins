@@ -1,0 +1,9 @@
+name: FPL
+main: com.codcraft.fpl.FunPointLogger
+version: 1
+depend: [CodCraftAPI]
+softdepend: [CodCraftPlayer]
+commands:
+   points:
+      description: show points
+      usage: /points
