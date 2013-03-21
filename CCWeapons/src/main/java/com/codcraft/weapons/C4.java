@@ -38,7 +38,7 @@ public class C4 implements Listener {
 		   if(e.getCause() == DamageCause.CUSTOM) {
 				   if(plugin.checkIfGameIsInstanceOfPlugin(e.getGame())) {
 					   e.setCancelled(false);
-				   
+					   e.setDamage(20);
 			   }
 		   }
 	   }
@@ -126,27 +126,20 @@ public class C4 implements Listener {
 	   
 	   
 	   public boolean expotiondetect(Player p, Player k) {
-		   Bukkit.broadcastMessage("1");
 		   GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		   Game<?> game = gm.getGameWithPlayer(p);
-		   Bukkit.broadcastMessage("2");
 		   if(game == null) {
-			   Bukkit.broadcastMessage("4");
 			   return false;
 		   }
-		   Bukkit.broadcastMessage("3");
 		   Team p1 = game.findTeamWithPlayer(p);
 		   Team k1 = game.findTeamWithPlayer(k);
 		   if (p== k){
-			   Bukkit.broadcastMessage("5");
 			   p.damage(20);
 			   return true;
 		   } else if( p1.getId().equalsIgnoreCase(k1.getId()))  {
-			   Bukkit.broadcastMessage("6");
 			   return false;
 		   } else {
 			   k.damage(20, p);
-			   Bukkit.broadcastMessage("7");
 			   return true;
 		   }
 	   }
