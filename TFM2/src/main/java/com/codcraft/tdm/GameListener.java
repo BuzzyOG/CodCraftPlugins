@@ -19,8 +19,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.CodCraft.api.event.GameWinEvent;
-import com.CodCraft.api.event.PlayerDamgedByWeaponEvent;
-import com.CodCraft.api.event.PlayerDamgedByWeaponEvent.DamageCause;
 import com.CodCraft.api.event.RequestJoinGameEvent;
 import com.CodCraft.api.event.team.TeamPlayerGainedEvent;
 import com.CodCraft.api.model.Game;
@@ -61,38 +59,6 @@ public class GameListener extends CCGameListener {
 			team1.addPlayer(e.getPlayer());
 		}
 	}
-	
-	@EventHandler
-	public void onweaponuse(PlayerDamgedByWeaponEvent e) {
-		if(e.getCause() == DamageCause.ARROW) {
-
-			
-		} else if(e.getCause() == DamageCause.KNIFE) {
-			e.setDamage(20);
-		} else if(e.getCause() == DamageCause.EQUIPMENT) {
-			e.setDamage(20);
-		}
-	}
-	
-	@EventHandler (priority = EventPriority.LOWEST)
-	public void onDagame(PlayerDamgedByWeaponEvent e) {
-		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
-		Game<?> g = gm.getGameWithPlayer(e.getDamagee());
-		if(!(g == null)) {
-			if(g.getPlugin() == plugin) {
-				Team t1 = g.findTeamWithPlayer(e.getDamagee());
-				Team t2 = g.findTeamWithPlayer(e.getDamager());
-				if(t1 == t2) {
-					e.setCancelled(true);
-					e.setSameteam(true);
-				} else {
-					e.setCancelled(false);
-					e.setSameteam(false);
-				}
-			}
-		}
-	}
-	
 	
 	
 	@EventHandler
@@ -191,6 +157,11 @@ public class GameListener extends CCGameListener {
 	
 	@EventHandler
 	public void onExspotion(EntityExplodeEvent e) {
+		System.out.println(e);
+		System.out.println(e.getEntity());
+		if(e.getEntity() == null) {
+			return;
+		}
 		for(Game<?> g : plugin.api.getModuleForClass(GameManager.class).getAllGames()) {
 			if(e.getEntity().getWorld().getName().equalsIgnoreCase(g.getName())) {
 				if(g.getPlugin() == plugin) {

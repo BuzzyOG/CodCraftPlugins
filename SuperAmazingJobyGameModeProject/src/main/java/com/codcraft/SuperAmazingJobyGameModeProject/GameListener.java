@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -24,8 +23,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import com.CodCraft.api.event.GameWinEvent;
-import com.CodCraft.api.event.PlayerDamgedByWeaponEvent;
-import com.CodCraft.api.event.PlayerDamgedByWeaponEvent.DamageCause;
 import com.CodCraft.api.event.RequestJoinGameEvent;
 import com.CodCraft.api.event.team.TeamPlayerGainedEvent;
 import com.CodCraft.api.model.Game;
@@ -256,8 +253,8 @@ public class GameListener implements Listener {
 		}
 	}
 	
-	@EventHandler (priority =EventPriority.LOWEST)
-	public void onDamage(PlayerDamgedByWeaponEvent e) {
+	/*@EventHandler (priority =EventPriority.LOWEST)
+	public void onDamage(EntityDamgedByWeaponEvent e) {
 		if(e.getCause() == DamageCause.ARROW) {
 			Player p = e.getDamager();
 			ItemStack bow = null;
@@ -280,7 +277,7 @@ public class GameListener implements Listener {
 				} 
 			}	
 		}
-	}
+	}*/
 	
 	
 	

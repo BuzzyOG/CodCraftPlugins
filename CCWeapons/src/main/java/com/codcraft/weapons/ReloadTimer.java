@@ -21,7 +21,7 @@ public class ReloadTimer implements Runnable {
 	@Override
 	public void run() {
 		if(player.getExp() <= 0) {
-			player.getInventory().addItem(new ItemStack(Material.ARROW, arrow));
+			player.getInventory().addItem(new ItemStack(Material.SNOW_BALL, arrow));
 			plugin.reloaders.remove(player.getName());
 			return;
 		} else {

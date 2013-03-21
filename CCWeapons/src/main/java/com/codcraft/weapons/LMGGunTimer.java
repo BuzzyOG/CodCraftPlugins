@@ -24,7 +24,7 @@ public class LMGGunTimer implements Runnable {
 
 	@Override
 	public void run() {
-		LMGWeapon.users.put(p.getName(), true);
+
 
 		
 			 if(p.getItemInHand().getType() == Material.BOW) {
@@ -39,14 +39,12 @@ public class LMGGunTimer implements Runnable {
 		
 		xToGo--;
 	      if(xToGo > 0) {
-	    	  LMGWeapon.users.put(p.getName(), true);
 	          Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new LMGGunTimer(plugin, p, xToGo, delay), delay);
 	       } else {
 	    	   Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 				
 				@Override
 				public void run() {
-					LMGWeapon.users.put(p.getName(), false);
 				}
 			}, 5);
 	    	   

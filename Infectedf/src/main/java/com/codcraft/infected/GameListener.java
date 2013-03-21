@@ -19,8 +19,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.CodCraft.api.event.GameWinEvent;
-import com.CodCraft.api.event.PlayerDamgedByWeaponEvent;
-import com.CodCraft.api.event.PlayerDamgedByWeaponEvent.DamageCause;
 import com.CodCraft.api.event.RequestJoinGameEvent;
 import com.CodCraft.api.event.team.TeamPlayerGainedEvent;
 import com.CodCraft.api.model.Game;
@@ -62,19 +60,8 @@ public class GameListener extends CCGameListener {
 		}
 	}
 	
-	@EventHandler
-	public void onweaponuse(PlayerDamgedByWeaponEvent e) {
-		if(e.getCause() == DamageCause.ARROW) {
-
-			
-		} else if(e.getCause() == DamageCause.KNIFE) {
-			e.setDamage(20);
-		} else if(e.getCause() == DamageCause.EQUIPMENT) {
-			e.setDamage(20);
-		}
-	}
 	
-	@EventHandler (priority = EventPriority.LOWEST)
+	/*@EventHandler (priority = EventPriority.LOWEST)
 	public void onDagame(PlayerDamgedByWeaponEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		Game<?> g = gm.getGameWithPlayer(e.getDamagee());
@@ -93,7 +80,7 @@ public class GameListener extends CCGameListener {
 				}
 			}
 		}
-	}
+	}*/
 	
 	
 	
@@ -208,7 +195,11 @@ public class GameListener extends CCGameListener {
 	
 	@EventHandler
 	public void onExspotion(EntityExplodeEvent e) {
+		if(e.getEntity() == null) {
+			return;
+		}
 		for(Game<?> g : plugin.api.getModuleForClass(GameManager.class).getAllGames()) {
+
 			if(e.getEntity().getWorld().getName().equalsIgnoreCase(g.getName())) {
 				if(g.getPlugin() == plugin) {
 					e.blockList().clear();
