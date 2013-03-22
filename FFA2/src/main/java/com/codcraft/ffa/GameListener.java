@@ -7,7 +7,6 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -121,9 +120,6 @@ public class GameListener extends CCGameListener {
 			return;
 		}
     	e.getDrops().clear();
-    	e.getDrops().add(new ItemStack(Material.getMaterial(54), 1));
-    	
-
 		Team team1 = g.findTeamWithPlayer(p);
 		 
 		CCPlayerModule ccplayerm = plugin.api.getModuleForClass(CCPlayerModule.class);

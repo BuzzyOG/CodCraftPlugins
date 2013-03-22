@@ -9,11 +9,13 @@ import com.codcraft.ffa.CodCraftFFA;
 import com.codcraft.infected.CodCraftInfected;
 import com.codcraft.perks.lightweight.LightWight;
 import com.codcraft.perks.marathon.Marathon;
+import com.codcraft.perks.scavenger.Scavenger;
 import com.codcraft.tdm.CodCraftTDM;
 
 public class Perks extends JavaPlugin {
 	
 	public LightWight lw;
+	public Scavenger sc;
 	public Marathon m;
 	public CCAPI api;
 	public CodCraftFFA ffa;
@@ -48,6 +50,7 @@ public class Perks extends JavaPlugin {
 		}
 		this.lw = new LightWight(this);
 		this.m = new Marathon(this);
+		this.sc = new Scavenger(this);
 	}
 	
 	public boolean checkIfGameIsInstanceOfPlugin(Game<?> g) {
