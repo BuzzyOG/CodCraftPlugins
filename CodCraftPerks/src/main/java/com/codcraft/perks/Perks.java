@@ -8,11 +8,13 @@ import com.CodCraft.api.model.Game;
 import com.codcraft.ffa.CodCraftFFA;
 import com.codcraft.infected.CodCraftInfected;
 import com.codcraft.perks.lightweight.LightWight;
+import com.codcraft.perks.marathon.Marathon;
 import com.codcraft.tdm.CodCraftTDM;
 
 public class Perks extends JavaPlugin {
 	
 	public LightWight lw;
+	public Marathon m;
 	public CCAPI api;
 	public CodCraftFFA ffa;
 	public CodCraftInfected Infected;
@@ -45,6 +47,7 @@ public class Perks extends JavaPlugin {
 			this.TDM = (CodCraftTDM) TDM;
 		}
 		this.lw = new LightWight(this);
+		this.m = new Marathon(this);
 	}
 	
 	public boolean checkIfGameIsInstanceOfPlugin(Game<?> g) {

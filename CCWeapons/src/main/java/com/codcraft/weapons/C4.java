@@ -24,11 +24,15 @@ import com.CodCraft.api.event.PlayerDamgedByWeaponEvent.DamageCause;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.modules.GameManager;
+import com.codcraft.cac.CaCModule;
+import com.codcraft.codcraftplayer.CCPlayerModule;
+import com.codcraft.codcraftplayer.PlayerGetClassEvent;
 
 public class C4 implements Listener {
 	private Weapons plugin;
 	public C4(Weapons plugin) {
 		this.plugin = plugin;
+		plugin.api.getModuleForClass(CaCModule.class).addweapon("C4", "equipment");
 	}
 	
 	private Map<Location, String> c4spots = new ConcurrentHashMap<Location, String>();
@@ -42,6 +46,15 @@ public class C4 implements Listener {
 			   }
 		   }
 	   }
+	   
+	   @EventHandler
+	   public void getClass(PlayerGetClassEvent e) {
+			CCPlayerModule ccplayer = plugin.api.getModuleForClass(CCPlayerModule.class);
+			if(ccplayer.getPlayer(e.getPlayer()).getClass(ccplayer.getPlayer(e.getPlayer()).getCurrentclass()).getEquipment().equalsIgnoreCase("C4")) {
+				e.addItem(new ItemStack(Material.LEVER, 1));
+			}
+	   }
+	   
 	
 	@EventHandler
 	public void onPlace(final BlockPlaceEvent e)  {

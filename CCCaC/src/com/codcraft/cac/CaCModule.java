@@ -158,6 +158,7 @@ public class CaCModule extends CCModule {
 			plugin.Attachement.add(name);
 			break;
 		case "perk1":
+			Bukkit.broadcastMessage("added: "+ name);
 			plugin.Perk1.add(name);
 			break;
 		case "perk2":
