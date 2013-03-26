@@ -67,9 +67,8 @@ public class CaCModule extends CCModule {
 	      p.sendMessage("Telporting in 5 secs");
 			CCPlayerModule playermodule = plugin.api.getModuleForClass(CCPlayerModule.class);
 			CCPlayer player = playermodule.getPlayer(p);
-			CCClass clazz = player.getClass(1);
-			LoadSigns(p, clazz.getGun(), clazz.getPerk1(), clazz.getPerk2(), clazz.getPerk3(),
-					clazz.getEquipment(), clazz.getKillStreak());
+			final CCClass clazz = player.getClass(1);
+
 	      Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			@Override
@@ -78,6 +77,8 @@ public class CaCModule extends CCModule {
 					g.findTeamWithPlayer(p).removePlayer(p);
 				}
 				p.teleport(plugin.locations.LobbySpawn.get(GetBox(p)));
+				LoadSigns(p, clazz.getGun(), clazz.getPerk1(), clazz.getPerk2(), clazz.getPerk3(),
+						clazz.getEquipment(), clazz.getKillStreak());
 			}
 		}, 100);
 	      

@@ -22,7 +22,7 @@ public class Semtex implements Listener {
 	private GameManager gm;
 	private Weapons plugin;
 	
-	private Map<Entity, Location> spots = new HashMap<Entity, Location>();
+	public Map<Entity, Location> spots = new HashMap<Entity, Location>();
 	
 	public Semtex(Weapons plugin) {
 		this.plugin = plugin;

@@ -40,10 +40,13 @@ import com.CodCraft.api.listener.EntityDamagedInGameEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
+import com.CodCraft.api.modules.Broadcast;
 import com.CodCraft.api.modules.GUI;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCGameListener;
 import com.codcraft.ccssbb.CCSSBB.states;
+import com.codcraft.codcraftplayer.CCPlayer;
+import com.codcraft.codcraftplayer.CCPlayerModule;
 
 public class SSBlistener extends CCGameListener {
 	private CCSSBB plugin;
@@ -137,7 +140,6 @@ public class SSBlistener extends CCGameListener {
 				if(t.getPlayers().size() == 0) {
 					t.addPlayer(e.getPlayer());
 					plugin.getLogger().info(e.getPlayer().getName()+" has requested to join a SSB game named " + g.getName()+".");
-					Bukkit.broadcastMessage(e.getPlayer().getName()+" is now on a team");
 					return;
 				}
 			}
@@ -188,10 +190,17 @@ public class SSBlistener extends CCGameListener {
 			if(g.getPlugin() == plugin) {
 				TeamPlayer p1 = g.findTeamWithPlayer(p).findPlayer(p);
 				p1.incrementDeaths(1);
+				CCPlayer player1 = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(p);
+				player1.setDeaths(player1.getDeaths() + 1);
+				player1.setSSBDeaths(player1.getSSBDeaths() + 1);
+				if(e.getEntity().getKiller() instanceof Player) {
+					CCPlayer player2 = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer((Player)e.getEntity().getKiller());
+					player2.setSSBKills(player2.getSSBKills() + 1);
+					player2.setKills(player2.getKills() + 1);
+				}
 				int i = 0;
 				String player = null;
 				for(Team t : g.getTeams()) {
-					System.out.println(t.getPlayers());
 					for(TeamPlayer p2 : t.getPlayers()) {
 						if(p2.getDeaths() < 5) {
 							i++;;
@@ -200,19 +209,16 @@ public class SSBlistener extends CCGameListener {
 					}
 				}
 				onGUI(p);
+				if(p1.getDeaths() == 5) {
+					p.getInventory().clear();
+					plugin.api.getModuleForClass(Broadcast.class).BroadCastMessage(g, ChatColor.BLUE+p1.getName()+" is now out of the game");
+				}
 				if(i == 1) {
 					GameWinEvent event = new GameWinEvent(player+"has won the "+g.getName() +" game!", g.findTeamWithPlayer(new TeamPlayer(player)), g);
 					Bukkit.getPluginManager().callEvent(event);
 					Bukkit.broadcastMessage(event.getWinMessage());
 				}
-				if(p1.getDeaths() == 5) {
-					p.getInventory().clear();
-					for(Team t : g.getTeams()) {
-						for(TeamPlayer p5 : t.getPlayers()) {
-							Bukkit.getPlayer(p5.getName()).sendMessage(ChatColor.BLUE+p1.getName()+" is now out of the game");
-						}
-					}
-				}
+
 			}
 		}
 	}
@@ -280,7 +286,21 @@ public class SSBlistener extends CCGameListener {
 	@EventHandler
 	public void onWin(GameWinEvent e) {
 		if(e.getGame().getPlugin() == plugin) {
+			TeamPlayer tplayer = null;
+			for(TeamPlayer tp : e.getTeam().getPlayers()) {
+				tplayer = tp;
+			}
+			CCPlayer player = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(Bukkit.getPlayer(tplayer.getName()));
+			player.setWins(player.getWins() + 1);
+			player.setSSBWins(player.getSSBWins() + 1);
 			for(Team t : e.getGame().getTeams()) {
+				if(t != e.getTeam()) {
+					for(TeamPlayer tp : t.getPlayers()) {
+						CCPlayer player2 = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(Bukkit.getPlayer(tp.getName()));
+						player2.setLosses(player2.getLosses() + 1);
+						player2.setSSBLosses(player2.getSSBLosses() + 1);
+					}
+				}
 				for(TeamPlayer p : t.getPlayers()) {
 					t.removePlayer(p);
 					Player p2 = Bukkit.getPlayer(p.getName());

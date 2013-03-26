@@ -41,6 +41,7 @@ public class ADListener implements Listener {
 				e.setMessage(ChatColor.WHITE +  m);
 			} else {
 				String m = e.getMessage();
+				e.setFormat(e.getPlayer().getName()+": "+ ChatColor.WHITE  + m);
 				e.setMessage(e.getPlayer().getName()+": "+ ChatColor.WHITE  + m);
 			}
         }

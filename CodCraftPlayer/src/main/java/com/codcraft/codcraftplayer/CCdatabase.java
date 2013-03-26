@@ -26,7 +26,12 @@ public class CCdatabase {
 				statement5 = plugin.con.createStatement();
 				Bukkit.broadcastMessage(""+player.mysqlid);
 				String SQL2 = "UPDATE players SET kills = '"+player.getKills()+"', deaths = '"+player.Deaths+"', wins = '"+player.getWins()+
-						"',losses = '"+player.getLosses()+"',Levels = '"+player.getLevel()+"', Points = '"+player.getPoints()+"', classes = '"+player.CaCint+"' WHERE id = "+player.mysqlid+"";
+						"',losses = '"+player.getLosses()+"',Levels = '"+player.getLevel()+"', Points = '"+player.getPoints()+"', classes = '"+player.CaCint+
+						"', TDMKills = '"+player.getTDMKills()+"', TDMDeaths = '"+player.getTDMDeaths()+"', TDMWins = '"+player.getTDMWins()+"', TDMLosses = '"+player.getTDMLosses()+
+						"', FFAKills = '"+player.getFFAKills()+"', FFADeaths = '"+player.getFFADeaths()+"', FFAWins = '"+player.getFFAWins()+"', FFALosses = '"+player.getFFALosses()+
+						"', SSBKills = '"+player.getSSBKills()+"', SSBDeaths = '"+player.getSSBDeaths()+"', SSBWins = '"+player.getSSBWins()+"', SSBLosses = '"+player.getSSBLosses()+
+						"', UHCKills = '"+player.getUHCKills()+"', UHCDeaths = '"+player.getUHCDeaths()+"', UHCWins = '"+player.getUHCWins()+"', UHCLosses = '"+player.getUHCLosses()+
+						"' WHERE id = "+player.mysqlid+"";
 				statement5.executeUpdate(SQL2);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -92,6 +97,23 @@ public class CCdatabase {
 				plasyers.setLevel(0);
 				plasyers.setPoints(0);
 				plasyers.CaCint = 0;
+				plasyers.setTDMKills(0);
+				plasyers.setTDMDeaths(0);
+				plasyers.setTDMLosses(0);
+				plasyers.setTDMWins(0);
+				plasyers.setFFADeaths(0);
+				plasyers.setFFAKills(0);
+				plasyers.setFFALosses(0);
+				plasyers.setFFAWins(0);
+				plasyers.setSSBDeaths(0);
+				plasyers.setSSBKills(0);
+				plasyers.setSSBLosses(0);
+				plasyers.setSSBWins(0);
+				plasyers.setUHCDeaths(0);
+				plasyers.setUHCKills(0);
+				plasyers.setUHCLosses(0);
+				plasyers.setUHCWins(0);
+				
 			} else {
 				Statement statement11 = plugin.con.createStatement();
 				String SQL1 = "SELECT * FROM `players` WHERE `playername` = '" + p.getName() + "'";
@@ -105,6 +127,22 @@ public class CCdatabase {
 					plasyers.setLevel(rs1.getInt(7));
 					plasyers.setPoints(rs1.getInt(8));
 					plasyers.CaCint = rs1.getInt(9);
+					plasyers.setTDMKills(rs1.getInt(10));
+					plasyers.setTDMDeaths(rs1.getInt(11));
+					plasyers.setTDMLosses(rs1.getInt(12));
+					plasyers.setTDMWins(rs1.getInt(13));
+					plasyers.setFFAKills(rs1.getInt(14));
+					plasyers.setFFADeaths(rs1.getInt(15));
+					plasyers.setFFALosses(rs1.getInt(16));
+					plasyers.setFFAWins(rs1.getInt(17));
+					plasyers.setSSBKills(rs1.getInt(18));
+					plasyers.setSSBDeaths(rs1.getInt(19));
+					plasyers.setSSBLosses(rs1.getInt(20));
+					plasyers.setSSBWins(rs1.getInt(21));
+					plasyers.setUHCKills(rs1.getInt(22));
+					plasyers.setUHCDeaths(rs1.getInt(23));
+					plasyers.setUHCLosses(rs1.getInt(24));
+					plasyers.setUHCWins(rs1.getInt(25));
 					
 				}
 			}
@@ -172,7 +210,12 @@ public class CCdatabase {
 				try {
 					statement5 = plugin.con.createStatement();
 					String SQL2 = "UPDATE players SET kills = '"+player.getKills()+"', deaths = '"+player.Deaths+"', wins = '"+player.getWins()+
-							"',losses = '"+player.getLosses()+"',Levels = '"+player.getLevel()+"', Points = '"+player.getPoints()+"', classes = '"+player.CaCint+"' WHERE playername = "+p.getName()+"";
+							"',losses = '"+player.getLosses()+"',Levels = '"+player.getLevel()+"', Points = '"+player.getPoints()+"', classes = '"+player.CaCint+
+							"', TDMKills = '"+player.getTDMKills()+"', TDMDeaths = '"+player.getTDMDeaths()+"', TDMWins = '"+player.getTDMWins()+"', TDMLosses = '"+player.getTDMLosses()+
+							"', FFAKills = '"+player.getFFAKills()+"', FFADeaths = '"+player.getFFADeaths()+"', FFAWins = '"+player.getFFAWins()+"', FFALosses = '"+player.getFFALosses()+
+							"', SSBKills = '"+player.getSSBKills()+"', SSBDeaths = '"+player.getSSBDeaths()+"', SSBWins = '"+player.getSSBWins()+"', SSBLosses = '"+player.getSSBLosses()+
+							"', UHCKills = '"+player.getUHCKills()+"', UHCDeaths = '"+player.getUHCDeaths()+"', UHCWins = '"+player.getUHCWins()+"', UHCLosses = '"+player.getUHCLosses()+
+							"' WHERE id = "+player.mysqlid+"";
 					statement5.executeUpdate(SQL2);
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -235,6 +278,22 @@ public class CCdatabase {
 			plasyers.setLevel(0);
 			plasyers.setPoints(0);
 			plasyers.CaCint = 0;
+			plasyers.setTDMKills(0);
+			plasyers.setTDMDeaths(0);
+			plasyers.setTDMLosses(0);
+			plasyers.setTDMWins(0);
+			plasyers.setFFADeaths(0);
+			plasyers.setFFAKills(0);
+			plasyers.setFFALosses(0);
+			plasyers.setFFAWins(0);
+			plasyers.setSSBDeaths(0);
+			plasyers.setSSBKills(0);
+			plasyers.setSSBLosses(0);
+			plasyers.setSSBWins(0);
+			plasyers.setUHCDeaths(0);
+			plasyers.setUHCKills(0);
+			plasyers.setUHCLosses(0);
+			plasyers.setUHCWins(0);
 		} else {
 			Statement statement11 = plugin.con.createStatement();
 			String SQL1 = "SELECT * FROM `players` WHERE `playername` = '" + p.getName() + "'";
@@ -248,6 +307,22 @@ public class CCdatabase {
 				plasyers.setLevel(rs1.getInt(7));
 				plasyers.setPoints(rs1.getInt(8));
 				plasyers.CaCint = rs1.getInt(9);
+				plasyers.setTDMKills(rs1.getInt(10));
+				plasyers.setTDMDeaths(rs1.getInt(11));
+				plasyers.setTDMLosses(rs1.getInt(12));
+				plasyers.setTDMWins(rs1.getInt(13));
+				plasyers.setFFAKills(rs1.getInt(14));
+				plasyers.setFFADeaths(rs1.getInt(15));
+				plasyers.setFFALosses(rs1.getInt(16));
+				plasyers.setFFAWins(rs1.getInt(17));
+				plasyers.setSSBKills(rs1.getInt(18));
+				plasyers.setSSBDeaths(rs1.getInt(19));
+				plasyers.setSSBLosses(rs1.getInt(20));
+				plasyers.setSSBWins(rs1.getInt(21));
+				plasyers.setUHCKills(rs1.getInt(22));
+				plasyers.setUHCDeaths(rs1.getInt(23));
+				plasyers.setUHCLosses(rs1.getInt(24));
+				plasyers.setUHCWins(rs1.getInt(25));
 				
 			}
 		}
@@ -329,7 +404,8 @@ private void adddefaultclass(Player p) {
 
 private void addefaults(Player p) {
 	PreparedStatement pst;
-	String SQL = "INSERT INTO players(playername, kills, deaths, wins, losses, Levels, Points, classes) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+	String SQL = "INSERT INTO players(playername, kills, deaths, wins, losses, Levels, Points, classes, TDMKills, TDMDeaths, TDMWins, TDMLosses, FFAKills, FFADeaths, FFAWins, FFALosses, SSBKills, SSBDeaths, SSBWins, SSBLosses, UHCKills, UHCDeaths, UHCWins, UHCLosses )" +
+			" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	try {
 		pst = plugin.con.prepareStatement(SQL);
 		pst.setString(1, p.getName());
@@ -340,6 +416,22 @@ private void addefaults(Player p) {
 		pst.setInt(6, 1);
 		pst.setInt(7, 0);
 		pst.setInt(8, 1);
+		pst.setInt(9, 0);
+		pst.setInt(10, 0);
+		pst.setInt(11, 0);
+		pst.setInt(12, 0);
+		pst.setInt(13, 0);
+		pst.setInt(14, 0);
+		pst.setInt(15, 0);
+		pst.setInt(16, 0);
+		pst.setInt(17, 0);
+		pst.setInt(18, 0);
+		pst.setInt(19, 0);
+		pst.setInt(20, 0);
+		pst.setInt(21, 0);
+		pst.setInt(22, 0);
+		pst.setInt(23, 0);
+		pst.setInt(24, 0);
 		pst.executeUpdate();
 	} catch (SQLException e) {
 		e.printStackTrace();

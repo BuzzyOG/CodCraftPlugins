@@ -129,6 +129,7 @@ public class GameListener extends CCGameListener {
 			player1.setDeaths(0);
 		}
 		player1.setDeaths(player1.getDeaths() +1);
+		player1.setTDMDeaths(player1.getTDMDeaths() +1);
 		if(e.getEntity().getKiller() instanceof Player) {
 
 			Player k =(Player) e.getEntity().getKiller();
@@ -146,6 +147,7 @@ public class GameListener extends CCGameListener {
 				player2.setDeaths(0);
 			}
 			player2.setKills(player2.getKills() + 1);
+			player2.setTDMKills(player2.getTDMKills() + 1);
 			team2.findPlayer(k).incrementKills(1);
 		}
 		updateallgui(g);
@@ -273,6 +275,7 @@ public class GameListener extends CCGameListener {
 			e.setWinMessage(t.getName()+" has won the game");
 			CCPlayer player = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(Bukkit.getPlayer(t.getName()));
 			player.setWins(player.getWins() + 1);
+			player.setTDMWins(player.getTDMWins() + 1);
 		}
 		Random rnd = new Random();
 		plugin.currentmap.get(g.getId()).Map1 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
@@ -294,6 +297,15 @@ public class GameListener extends CCGameListener {
 						
 			}
 			team.setScore(0);
+		}
+		for(Team team : g.getTeams()) {
+			if(team != e.getTeam()) {
+				for(TeamPlayer tp : team.getPlayers()) {
+					CCPlayer player2 = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(Bukkit.getPlayer(tp.getName()));
+					player2.setLosses(player2.getLosses() + 1);
+					player2.setTDMLosses(player2.getTDMLosses() + 1);
+				}
+			}
 		}
 		updateallgui(g);
 

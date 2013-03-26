@@ -84,6 +84,7 @@ public class C4 implements Listener {
 			Map<Location, String> endt = c4spots;
 			for(Entry<Location, String> entry : endt.entrySet()) {
 				if(entry.getValue().equalsIgnoreCase(e.getEntity().getName())) {
+					entry.getKey().getBlock().setType(Material.AIR);
 					c4spots.remove(e.getEntity().getName());
 				}
 			}
