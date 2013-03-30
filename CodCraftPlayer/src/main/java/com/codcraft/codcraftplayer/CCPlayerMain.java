@@ -38,7 +38,7 @@ public class CCPlayerMain extends JavaPlugin {
 				e.printStackTrace();
 			}
 		for(Player p : Bukkit.getOnlinePlayers()) {
-			getCCDatabase.getp(p);
+			getCCDatabase.getp(p.getName());
 		}
 
 	}

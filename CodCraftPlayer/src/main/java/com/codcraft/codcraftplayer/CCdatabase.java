@@ -76,12 +76,12 @@ public class CCdatabase {
 	}
 	
 	
-	public void getp(Player p) {
+	public void getp(String p) {
 		Statement statement1 = null;
 
 		try {
 			statement1 = plugin.con.createStatement();
-			String SQL = "SELECT * FROM `players` WHERE `playername` = '" + p.getName() + "'";
+			String SQL = "SELECT * FROM `players` WHERE `playername` = '" + p + "'";
 			ResultSet rs = statement1.executeQuery(SQL);
 			CCPlayer plasyers = new CCPlayer();
 			int id = 0;
@@ -116,7 +116,7 @@ public class CCdatabase {
 				
 			} else {
 				Statement statement11 = plugin.con.createStatement();
-				String SQL1 = "SELECT * FROM `players` WHERE `playername` = '" + p.getName() + "'";
+				String SQL1 = "SELECT * FROM `players` WHERE `playername` = '" + p + "'";
 				ResultSet rs1 = statement11.executeQuery(SQL1);
 				while (rs1.next()) {
 					plasyers.mysqlid = rs1.getInt(1);
@@ -146,10 +146,10 @@ public class CCdatabase {
 					
 				}
 			}
-			if(plugin.players.containsKey(p.getName())) {
-				plugin.players.remove(p.getName());
+			if(plugin.players.containsKey(p)) {
+				plugin.players.remove(p);
 			}
-			plugin.players.put(p.getName(), plasyers);
+			plugin.players.put(p, plasyers);
 
 		} catch (SQLException error) {
 			plugin.getLogger().info("sql exception");
@@ -159,7 +159,7 @@ public class CCdatabase {
 			Statement statement = null;
 			try {
 				statement = plugin.con.createStatement();
-				String SQL = "SELECT * FROM `classes` WHERE `username` = '" + p.getName() + "'";
+				String SQL = "SELECT * FROM `classes` WHERE `username` = '" + p + "'";
 				ResultSet result = null;
 				result = statement.executeQuery(SQL);
 				List<Integer> Classes = new ArrayList<>();
@@ -174,10 +174,10 @@ public class CCdatabase {
 					result2 = statement2.executeQuery(SQL2);
 					CCPlayer ccplayer = null;
 					while(result2.next()) {
-						if(plugin.players.get(p.getName()) == null) {
+						if(plugin.players.get(p) == null) {
 							ccplayer = new CCPlayer();
 						} else {
-							ccplayer = plugin.players.get(p.getName());
+							ccplayer = plugin.players.get(p);
 						}
 						int classspot = result2.getInt(3);
 						CCClass clazz = new CCClass();
@@ -191,9 +191,9 @@ public class CCdatabase {
 						clazz.Perk3 = result2.getString(8);
 						ccplayer.setClass(clazz, classspot);
 					}
-					plugin.players.put(p.getName(), ccplayer);
+					plugin.players.put(p, ccplayer);
 				}
-				if(plugin.players.get(p.getName()).classes.size() == 0) {
+				if(plugin.players.get(p).classes.size() == 0) {
 					adddefaultclass(p);
 					
 				}
@@ -270,7 +270,7 @@ public class CCdatabase {
 			id = rs.getInt(1);
 		}
 		if(id == 0) {
-			addefaults(p);
+			addefaults(p.getName());
 			plasyers.setKills(0);
 			plasyers.setDeaths(0);
 			plasyers.setWins(0);
@@ -374,7 +374,7 @@ public class CCdatabase {
 				plugin.players.put(p.getName(), ccplayer);
 			}
 			if(plugin.players.get(p.getName()).classes.size() == 0) {
-				adddefaultclass(p);
+				adddefaultclass(p.getName());
 				
 			}
 
@@ -383,32 +383,33 @@ public class CCdatabase {
 		}
 }
 
-private void adddefaultclass(Player p) {
+private void adddefaultclass(String p) {
 	PreparedStatement pst;
-	String SQL = "INSERT INTO classes(username, classid, gun, attachment, Perk1, Perk2, Perk3, KillStreak) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+	String SQL = "INSERT INTO classes(username, classid, gun, attachment, Perk1, Perk2, Perk3, Equipment, KillStreak) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	try {
 		pst = plugin.con.prepareStatement(SQL);
-		pst.setString(1, p.getName());
+		pst.setString(1, p);
 		pst.setInt(2, 1);
-		pst.setString(3, "Test");
-		pst.setString(4, "Test");
-		pst.setString(5, "Test");
-		pst.setString(6, "Test");
-		pst.setString(7, "Test");
-		pst.setString(8, "Test");
+		pst.setString(3, "Sniper");
+		pst.setString(4, "none");
+		pst.setString(5, "Marathon");
+		pst.setString(6, "LightWeight");
+		pst.setString(7, "Equip2X");
+		pst.setString(8, "C4");
+		pst.setString(9, "none");
 		pst.executeUpdate();
 	} catch (SQLException e) {
 		e.printStackTrace();
 	}
 }
 
-private void addefaults(Player p) {
+private void addefaults(String p) {
 	PreparedStatement pst;
 	String SQL = "INSERT INTO players(playername, kills, deaths, wins, losses, Levels, Points, classes, TDMKills, TDMDeaths, TDMWins, TDMLosses, FFAKills, FFADeaths, FFAWins, FFALosses, SSBKills, SSBDeaths, SSBWins, SSBLosses, UHCKills, UHCDeaths, UHCWins, UHCLosses )" +
 			" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	try {
 		pst = plugin.con.prepareStatement(SQL);
-		pst.setString(1, p.getName());
+		pst.setString(1, p);
 		pst.setInt(2, 0);
 		pst.setInt(3, 0);
 		pst.setInt(4, 0);

@@ -792,6 +792,9 @@ public class SSBlistener extends CCGameListener {
 					return;
 				}
 				if(plugin.games.get(g.getId()).playerclass.get(p.getName()).equalsIgnoreCase("spider")) {
+					if(!p.hasPermission("CodCraft.ssb.spiderclimb")) {
+						
+					}
 					if(!e.getPlayer().isSneaking()) {
 						return;
 					}
@@ -807,7 +810,6 @@ public class SSBlistener extends CCGameListener {
 				}
 			}
 		}
-		//todo check if he has the point climb
 	}
 
 	private void runtask(final Game<?> g) {

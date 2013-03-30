@@ -25,6 +25,9 @@ public class Segment {
 	protected Location loc19;
 	protected Location loc20;
 	
-	
+	@Override
+	public String toString() {
+		return loc1.toString();
+	}
 
 }

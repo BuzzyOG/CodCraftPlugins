@@ -22,12 +22,12 @@ public class CCPlayerModule extends CCModule {
 		}
 	}
 	
-	public boolean removePlayer(Player p) {
-		if(!plugin.players.containsKey(p.getName())) {
+	public boolean removePlayer(String p) {
+		if(!plugin.players.containsKey(p)) {
 			return true;
 		} 
-		plugin.players.remove(p.getName());
-		if(plugin.players.containsKey(p.getName())) {
+		plugin.players.remove(p);
+		if(plugin.players.containsKey(p)) {
 			return false;
 		} else {
 			return true;
@@ -46,6 +46,10 @@ public class CCPlayerModule extends CCModule {
 	public void updatePlayer(Player p) {
 		plugin.getCCDatabase.updatep(p);
 	}
+	
+	public void loadPlayer(String p) {
+		plugin.getCCDatabase.getp(p);
+	}
 
 	@Override
 	public void starting() {
@@ -57,6 +61,12 @@ public class CCPlayerModule extends CCModule {
 	public void closing() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public CCPlayer getPlayer(String p) {
+		CCPlayer player = null;
+		if(plugin.players.containsKey(p)) player = plugin.players.get(p);
+		return player;
 	}
 
 }
