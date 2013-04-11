@@ -24,12 +24,14 @@ public class LobbyListener implements Listener {
 		this.plugin = plugin;
 	}
 	@EventHandler
-	public void onjoin(PlayerJoinEvent e) {
-		e.getPlayer().teleport(Bukkit.getWorld("world").getSpawnLocation());
+	public void onjoin(final PlayerJoinEvent e) {
+		e.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -1.02, 29.5, -30.7, (float) 180, (float) 0.6));
+		e.setJoinMessage(null);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			@Override
 			public void run() {
+				
 				plugin.updateSigns();
 				
 			}
@@ -37,11 +39,13 @@ public class LobbyListener implements Listener {
 		
 	}
 	@EventHandler
-	public void onleave(PlayerQuitEvent e) {
+	public void onleave(final PlayerQuitEvent e) {
+		e.setQuitMessage(null);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			@Override
 			public void run() {
+				
 				plugin.updateSigns();
 			}
 		}, 5);

@@ -4,6 +4,7 @@ import com.codcraft.perks.Perks;
 
 public class Scavenger {
 
+	@SuppressWarnings("unused")
 	private Perks plugin;
 
 	public Scavenger(Perks plugin) {

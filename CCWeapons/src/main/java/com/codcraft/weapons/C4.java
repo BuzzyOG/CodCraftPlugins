@@ -66,6 +66,7 @@ public class C4 implements Listener {
 			c4spots.put(e.getBlockPlaced().getLocation(), e.getPlayer().getName());
 			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 				
+				@SuppressWarnings("deprecation")
 				@Override
 				public void run() {
 					if(!e.getPlayer().getInventory().contains(Material.LEVER)) {
@@ -92,6 +93,7 @@ public class C4 implements Listener {
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {

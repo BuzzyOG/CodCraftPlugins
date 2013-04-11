@@ -7,10 +7,14 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -61,12 +65,37 @@ public class GameListener extends CCGameListener {
 	}
 	
 	@EventHandler
+	public void onPlace(BlockPlaceEvent e) {
+		for(Game<?> g : plugin.api.getModuleForClass(GameManager.class).getAllGames()) {
+			if(g.getPlugin() == plugin) {
+				if(e.getBlockPlaced().getLocation().getWorld().getName().equalsIgnoreCase(g.getName())) {
+					if(e.getBlockPlaced().getType() != Material.LEVER) {
+						e.setCancelled(true);
+					}
+
+				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onMobSpawn(CreatureSpawnEvent e) {
+		for(Game<?> g : plugin.api.getModuleForClass(GameManager.class).getAllGames()) {
+			if(g.getPlugin() == plugin) {
+				if(e.getLocation().getWorld().getName().equalsIgnoreCase(g.getName())) {
+					e.setCancelled(true);
+				}
+			}
+		}
+	}
+	
+	@EventHandler
 	public void onGameJoin(TeamPlayerGainedEvent e) {
 		  final GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		  final Game<?> g = gm.getGameWithTeam(e.getTeam());
 		  
 		  if( g == null) {
-			  plugin.getLogger().info("null");
+			return;
 		  }
 		  
 		if(g.getPlugin() != plugin) {
@@ -78,7 +107,10 @@ public class GameListener extends CCGameListener {
 		final String currentmap = plugin.currentmap.get(game.getId()).map;
 		final Player p = Bukkit.getPlayer(e.getPlayer().getName());
 		FFAModel model = plugin.currentmap.get(g.getId());
-		
+		if(p.getGameMode() != GameMode.SURVIVAL) {
+			p.setGameMode(GameMode.SURVIVAL);
+		}
+		p.getInventory().clear();
 		if(model.state == GameState.LOBBY) {
 			p.sendMessage(ChatColor.BLUE+"Please vote for a map!");
 			p.sendMessage(ChatColor.BLUE+model.Map1);

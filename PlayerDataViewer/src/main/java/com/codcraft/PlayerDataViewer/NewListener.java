@@ -4,7 +4,6 @@ package com.codcraft.PlayerDataViewer;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -60,42 +59,14 @@ public class NewListener implements Listener {
 								ii = 3;
 							}
 							 let = plugin.letters.get(""+killsa.get(ii - 1));
-							 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-							 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-							 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-							 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-							 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-							 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-							 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-							 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-							 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-							 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-							 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-							 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-							 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-							 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-							 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+							 updatesegment(p, seg, let);
 							 i--;
 						 }
 					 } catch (IndexOutOfBoundsException e) {
 					 }
 					 Segment seg2 = plugin.kills.get(0);
 					 Letter let = new Letter() {};
-					 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), let.block1);
-					 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), let.block2);
-					 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), let.block3);
-					 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), let.block4);
-					 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), let.block5);
-					 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), let.block6);
-					 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), let.block7);
-					 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), let.block8);
-					 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), let.block9);
-					 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), let.block10);
-					 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), let.block11);
-					 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), let.block12);
-					 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), let.block13);
-					 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), let.block14);
-					 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), let.block15);
+					 updatesegment(p, seg2, let);
 				 } else if (killsa.size() <= 6 && killsa.size() >= 4){
 					 Integer ints = Integer.parseInt(kills);
 					 ints = ints / 1000;
@@ -121,41 +92,14 @@ public class NewListener implements Listener {
 								ii = 3;
 							}
 							 let = plugin.letters.get(""+kills23.get(ii - 1));
-							 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-							 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-							 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-							 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-							 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-							 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-							 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-							 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-							 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-							 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-							 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-							 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-							 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-							 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-							 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+							 updatesegment(p, seg, let);
 							 i--;
 						 }
 					 } catch (IndexOutOfBoundsException e) {
 					 }
 					 Segment seg2 = plugin.kills.get(0);
-					 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), (byte) 0);
-					 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), (byte) 15);
-					 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), (byte) 0);
-					 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), (byte) 0);
-					 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), (byte) 15);
-					 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), (byte) 0);
-					 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), (byte) 0);
-					 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), (byte) 0);
-					 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), (byte) 15);
-					 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), (byte) 0);
-					 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), (byte) 15);
-					 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), (byte) 0);
-					 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), (byte) 0);
-					 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), (byte) 15);
-					 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), (byte) 0);
+					 updatesegment(p, seg2, new Letter() {
+					});
 				 }
 				 String deaths = getScore(plugin.game, "deaths", name);
 				    ArrayList<Integer> deathsa = new ArrayList<>();  
@@ -179,42 +123,14 @@ public class NewListener implements Listener {
 									ii = 3;
 								}
 								 let = plugin.letters.get(""+deathsa.get(ii - 1));
-								 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-								 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-								 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-								 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-								 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-								 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-								 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-								 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-								 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-								 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-								 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-								 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-								 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-								 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-								 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+								 updatesegment(p, seg, let);
 								 i--;
 							 }
 						 } catch (IndexOutOfBoundsException e) {
 						 }
 						 Segment seg2 = plugin.deaths.get(0);
 						 Letter let = new Letter() {};
-						 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), let.block1);
-						 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), let.block2);
-						 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), let.block3);
-						 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), let.block4);
-						 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), let.block5);
-						 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), let.block6);
-						 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), let.block7);
-						 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), let.block8);
-						 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), let.block9);
-						 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), let.block10);
-						 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), let.block11);
-						 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), let.block12);
-						 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), let.block13);
-						 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), let.block14);
-						 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), let.block15);
+						 updatesegment(p, seg2, let);
 					 } else if (deathsa.size() <= 6 && deathsa.size() >= 4){
 						 Integer ints = Integer.parseInt(deaths);
 						 ints = ints / 1000;
@@ -240,41 +156,14 @@ public class NewListener implements Listener {
 									ii = 3;
 								}
 								 let = plugin.letters.get(""+deaths23.get(ii - 1));
-								 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-								 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-								 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-								 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-								 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-								 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-								 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-								 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-								 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-								 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-								 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-								 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-								 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-								 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-								 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+								 updatesegment(p, seg, let);
 								 i--;
 							 }
 						 } catch (IndexOutOfBoundsException e) {
 						 }
 						 Segment seg2 = plugin.deaths.get(0);
-						 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), (byte) 0);
-						 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), (byte) 15);
-						 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), (byte) 0);
-						 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), (byte) 0);
-						 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), (byte) 15);
-						 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), (byte) 0);
-						 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), (byte) 0);
-						 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), (byte) 0);
-						 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), (byte) 15);
-						 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), (byte) 0);
-						 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), (byte) 15);
-						 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), (byte) 0);
-						 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), (byte) 0);
-						 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), (byte) 15);
-						 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), (byte) 0);
+						 updatesegment(p, seg2, new Letter() {
+						});
 					 }
 					 String wins = getScore(plugin.game, "wins", name);
 					    ArrayList<Integer> winsa = new ArrayList<>();  
@@ -298,42 +187,14 @@ public class NewListener implements Listener {
 										ii = 3;
 									}
 									 let = plugin.letters.get(""+winsa.get(ii - 1));
-									 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-									 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-									 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-									 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-									 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-									 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-									 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-									 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-									 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-									 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-									 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-									 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-									 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-									 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-									 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+									 updatesegment(p, seg, let);
 									 i--;
 								 }
 							 } catch (IndexOutOfBoundsException e) {
 							 }
 							 Segment seg2 = plugin.wins.get(0);
 							 Letter let = new Letter() {};
-							 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), let.block1);
-							 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), let.block2);
-							 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), let.block3);
-							 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), let.block4);
-							 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), let.block5);
-							 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), let.block6);
-							 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), let.block7);
-							 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), let.block8);
-							 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), let.block9);
-							 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), let.block10);
-							 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), let.block11);
-							 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), let.block12);
-							 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), let.block13);
-							 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), let.block14);
-							 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), let.block15);
+							 updatesegment(p, seg2, let);
 						 } else if (winsa.size() <= 6 && winsa.size() >= 4){
 							 Integer ints = Integer.parseInt(wins);
 							 ints = ints / 1000;
@@ -359,41 +220,14 @@ public class NewListener implements Listener {
 										ii = 3;
 									}
 									 let = plugin.letters.get(""+wins21.get(ii - 1));
-									 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-									 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-									 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-									 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-									 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-									 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-									 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-									 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-									 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-									 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-									 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-									 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-									 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-									 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-									 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+									 updatesegment(p, seg, let);
 									 i--;
 								 }
 							 } catch (IndexOutOfBoundsException e) {
 							 }
 							 Segment seg2 = plugin.wins.get(0);
-							 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), (byte) 0);
-							 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), (byte) 15);
-							 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), (byte) 0);
-							 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), (byte) 0);
-							 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), (byte) 15);
-							 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), (byte) 0);
-							 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), (byte) 0);
-							 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), (byte) 0);
-							 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), (byte) 15);
-							 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), (byte) 0);
-							 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), (byte) 15);
-							 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), (byte) 0);
-							 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), (byte) 0);
-							 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), (byte) 15);
-							 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), (byte) 0);
+							 updatesegment(p, seg2, new Letter() {
+							});
 						 }
 						 String losses = getScore(plugin.game, "losses", name);
 						    ArrayList<Integer> lossesa = new ArrayList<>();  
@@ -417,42 +251,14 @@ public class NewListener implements Listener {
 											ii = 3;
 										}
 										 let = plugin.letters.get(""+lossesa.get(ii - 1));
-										 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-										 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-										 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-										 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-										 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-										 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-										 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-										 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-										 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-										 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-										 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-										 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-										 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-										 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-										 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+										 updatesegment(p, seg, let);
 										 i--;
 									 }
 								 } catch (IndexOutOfBoundsException e) {
 								 }
 								 Segment seg2 = plugin.losses.get(0);
 								 Letter let = new Letter() {};
-								 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), let.block1);
-								 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), let.block2);
-								 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), let.block3);
-								 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), let.block4);
-								 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), let.block5);
-								 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), let.block6);
-								 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), let.block7);
-								 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), let.block8);
-								 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), let.block9);
-								 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), let.block10);
-								 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), let.block11);
-								 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), let.block12);
-								 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), let.block13);
-								 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), let.block14);
-								 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), let.block15);
+								 updatesegment(p, seg2, let);
 							 } else if (lossesa.size() <= 6 && lossesa.size() >= 4){
 								 Integer ints = Integer.parseInt(losses);
 								 ints = ints / 1000;
@@ -478,41 +284,14 @@ public class NewListener implements Listener {
 											ii = 3;
 										}
 										 let = plugin.letters.get(""+losses21.get(ii - 1));
-										 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-										 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-										 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-										 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-										 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-										 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-										 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-										 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-										 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-										 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-										 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-										 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-										 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-										 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-										 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+										 updatesegment(p, seg, let);
 										 i--;
 									 }
 								 } catch (IndexOutOfBoundsException e) {
 								 }
 								 Segment seg2 = plugin.losses.get(0);
-								 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), (byte) 0);
-								 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), (byte) 15);
-								 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), (byte) 0);
-								 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), (byte) 0);
-								 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), (byte) 15);
-								 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), (byte) 0);
-								 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), (byte) 0);
-								 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), (byte) 0);
-								 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), (byte) 15);
-								 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), (byte) 0);
-								 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), (byte) 15);
-								 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), (byte) 0);
-								 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), (byte) 0);
-								 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), (byte) 15);
-								 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), (byte) 0);
+								 updatesegment(p, seg2, new Letter() {
+								});
 							 }
 							 String level = getScore(plugin.game, "level", name);
 							    ArrayList<Integer> levela = new ArrayList<>();  
@@ -536,42 +315,14 @@ public class NewListener implements Listener {
 												ii = 3;
 											}
 											 let = plugin.letters.get(""+levela.get(ii - 1));
-											 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-											 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-											 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-											 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-											 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-											 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-											 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-											 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-											 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-											 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-											 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-											 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-											 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-											 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-											 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+											 updatesegment(p, seg, let);
 											 i--;
 										 }
 									 } catch (IndexOutOfBoundsException e) {
 									 }
 									 Segment seg2 = plugin.level.get(0);
 									 Letter let = new Letter() {};
-									 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), let.block1);
-									 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), let.block2);
-									 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), let.block3);
-									 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), let.block4);
-									 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), let.block5);
-									 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), let.block6);
-									 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), let.block7);
-									 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), let.block8);
-									 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), let.block9);
-									 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), let.block10);
-									 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), let.block11);
-									 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), let.block12);
-									 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), let.block13);
-									 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), let.block14);
-									 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), let.block15);
+									 updatesegment(p, seg2, let);
 								 } else if (levela.size() <= 6 && levela.size() >= 4){
 									 Integer ints = Integer.parseInt(level);
 									 ints = ints / 1000;
@@ -597,41 +348,14 @@ public class NewListener implements Listener {
 												ii = 3;
 											}
 											 let = plugin.letters.get(""+level21.get(ii - 1));
-											 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-											 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-											 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-											 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-											 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-											 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-											 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-											 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-											 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-											 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-											 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-											 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-											 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-											 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-											 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+											 updatesegment(p, seg, let);
 											 i--;
 										 }
 									 } catch (IndexOutOfBoundsException e) {
 									 }
 									 Segment seg2 = plugin.level.get(0);
-									 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), (byte) 0);
-									 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), (byte) 15);
-									 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), (byte) 0);
-									 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), (byte) 0);
-									 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), (byte) 15);
-									 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), (byte) 0);
-									 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), (byte) 0);
-									 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), (byte) 0);
-									 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), (byte) 15);
-									 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), (byte) 0);
-									 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), (byte) 15);
-									 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), (byte) 0);
-									 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), (byte) 0);
-									 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), (byte) 15);
-									 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), (byte) 0);
+									 updatesegment(p, seg2, new Letter() {
+									});
 								 }
 								 String points = getScore(plugin.game, "point", name);
 								    ArrayList<Integer> pointsa = new ArrayList<>();  
@@ -655,42 +379,14 @@ public class NewListener implements Listener {
 													ii = 3;
 												}
 												 let = plugin.letters.get(""+pointsa.get(ii - 1));
-												 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-												 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-												 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-												 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-												 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-												 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-												 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-												 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-												 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-												 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-												 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-												 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-												 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-												 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-												 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+												 updatesegment(p, seg, let);
 												 i--;
 											 }
 										 } catch (IndexOutOfBoundsException e) {
 										 }
 										 Segment seg2 = plugin.points.get(0);
 										 Letter let = new Letter() {};
-										 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), let.block1);
-										 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), let.block2);
-										 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), let.block3);
-										 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), let.block4);
-										 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), let.block5);
-										 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), let.block6);
-										 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), let.block7);
-										 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), let.block8);
-										 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), let.block9);
-										 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), let.block10);
-										 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), let.block11);
-										 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), let.block12);
-										 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), let.block13);
-										 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), let.block14);
-										 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), let.block15);
+										 updatesegment(p, seg2, let);
 									 } else if (pointsa.size() <= 6 && pointsa.size() >= 4){
 										 Integer ints = Integer.parseInt(points);
 										 ints = ints / 1000;
@@ -716,41 +412,14 @@ public class NewListener implements Listener {
 													ii = 3;
 												}
 												 let = plugin.letters.get(""+level21.get(ii - 1));
-												 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
-												 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
-												 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
-												 p.sendBlockChange(seg.loc4, Material.WOOL.getId(), let.block4);
-												 p.sendBlockChange(seg.loc5, Material.WOOL.getId(), let.block5);
-												 p.sendBlockChange(seg.loc6, Material.WOOL.getId(), let.block6);
-												 p.sendBlockChange(seg.loc7, Material.WOOL.getId(), let.block7);
-												 p.sendBlockChange(seg.loc8, Material.WOOL.getId(), let.block8);
-												 p.sendBlockChange(seg.loc9, Material.WOOL.getId(), let.block9);
-												 p.sendBlockChange(seg.loc10, Material.WOOL.getId(), let.block10);
-												 p.sendBlockChange(seg.loc11, Material.WOOL.getId(), let.block11);
-												 p.sendBlockChange(seg.loc12, Material.WOOL.getId(), let.block12);
-												 p.sendBlockChange(seg.loc13, Material.WOOL.getId(), let.block13);
-												 p.sendBlockChange(seg.loc14, Material.WOOL.getId(), let.block14);
-												 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);		 
+												 updatesegment(p, seg, let);
 												 i--;
 											 }
 										 } catch (IndexOutOfBoundsException e) {
 										 }
 										 Segment seg2 = plugin.points.get(0);
-										 p.sendBlockChange(seg2.loc1, Material.WOOL.getId(), (byte) 0);
-										 p.sendBlockChange(seg2.loc2, Material.WOOL.getId(), (byte) 15);
-										 p.sendBlockChange(seg2.loc3, Material.WOOL.getId(), (byte) 0);
-										 p.sendBlockChange(seg2.loc4, Material.WOOL.getId(), (byte) 0);
-										 p.sendBlockChange(seg2.loc5, Material.WOOL.getId(), (byte) 15);
-										 p.sendBlockChange(seg2.loc6, Material.WOOL.getId(), (byte) 0);
-										 p.sendBlockChange(seg2.loc7, Material.WOOL.getId(), (byte) 0);
-										 p.sendBlockChange(seg2.loc8, Material.WOOL.getId(), (byte) 0);
-										 p.sendBlockChange(seg2.loc9, Material.WOOL.getId(), (byte) 15);
-										 p.sendBlockChange(seg2.loc10, Material.WOOL.getId(), (byte) 0);
-										 p.sendBlockChange(seg2.loc11, Material.WOOL.getId(), (byte) 15);
-										 p.sendBlockChange(seg2.loc12, Material.WOOL.getId(), (byte) 0);
-										 p.sendBlockChange(seg2.loc13, Material.WOOL.getId(), (byte) 0);
-										 p.sendBlockChange(seg2.loc14, Material.WOOL.getId(), (byte) 15);
-										 p.sendBlockChange(seg2.loc15, Material.WOOL.getId(), (byte) 0);
+										 updatesegment(p, seg2, new Letter() {
+										});
 									 }
 			
 			
@@ -809,22 +478,26 @@ public class NewListener implements Listener {
 			String lettoget = String.valueOf(cha);
 			Letter let = plugin.letters.get(lettoget);
 			Segment seg = plugin.board.lines.get(0).segmants.get(i);
-			p.sendBlockChange(seg.loc1, 35, let.block1);
-			p.sendBlockChange(seg.loc2, 35, let.block2);
-			p.sendBlockChange(seg.loc3, 35, let.block3);
-			p.sendBlockChange(seg.loc4, 35, let.block4);
-			p.sendBlockChange(seg.loc5, 35, let.block5);
-			p.sendBlockChange(seg.loc6, 35, let.block6);
-			p.sendBlockChange(seg.loc7, 35, let.block7);
-			p.sendBlockChange(seg.loc8, 35, let.block8);
-			p.sendBlockChange(seg.loc9, 35, let.block9);
-			p.sendBlockChange(seg.loc10, 35, let.block10);
-			p.sendBlockChange(seg.loc11, 35, let.block11);
-			p.sendBlockChange(seg.loc12, 35, let.block12);
-			p.sendBlockChange(seg.loc13, 35, let.block13);
-			p.sendBlockChange(seg.loc14, 35, let.block14);
-			p.sendBlockChange(seg.loc15, 35, let.block15);
+			updatesegment(p, seg, let);
 		}
+	}
+	
+	private void updatesegment(Player p, Segment seg, Letter let) {
+		p.sendBlockChange(seg.loc1, 35, let.block1);
+		p.sendBlockChange(seg.loc2, 35, let.block2);
+		p.sendBlockChange(seg.loc3, 35, let.block3);
+		p.sendBlockChange(seg.loc4, 35, let.block4);
+		p.sendBlockChange(seg.loc5, 35, let.block5);
+		p.sendBlockChange(seg.loc6, 35, let.block6);
+		p.sendBlockChange(seg.loc7, 35, let.block7);
+		p.sendBlockChange(seg.loc8, 35, let.block8);
+		p.sendBlockChange(seg.loc9, 35, let.block9);
+		p.sendBlockChange(seg.loc10, 35, let.block10);
+		p.sendBlockChange(seg.loc11, 35, let.block11);
+		p.sendBlockChange(seg.loc12, 35, let.block12);
+		p.sendBlockChange(seg.loc13, 35, let.block13);
+		p.sendBlockChange(seg.loc14, 35, let.block14);
+		p.sendBlockChange(seg.loc15, 35, let.block15);
 	}
 	
 	

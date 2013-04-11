@@ -22,6 +22,10 @@ public class CCLobby extends JavaPlugin {
 		
 	public List<Module> configmap = new ArrayList<>();
 
+	
+	public void onDisable() {
+	}
+	
 	public void onEnable() {
 		
 		
@@ -104,7 +108,6 @@ public class CCLobby extends JavaPlugin {
 	    			Result res = Ping.getInstance().results.get(ts.getServer());
 	    			if(res != null) {
 	    				if (res.isOnline()) {
-	    					
 	    					String npl = String.valueOf(res.getPlayersOnline());
 	    					String mpl = String.valueOf(res.getMaxPlayers());
 	    					String motd = res.getMotd();
@@ -121,6 +124,11 @@ public class CCLobby extends JavaPlugin {
 	    					s.update();
 	    				}
 	       			}
+	    		}
+	    		Location sign2loc = ts.SignBlock2.getBlock().getLocation();
+	    		Block sb = sign2loc.getBlock();
+	    		if ((sb.getState() instanceof Sign)) {
+	    			
 	    		}
 	    	}
 		}

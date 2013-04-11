@@ -65,7 +65,7 @@ public class Weapons extends JavaPlugin {
 	
 	public boolean checkIfGameIsInstanceOfPlugin(Game<?> g) {
 		if(g == null) {
-			throw new IllegalArgumentException("Game can not be null");
+			return false;			
 		}
 		Plugin plug = g.getPlugin();
 		if(plug == ffa) return true;

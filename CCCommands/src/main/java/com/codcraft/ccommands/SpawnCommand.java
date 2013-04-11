@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffect;
 
 import com.CodCraft.api.modules.GUI;
 import com.CodCraft.api.modules.GameManager;
+import com.codcraft.lobby.LobbyModule;
 
 public class SpawnCommand implements CommandExecutor {
 	private CCCommands plugin;
@@ -34,7 +35,7 @@ public class SpawnCommand implements CommandExecutor {
 				gui.updateplayerlist(p, s);
 				if(gm.getGameWithPlayer(p) == null) {
 					p.teleport(new Location(Bukkit.getWorld("world"), -102, 138, 60));
-					plugin.lobby.sign.UpdateSigns();
+					plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
 					p.getInventory().clear();
 					for(PotionEffect pe : p.getActivePotionEffects()) {
 						p.removePotionEffect(pe.getType());
@@ -43,7 +44,7 @@ public class SpawnCommand implements CommandExecutor {
 				} else {
 					gm.getGameWithPlayer(p).findTeamWithPlayer(p).removePlayer(p);
 					p.teleport(new Location(Bukkit.getWorld("world"), -102, 138, 60));
-					plugin.lobby.sign.UpdateSigns();
+					plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
 					p.getInventory().clear();
 					for(PotionEffect pe : p.getActivePotionEffects()) {
 						p.removePotionEffect(pe.getType());

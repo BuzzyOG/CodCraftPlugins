@@ -793,7 +793,7 @@ public class SSBlistener extends CCGameListener {
 				}
 				if(plugin.games.get(g.getId()).playerclass.get(p.getName()).equalsIgnoreCase("spider")) {
 					if(!p.hasPermission("CodCraft.ssb.spiderclimb")) {
-						
+						return;
 					}
 					if(!e.getPlayer().isSneaking()) {
 						return;

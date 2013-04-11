@@ -354,6 +354,11 @@ public class Main extends JavaPlugin {
 		lz.block14 = 0;
 		lz.block15 = 0;
 		letters.put("z", lz);
+		Letter l_ = new Letter() {};
+		l_.block13 = 0;
+		l_.block14 = 0;
+		l_.block15 = 0;
+		letters.put("_", l_);
 		Letter l1 = new Letter() {};
 		l1.block2 = 0;
 		l1.block5 = 0;

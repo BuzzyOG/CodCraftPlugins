@@ -13,6 +13,11 @@ public class LobbyModule extends CCModule{
 		this.plugin = plugin;
 	}
 	
+	public void UpdateSigns() {
+		plugin.sign.UpdateSigns();
+	}
+	
+	
 	public Map<String, Lobby> getLobby() {
 		return plugin.configmap;
 	}

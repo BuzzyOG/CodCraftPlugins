@@ -6,8 +6,11 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 import com.CodCraft.api.CCAPI;
 import com.CodCraft.api.event.CaCEvent;
@@ -76,6 +79,12 @@ public class CaCModule extends CCModule {
 				if(g != null) {
 					g.findTeamWithPlayer(p).removePlayer(p);
 				}
+				p.getInventory().clear();
+				ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
+				BookMeta bm = (BookMeta) book.getItemMeta();
+				bm.addPage("Welcome to Create A Class! Please go up to signs and right click to configure your classes!");
+				book.setItemMeta(bm);
+				p.getInventory().addItem(book);
 				p.teleport(plugin.locations.LobbySpawn.get(GetBox(p)));
 				LoadSigns(p, clazz.getGun(), clazz.getPerk1(), clazz.getPerk2(), clazz.getPerk3(),
 						clazz.getEquipment(), clazz.getKillStreak());

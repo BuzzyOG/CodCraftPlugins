@@ -17,6 +17,7 @@ import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCGamePlugin;
 import com.codcraft.codcraftplayer.CCPlayer;
 import com.codcraft.codcraftplayer.CCPlayerModule;
+import com.codcraft.lobby.LobbyModule;
 
 public class AdminCommand implements CommandExecutor {
 	private CCCommands plugin;
@@ -40,7 +41,7 @@ public class AdminCommand implements CommandExecutor {
 					gm.deregisterGame(g);
 					sender.sendMessage(""+g.getName()+" has ended.");
 				}
-				plugin.lobby.sign.UpdateSigns();
+				plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
 				return true;
 				
 			}
@@ -61,7 +62,7 @@ public class AdminCommand implements CommandExecutor {
 					games.add(g);
 					gm.deregisterGame(g);
 				}
-				plugin.lobby.sign.UpdateSigns();
+				plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
 				sender.sendMessage(""+games.size()+" has ended.");
 				Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 				final ArrayList<Game<?>> startedgames = new ArrayList<>();
@@ -71,7 +72,7 @@ public class AdminCommand implements CommandExecutor {
 							gm.registerGame(g);
 							startedgames.add(g);
 						}
-						plugin.lobby.sign.UpdateSigns();
+						plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
 					}
 				}, 20L);
 				sender.sendMessage(""+games.size()+" has started.");
@@ -141,7 +142,7 @@ public class AdminCommand implements CommandExecutor {
 						return true;
 					}
 					gm.deregisterGame(game);
-					plugin.lobby.sign.UpdateSigns();
+					plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
 					sender.sendMessage(""+game.getName()+" has ended.");
 					return true;
 				}
@@ -149,37 +150,13 @@ public class AdminCommand implements CommandExecutor {
 				Plugin plug = Bukkit.getPluginManager().getPlugin(args[1]);
 				if(plug instanceof CCGamePlugin) {
 					((CCGamePlugin)plug).makegame(args[2]);
+					plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
 				}
-				/*if(args[1].equalsIgnoreCase("ffa")) {
-					plugin.ffa.makegame(args[2]);
-					sender.sendMessage(""+args[2]+" has started.");
-				} else if (args[1].equalsIgnoreCase("uhc")) {
-					plugin.uhc.makegame(args[2]);
-					sender.sendMessage(""+args[2]+" has started.");
-				} else if (args[1].equalsIgnoreCase("ssb")) {
-					plugin.ssb.makegame(args[2]);
-					sender.sendMessage(""+args[2]+" has started.");
-				} else if (args[1].equalsIgnoreCase("tdm")) {
-					plugin.tdm.makegame(args[2]);
-					sender.sendMessage(""+args[2]+" has started.");
-				} else if (args[1].equalsIgnoreCase("inf") || args[1].equalsIgnoreCase("infected")) {
-					plugin.inf.makegame(args[2]);
-					sender.sendMessage(""+args[2]+" has started.");
-				} else if (args[1].equalsIgnoreCase("plotme")) {
-					plugin.plotme.makegame(args[2]);
-					sender.sendMessage(""+args[2]+" has started.");
-				}*/
-					
-				
-				plugin.lobby.sign.UpdateSigns();
 				return true;
 			}
-			
-	
 		}
 		return false;
 	}
-
 	private void showhelp(CommandSender sender) {
 	}
 

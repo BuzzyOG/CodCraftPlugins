@@ -1,12 +1,7 @@
 package com.codcraft.PlayerDataViewer;
 
-import java.io.File;
-
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,10 +10,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Maker implements Listener {
 	
-	private Main plugin;
+	//private Main plugin;
 
 	public Maker(Main plugin) {
-		this.plugin = plugin;
+		//this.plugin = plugin;
 	}
 	
 	private static String segmant = null; 
@@ -47,12 +42,8 @@ public class Maker implements Listener {
 	}
 
 	private boolean Save() {
-		File f = new File(plugin.getDataFolder(), "letterlocations.yml");
 		new YamlConfiguration();
-		YamlConfiguration config = YamlConfiguration.loadConfiguration(f);
-		ConfigurationSection letter = config.getConfigurationSection("Segmants");
 		if(Maker.segmant != null) {
-			ConfigurationSection segmant = letter.createSection(Maker.segmant);
 			
 		}
 		

@@ -4,6 +4,7 @@ import com.codcraft.perks.Perks;
 
 public class Eqip2x {
 
+	@SuppressWarnings("unused")
 	private Perks plugin;
 
 	public Eqip2x(Perks plugin) {
