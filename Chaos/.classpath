@@ -6,8 +6,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/downloads/bukkit-1.4.6-R0.2-20121223.214932-4.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CodCraftAPI"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="optional" value="true"/>

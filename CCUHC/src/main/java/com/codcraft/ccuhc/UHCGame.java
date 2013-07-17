@@ -1,46 +1,92 @@
 package com.codcraft.ccuhc;
 
 import java.lang.reflect.Field;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.server.v1_5_R1.MinecraftServer;
-
+import net.minecraft.server.v1_6_R1.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.craftbukkit.v1_5_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_5_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_6_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_6_R1.CraftWorld;
 import org.bukkit.entity.Player;
 
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
 import com.CodCraft.api.model.Team;
-public class UHCGame extends Game<UHC> {
+import com.codcraft.ccuhc.states.InGameStates;
+import com.codcraft.ccuhc.states.LobbyState;
 
+
+public class UHCGame extends Game<UHC> {
 	
+	private int radius = 1000;
+	
+	private String LobbyLeader = "";
+	
+	public List<GameType> types;
+
+	public Map<String, List<String>> invited = new HashMap<String, List<String>>();
 	
 	public UHCGame(UHC instance) {
 		super(instance);
-		Team team = new Team("main");
-		team.setMaxPlayers(24);
-		addTeam(team);
-		addListener(new UHClistener(instance));
 		addListener(new RecipeHandler(instance));
-		
-		
+		knownStates.put(new LobbyState(this).getId(), new LobbyState(this));
+		knownStates.put(new InGameStates(this).getId(), new InGameStates(this));
+		setState(new LobbyState(this));
 	}
 
 	@Override
 	public void initialize() {
 		Long longint = new Random().nextLong();
-		plugin.i = plugin.i+1;
-		WorldCreator world = new WorldCreator(getName()+plugin.i);
+		Team team = new Team("main");
+		team.setMaxPlayers(24);
+		addTeam(team);
+		types = new ArrayList<>();
+		WorldCreator world = new WorldCreator(getId());
 		world.seed(longint);
 		world.generateStructures(true);
 		Bukkit.createWorld(world);
+		setState(new LobbyState(this));
+	}
+
+	public void BuildBox(World world) {
+		System.out.println("Starting");
+		System.out.println("Starting X+");
+		for(int x = radius * -1; x < radius; x++) {
+			for(int y = 0; y < 256; y++) {
+				world.getBlockAt(x, y, radius).setType(Material.BEDROCK);
+			}
+		}
+		System.out.println("Starting X-");
+		for(int x = radius * -1; x < radius; x++) {
+			for(int y = 0; y < 256; y++) {
+				world.getBlockAt(x, y, radius* -1).setType(Material.BEDROCK);
+			}
+		}
+
+		System.out.println("Starting Z+");
+		for(int z = radius * -1; z < radius; z++) {
+			for(int y = 0; y < 256; y++) {
+				world.getBlockAt(radius, y, z).setType(Material.BEDROCK);
+			}
+		}
+		System.out.println("Starting Z-");
+		for(int z = radius * -1; z < radius; z++) {
+			for(int y = 0; y < 256; y++) {
+				world.getBlockAt(radius * -1, y, z).setType(Material.BEDROCK);
+			}
+		}
+
+		System.out.println("Finsihed");
 	}
 
 	@Override
@@ -57,7 +103,7 @@ public class UHCGame extends Game<UHC> {
 	@Override
 	public void deinitialize() {
 		System.out.println("trying to unload");
-		World w = Bukkit.getWorld(getName()+plugin.i);
+		World w = Bukkit.getWorld(getId());
 		Bukkit.broadcastMessage(w.getName());
 		for(Player p : w.getPlayers()) {
 			Bukkit.broadcastMessage(p.getName());
@@ -67,10 +113,12 @@ public class UHCGame extends Game<UHC> {
 			c.unload(true, false);
 		}
         forceUnloadWorld(w);
-        if(Bukkit.getWorld(getName()) != null) {
+        if(Bukkit.getWorld(getId()) != null) {
         	System.out.println("did not unload!");
         }
         //deleteWorld(w.getName());
+        regenerateID();
+        teams.clear();
 
 	}
 	
@@ -144,6 +192,26 @@ public class UHCGame extends Game<UHC> {
 	{
 		CraftServer server = (CraftServer)plugin.getServer();
 		return server.getServer();
+	}
+
+	public int getRadius() {
+		return radius;
+	}
+
+	public boolean setRadius(int radius) {
+		if(radius < 100 || radius > 2500) {
+			return false;
+		}
+		this.radius = radius;
+		return true;
+	}
+
+	public String getLobbyLeader() {
+		return LobbyLeader;
+	}
+
+	public void setLobbyLeader(String lobbyLeader) {
+		LobbyLeader = lobbyLeader;
 	}
 	
 	/*private String build() {

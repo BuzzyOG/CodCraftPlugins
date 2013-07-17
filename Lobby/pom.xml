@@ -1,8 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>Lobby</groupId>
+  <groupId>com.codcraft</groupId>
   <artifactId>Lobby</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.001</version>
+     <!-- Parent project -->
+    <parent>
+        <groupId>com.CodCraft</groupId>
+        <artifactId>CodCraftPlugins</artifactId>
+        <version>${codcraft.plugin.version}</version>
+    </parent>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -16,4 +22,11 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.codcraft</groupId>
+  		<artifactId>CCCommands</artifactId>
+  		<version>${codcraft.plugins.version}</version>
+  	</dependency>
+  </dependencies>
 </project>

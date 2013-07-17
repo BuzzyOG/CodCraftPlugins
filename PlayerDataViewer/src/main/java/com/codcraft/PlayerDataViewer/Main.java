@@ -48,11 +48,13 @@ public class Main extends JavaPlugin {
 			this.api = ccapi;
 		}
 		temploadletters();
-		game = "ffa";
+		game = YamlConfiguration.loadConfiguration(new File("./plugins/PDY/games.yml")).getString("board");
 	}
 	
 	private void temploadletters() {
-		Letter la = new Letter() {};
+		Letter lspace = new Letter("") {};
+		letters.put("", lspace);
+		Letter la = new Letter("a") {};
 		la.block2 = 0;
 		la.block4 = 0;
 		la.block6 = 0;
@@ -64,7 +66,7 @@ public class Main extends JavaPlugin {
 		la.block13 = 0;
 		la.block15 = 0;
 		letters.put("a", la);
-		Letter lb = new Letter() {};
+		Letter lb = new Letter("b") {};
 		lb.block1 = 0;
 		lb.block2 = 0;
 		lb.block4 = 0;
@@ -77,7 +79,7 @@ public class Main extends JavaPlugin {
 		lb.block13 = 0;
 		lb.block14 = 0;
 		letters.put("b", lb);
-		Letter lc = new Letter() {};
+		Letter lc = new Letter("c") {};
 		lc.block1 = 0;
 		lc.block2 = 0;
 		lc.block3 = 0;
@@ -88,7 +90,7 @@ public class Main extends JavaPlugin {
 		lc.block14 = 0;
 		lc.block15 = 0;
 		letters.put("c", lc);
-		Letter ld = new Letter() {};
+		Letter ld = new Letter("d") {};
 		ld.block1 = 0;
 		ld.block2 = 0;
 		ld.block4 = 0;
@@ -100,7 +102,7 @@ public class Main extends JavaPlugin {
 		ld.block13 = 0;
 		ld.block14 = 0;
 		letters.put("d", ld);
-		Letter le = new Letter() {};
+		Letter le = new Letter("e") {};
 		le.block1 = 0;
 		le.block2 = 0;
 		le.block3 = 0;
@@ -112,7 +114,7 @@ public class Main extends JavaPlugin {
 		le.block14 = 0;
 		le.block15 = 0;
 		letters.put("e", le);
-		Letter lf = new Letter() {};
+		Letter lf = new Letter("f") {};
 		lf.block1 = 0;
 		lf.block2 = 0;
 		lf.block3 = 0;
@@ -122,7 +124,7 @@ public class Main extends JavaPlugin {
 		lf.block10 = 0;
 		lf.block13 = 0;
 		letters.put("f", lf);
-		Letter lg = new Letter() {};
+		Letter lg = new Letter("g") {};
 		lg.block2 = 0;
 		lg.block4 = 0;
 		lg.block7 = 0;
@@ -131,7 +133,7 @@ public class Main extends JavaPlugin {
 		lg.block12 = 0;
 		lg.block14 = 0;
 		letters.put("g", lg);
-		Letter lh = new Letter() {};
+		Letter lh = new Letter("h") {};
 		lh.block1 = 0;
 		lh.block3 = 0;
 		lh.block4 = 0;
@@ -144,7 +146,7 @@ public class Main extends JavaPlugin {
 		lh.block13 = 0;
 		lh.block15 = 0;
 		letters.put("h", lh);
-		Letter li = new Letter() {};
+		Letter li = new Letter("i") {};
 		li.block1 = 0;
 		li.block2 = 0;
 		li.block3 = 0;
@@ -155,7 +157,7 @@ public class Main extends JavaPlugin {
 		li.block14 = 0;
 		li.block15 = 0;
 		letters.put("i", li);
-		Letter lj = new Letter() {};
+		Letter lj = new Letter("j") {};
 		lj.block1 = 0;
 		lj.block2 = 0;
 		lj.block3 = 0;
@@ -165,7 +167,7 @@ public class Main extends JavaPlugin {
 		lj.block13 = 0;
 		lj.block14 = 0;
 		letters.put("j", lj);
-		Letter lk = new Letter() {};
+		Letter lk = new Letter("k") {};
 		lk.block1 = 0;
 		lk.block3 = 0;
 		lk.block4 = 0;
@@ -177,7 +179,7 @@ public class Main extends JavaPlugin {
 		lk.block13 = 0;
 		lk.block15 = 0;
 		letters.put("k", lk);
-		Letter ll = new Letter() {};
+		Letter ll = new Letter("l") {};
 		ll.block1 = 0;
 		ll.block4 = 0;
 		ll.block7 = 0;
@@ -186,7 +188,7 @@ public class Main extends JavaPlugin {
 		ll.block14 = 0;
 		ll.block15 = 0;
 		letters.put("l", ll);
-		Letter lm = new Letter() {};
+		Letter lm = new Letter("m") {};
 		lm.block1 = 0;
 		lm.block3 = 0;
 		lm.block4 = 0;
@@ -200,7 +202,7 @@ public class Main extends JavaPlugin {
 		lm.block13 = 0;
 		lm.block15 = 0;
 		letters.put("m", lm);
-		Letter ln = new Letter() {};
+		Letter ln = new Letter("n") {};
 		ln.block1 = 0;
 		ln.block4 = 0;
 		ln.block5 = 0;
@@ -211,7 +213,7 @@ public class Main extends JavaPlugin {
 		ln.block13 = 0;
 		ln.block15 = 0;
 		letters.put("n", ln);
-		Letter lo = new Letter() {};
+		Letter lo = new Letter("o") {};
 		lo.block1 = 0;
 		lo.block2 = 0;
 		lo.block3 = 0;
@@ -225,7 +227,7 @@ public class Main extends JavaPlugin {
 		lo.block14 = 0;
 		lo.block15 = 0;
 		letters.put("o", lo);
-		Letter lp = new Letter() {};
+		Letter lp = new Letter("p") {};
 		lp.block1 = 0;
 		lp.block2 = 0;
 		lp.block3 = 0;
@@ -237,7 +239,7 @@ public class Main extends JavaPlugin {
 		lp.block10 = 0;
 		lp.block13 = 0;
 		letters.put("p", lp);
-		Letter lq = new Letter() {};
+		Letter lq = new Letter("q") {};
 		lq.block1 = 0;
 		lq.block2 = 0;
 		lq.block3 = 0;
@@ -249,7 +251,7 @@ public class Main extends JavaPlugin {
 		lq.block11 = 0;
 		lq.block15 = 0;
 		letters.put("q", lq);
-		Letter lr = new Letter() {};
+		Letter lr = new Letter("r") {};
 		lr.block1 = 0;
 		lr.block2 = 0;
 		lr.block3 = 0;
@@ -263,7 +265,7 @@ public class Main extends JavaPlugin {
 		lr.block13 = 0;
 		lr.block15 = 0;
 		letters.put("r", lr);
-		Letter ls = new Letter() {};
+		Letter ls = new Letter("s") {};
 		ls.block2 = 0;
 		ls.block3 = 0;
 		ls.block4 = 0;
@@ -272,7 +274,7 @@ public class Main extends JavaPlugin {
 		ls.block13 = 0;
 		ls.block14 = 0;
 		letters.put("s", ls);
-		Letter lt = new Letter() {};
+		Letter lt = new Letter("t") {};
 		lt.block1 = 0;
 		lt.block2 = 0;
 		lt.block3 = 0;
@@ -281,7 +283,7 @@ public class Main extends JavaPlugin {
 		lt.block11 = 0;
 		lt.block14 = 0;
 		letters.put("t", lt);
-		Letter lu = new Letter() {};
+		Letter lu = new Letter("u") {};
 		lu.block1 = 0;
 		lu.block3 = 0;
 		lu.block4 = 0;
@@ -294,7 +296,7 @@ public class Main extends JavaPlugin {
 		lu.block14 = 0;
 		lu.block15 = 0;
 		letters.put("u", lu);
-		Letter lv = new Letter() {};
+		Letter lv = new Letter("v") {};
 		lv.block1 = 0;
 		lv.block3 = 0;
 		lv.block4 = 0;
@@ -305,7 +307,7 @@ public class Main extends JavaPlugin {
 		lv.block12 = 0;
 		lv.block14 = 0;
 		letters.put("v", lv);
-		Letter lw = new Letter() {};
+		Letter lw = new Letter("w") {};
 		lw.block1 = 0;
 		lw.block3 = 0;
 		lw.block4 = 0;
@@ -319,7 +321,7 @@ public class Main extends JavaPlugin {
 		lw.block13 = 0;
 		lw.block15 = 0;
 		letters.put("w", lw);
-		Letter lx = new Letter() {};
+		Letter lx = new Letter("x") {};
 		lx.block1 = 0;
 		lx.block3 = 0;
 		lx.block4 = 0;
@@ -330,7 +332,7 @@ public class Main extends JavaPlugin {
 		lx.block13 = 0;
 		lx.block15 = 0;
 		letters.put("x", lx);
-		Letter ly = new Letter() {};
+		Letter ly = new Letter("y") {};
 		ly.block1 = 0;
 		ly.block3 = 0;
 		ly.block4 = 0;
@@ -343,7 +345,7 @@ public class Main extends JavaPlugin {
 		ly.block14 = 0;
 		ly.block15 = 0;
 		letters.put("y", ly);
-		Letter lz = new Letter() {};
+		Letter lz = new Letter("z") {};
 		lz.block1 = 0;
 		lz.block2 = 0;
 		lz.block3 = 0;
@@ -354,12 +356,12 @@ public class Main extends JavaPlugin {
 		lz.block14 = 0;
 		lz.block15 = 0;
 		letters.put("z", lz);
-		Letter l_ = new Letter() {};
+		Letter l_ = new Letter("_") {};
 		l_.block13 = 0;
 		l_.block14 = 0;
 		l_.block15 = 0;
 		letters.put("_", l_);
-		Letter l1 = new Letter() {};
+		Letter l1 = new Letter("1") {};
 		l1.block2 = 0;
 		l1.block5 = 0;
 		l1.block8 = 0;
@@ -367,7 +369,7 @@ public class Main extends JavaPlugin {
 		l1.block11 = 0;
 		l1.block14 = 0;
 		letters.put("1", l1);
-		Letter l2 = new Letter() {};
+		Letter l2 = new Letter("2") {};
 		l2.block1 = 0;
 		l2.block2 = 0;
 		l2.block3 = 0;
@@ -380,7 +382,7 @@ public class Main extends JavaPlugin {
 		l2.block14 = 0;
 		l2.block15 = 0;
 		letters.put("2", l2);
-		Letter l3 = new Letter() {};
+		Letter l3 = new Letter("3") {};
 		l3.block1 = 0;
 		l3.block2 = 0;
 		l3.block3 = 0;
@@ -393,7 +395,7 @@ public class Main extends JavaPlugin {
 		l3.block14 = 0;
 		l3.block15 = 0;
 		letters.put("3", l3);
-		Letter l4r = new Letter() {};
+		Letter l4r = new Letter("4") {};
 		l4r.block1 = 0;
 		l4r.block3 = 0;
 		l4r.block4 = 0;
@@ -404,7 +406,7 @@ public class Main extends JavaPlugin {
 		l4r.block12 = 0;
 		l4r.block15 = 0;
 		letters.put("4", l4r);
-		Letter l5 = new Letter() {};
+		Letter l5 = new Letter("5") {};
 		l5.block1 = 0;
 		l5.block2 = 0;
 		l5.block3 = 0;
@@ -417,7 +419,7 @@ public class Main extends JavaPlugin {
 		l5.block14 = 0;
 		l5.block15 = 0;
 		letters.put("5", l5);
-		Letter l6 = new Letter() {};
+		Letter l6 = new Letter("6") {};
 		l6.block1 = 0;
 		l6.block2 = 0;
 		l6.block3 = 0;
@@ -431,7 +433,7 @@ public class Main extends JavaPlugin {
 		l6.block14 = 0;
 		l6.block15 = 0;
 		letters.put("6", l6);
-		Letter l7 = new Letter() {};
+		Letter l7 = new Letter("7") {};
 		l7.block1 = 0;
 		l7.block2 = 0;
 		l7.block3 = 0;;
@@ -440,7 +442,7 @@ public class Main extends JavaPlugin {
 		l7.block12 = 0;
 		l7.block15 = 0;
 		letters.put("7", l7);
-		Letter l8 = new Letter() {};
+		Letter l8 = new Letter("8") {};
 		l8.block1 = 0;
 		l8.block2 = 0;
 		l8.block3 = 0;
@@ -455,7 +457,7 @@ public class Main extends JavaPlugin {
 		l8.block14 = 0;
 		l8.block15 = 0;
 		letters.put("8", l8);
-		Letter l9 = new Letter() {};
+		Letter l9 = new Letter("9") {};
 		l9.block1 = 0;
 		l9.block2 = 0;
 		l9.block3 = 0;;
@@ -469,7 +471,7 @@ public class Main extends JavaPlugin {
 		l9.block14 = 0;
 		l9.block15 = 0;
 		letters.put("9", l9);
-		Letter l0 = new Letter() {};
+		Letter l0 = new Letter("0") {};
 		l0.block1 = 0;
 		l0.block2 = 0;
 		l0.block3 = 0;;
@@ -524,7 +526,7 @@ public class Main extends JavaPlugin {
 				int i = 1;
 				Segment seg = new Segment();		
 				for(String location : Gamesconfig.getConfigurationSection("extra."+name+"."+name2).getKeys(false)) {
-					getLogger().info(name+": "+ name2+": "+location+": ");
+					
 					Location Block = new Location(world, 
 							Double.parseDouble(Gamesconfig.getString("extra"+"."+name+"."+name2+"."+location+".x")), 
 							Double.parseDouble(Gamesconfig.getString("extra"+"."+name+"."+name2+"."+location+".y")), 

@@ -2,6 +2,16 @@ package com.codcraft.PlayerDataViewer.letters;
 
 public abstract class Letter {
 	
+	public Letter(String name) {
+		this.name = name;
+	}
+	
+	private final String name;
+	
+	public String getName() {
+		return name;
+	}
+	
 	public byte block1 = 15;
 	public byte block2 = 15;
 	public byte block3 = 15;

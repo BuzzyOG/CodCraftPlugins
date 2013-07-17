@@ -12,12 +12,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.CodCraft.api.model.Game;
-import com.CodCraft.api.modules.Buddy;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCGamePlugin;
 import com.codcraft.codcraftplayer.CCPlayer;
 import com.codcraft.codcraftplayer.CCPlayerModule;
-import com.codcraft.lobby.LobbyModule;
 
 public class AdminCommand implements CommandExecutor {
 	private CCCommands plugin;
@@ -34,16 +32,32 @@ public class AdminCommand implements CommandExecutor {
 				return true;
 			}
 			final GameManager gm = plugin.api.getModuleForClass(GameManager.class);
-			Buddy bud = plugin.api.getModuleForClass(Buddy.class);
-			
+			if(args[0].equalsIgnoreCase("setteam")) {
+				Player p = (Player) sender;
+				Game<?> g = gm.getGameWithPlayer((Player)sender);
+				g.findTeamWithPlayer(p).removePlayer(p);
+				g.findTeamWithName(args[1]).addPlayer(p);
+				p.sendMessage("You are now on "+ g.findTeamWithPlayer(p).getName());
+				return true;
+			}
 			if(args[0].equalsIgnoreCase("endallgames")) {
 				for(Game<?> g : gm.getAllGames()) {
 					gm.deregisterGame(g);
 					sender.sendMessage(""+g.getName()+" has ended.");
 				}
-				plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
+				
 				return true;
 				
+			}
+			
+			if(args[0].equalsIgnoreCase("setClasses")) {
+				String player = args[1];
+				String ammount = args[2];
+				CCPlayer player1 = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(player);
+				if(player1 != null) {
+					player1.setCaCint(Integer.parseInt(ammount));
+					return true;
+				}
 			}
 			
 			if(args[0].equalsIgnoreCase("listgames")) {
@@ -52,9 +66,9 @@ public class AdminCommand implements CommandExecutor {
 				}
 			}
 			if(args[0].equalsIgnoreCase("getBuddies")) {
-				for(String s : bud.getBuddys(Bukkit.getPlayer(args[1]))) {
-					sender.sendMessage(s);
-				}
+				//for(String s : bud.getBuddys(new Buddies(args[1]))) {
+				//	sender.sendMessage(s);
+				//}
 			}
 			if(args[0].equalsIgnoreCase("restartallgames")) {
 				final ArrayList<Game<?>> games = new ArrayList<>();
@@ -62,7 +76,7 @@ public class AdminCommand implements CommandExecutor {
 					games.add(g);
 					gm.deregisterGame(g);
 				}
-				plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
+				
 				sender.sendMessage(""+games.size()+" has ended.");
 				Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 				final ArrayList<Game<?>> startedgames = new ArrayList<>();
@@ -72,7 +86,7 @@ public class AdminCommand implements CommandExecutor {
 							gm.registerGame(g);
 							startedgames.add(g);
 						}
-						plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
+						
 					}
 				}, 20L);
 				sender.sendMessage(""+games.size()+" has started.");
@@ -142,7 +156,7 @@ public class AdminCommand implements CommandExecutor {
 						return true;
 					}
 					gm.deregisterGame(game);
-					plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
+					
 					sender.sendMessage(""+game.getName()+" has ended.");
 					return true;
 				}
@@ -150,7 +164,7 @@ public class AdminCommand implements CommandExecutor {
 				Plugin plug = Bukkit.getPluginManager().getPlugin(args[1]);
 				if(plug instanceof CCGamePlugin) {
 					((CCGamePlugin)plug).makegame(args[2]);
-					plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
+					
 				}
 				return true;
 			}

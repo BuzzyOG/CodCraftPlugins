@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -17,10 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.CodCraft.api.CCAPI;
-import com.CodCraft.api.event.GameWinEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
-import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCGamePlugin;
 
@@ -28,9 +25,8 @@ public class CodCraftFFA extends CCGamePlugin {
 	
 	public CCAPI api;
 	public Map<String, ArrayList<Location>> spawnpoints = new HashMap<>();
-	public Map<String, FFAModel> currentmap = new HashMap<>();
-	public ArrayList<String> maps  = new ArrayList<>();
-	private CodCraftFFA plugin;
+	public ArrayList<String> maps  = new ArrayList<>(); 
+
 
 	public void onEnable() {
 
@@ -43,17 +39,31 @@ public class CodCraftFFA extends CCGamePlugin {
 	         getServer().getPluginManager().disablePlugin(this);
 	         return;
 	      }
+	     
 	      spawnLoad();
 	      Bukkit.getPluginManager().registerEvents(new GameListener(this), this);
-	      getCommand("vote").setExecutor(new VoteCommand(this));
-	      
-	      	plugin = this;
-	      
-
-	      GameTimer();
+	      alwaysDay();
 	    }
 	
-	   private void spawnLoad() {
+	   private void alwaysDay() {
+		   final CodCraftFFA ffa = this;
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				List<Game<?>> games = api.getModuleForClass(GameManager.class).getGamesForPlugin(ffa);
+				for(Game<?> g : games) {
+					World world = Bukkit.getWorld(g.getName());
+					if(world != null) {
+						world.setTime(6062);
+					}
+				}
+			}
+		}, 0, 200);
+		
+	}
+
+	private void spawnLoad() {
 		     File spawns = new File("./plugins/FFA/config.yml");
 		     YamlConfiguration config = YamlConfiguration.loadConfiguration(spawns);
 		     for(String s : config.getConfigurationSection("maps").getKeys(false)) {
@@ -63,6 +73,14 @@ public class CodCraftFFA extends CCGamePlugin {
 		    	  Location loc = new Location(Bukkit.getWorld("world"), Double.parseDouble(config.getString("maps."+s+"."+location+".x")),
 		                       Double.parseDouble(config.getString("maps."+s+"."+location+".y")), Double.parseDouble(config	
 		                             .getString("maps."+s+"."+location+".z")));
+		    	  /*Float yaw = Float.parseFloat(config.getString("maps."+s+"."+location+".yaw"));
+		    	  if(yaw != null) {
+		    		  loc.setYaw(yaw);
+		    	  }
+		    	  Float pitch = Float.parseFloat(config.getString("maps."+s+"."+location+".pitch"));
+		    	  if(pitch != null) {
+		    		  loc.setPitch(pitch);
+		    	  }*/
 		    	  spawnpoints.get(s).add(loc);
 		      }
 	      }
@@ -87,7 +105,7 @@ public class CodCraftFFA extends CCGamePlugin {
 	
 	@Override
 	public String getTag() {
-		return "[FFA]";
+		return "[Free For All]";
 	}
 	
 	public enum GameState {
@@ -96,7 +114,7 @@ public class CodCraftFFA extends CCGamePlugin {
 		INGAME,
 		
 	}
-	public void GameTimer() {
+	/*public void GameTimer() {
 		
 		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 			
@@ -206,7 +224,7 @@ public class CodCraftFFA extends CCGamePlugin {
 				
 			}
 		}, 1, 20);
-	}
+	}*/
 	public Location Respawn(Player p,	 World world, String map, Game<?> g) {
 	      List<Location> locationlist = spawnpoints.get(map);
 	      List<Location> Aloowed = new ArrayList<Location>();

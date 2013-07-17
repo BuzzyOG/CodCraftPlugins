@@ -5,30 +5,35 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+
 public class ReloadTimer implements Runnable {
 	
 	private Weapons plugin;
-	private Player player;
-	private int arrow;
-	private double i;
-	public ReloadTimer(Weapons plugin, Player player, int arrows, double d) {
+	private String name;
+	private Double time;
+	private int snowballs;
+
+	public ReloadTimer(Weapons plugin, String name, double time, int snowballs) {
 		this.plugin = plugin;
-		this.player = player;
-		this.arrow = arrows;
-		this.i = d;
+		this.name = name;
+		this.time = time;
+		this.snowballs = snowballs;
 	}
-	
+
 	@Override
 	public void run() {
-		if(player.getExp() <= 0) {
-			player.getInventory().addItem(new ItemStack(Material.SNOW_BALL, arrow));
-			plugin.reloaders.remove(player.getName());
-			return;
-		} else {
-			player.setExp((float) (player.getExp() - i));
-			Bukkit.getScheduler().runTaskLater(plugin, new ReloadTimer(plugin, player, arrow, i), 5);
+		Player p = Bukkit.getPlayer(name);
+		if(p != null) {
+			if(p.getExp() <= 0) {
+				p.getInventory().addItem(new ItemStack(Material.SNOW_BALL, snowballs));
+				if(plugin.reloders.containsKey(p.getName())) {
+					plugin.reloders.get(p.getName()).cancel();
+					plugin.reloders.remove(p.getName());
+				}
+			} else {
+				p.setExp((float) (p.getExp() - .1));
+			}
 		}
-
 	}
 
 }

@@ -10,17 +10,17 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.codcraft.lobby.ping.Ping;
-import com.codcraft.lobby.ping.Result;
-import com.codcraft.lobby.ping.Update;
+import com.codcraft.lobby.ping.PingManager;
 
 
 public class CCLobby extends JavaPlugin {
 		
 	public List<Module> configmap = new ArrayList<>();
+	public PingManager pingManager;
 
 	
 	public void onDisable() {
@@ -34,17 +34,52 @@ public class CCLobby extends JavaPlugin {
 		
 		checkplugins();
 		
+		//Always Day
+		AlwaysDay();
+		
 		//register events
 		
 		getServer().getPluginManager().registerEvents(new LobbyListener(this), this);
 		getServer().getPluginManager().registerEvents(new LobbyMaker(this), this);
 		getCommand("maker").setExecutor(new makercommand());
+		getLogger().info(getCommand("maker").getPermission());
+		PluginCommand command = getCommand("send");
+		command.setExecutor(new SendCommand(this));
+		getLogger().info(command.getPermission());
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-		Ping.getInstance().loadConfig2();
-		Ping.getInstance().startPing();
-		updateSigns();
-		getServer().getScheduler().runTaskTimer(this, new Update(this), 20, 20);
+		getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener(this));
+		this.pingManager = new PingManager(this);
+		pingManager.setUp(configmap);
+		
+		startTimer();
 
+
+	}
+
+	private void startTimer() {
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				pingManager.pingServers();
+				updateSigns();
+			}
+		}, 0, 1200);
+		
+	}
+
+	private void AlwaysDay() {
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				World world = Bukkit.getWorld("world");
+				if(world != null) {
+					world.setTime(6000);
+				}	
+			}
+		}, 0, 200);
+		
 	}
 
 	private void checkplugins() {
@@ -67,6 +102,7 @@ public class CCLobby extends JavaPlugin {
 				String name = Gamesconfig.getString("Games."+Gamestring+".Name");
 				String game = Gamesconfig.getString("Games."+Gamestring+".Server");
 				String IP = Gamesconfig.getString("Games."+Gamestring+".IP");
+				int port = Gamesconfig.getInt("Games."+Gamestring+".Port");
 				Location locblock1 = new Location(LobbyWorld, 
 						Double.parseDouble(Gamesconfig.getString("Games."+Gamestring+".Block1.x")), 
 						Double.parseDouble(Gamesconfig.getString("Games."+Gamestring+".Block1.y")), 
@@ -92,6 +128,7 @@ public class CCLobby extends JavaPlugin {
 				mapModule.setName(name);
 				mapModule.setSignBlock1(SignBlock);
 				mapModule.setSignBlock2(SignBlock2);
+				mapModule.port = port;
 				configmap.add(mapModule);
 			}
 		}
@@ -99,15 +136,34 @@ public class CCLobby extends JavaPlugin {
 	}
 	
 	public void updateSigns() {
+		Bukkit.broadcastMessage("Starting updating!");
 		if(configmap != null) {
 	    	for (Module ts : configmap) {
 	    		Location l = ts.SignBlock1.getBlock().getLocation();
 	    		Block b = l.getBlock();
-	    		if ((b.getState() instanceof Sign)) {
+	    		if (b.getState() instanceof Sign) {
 	    			Sign s = (Sign)b.getState();
-	    			Result res = Ping.getInstance().results.get(ts.getServer());
+	    			List<String> res = pingManager.getPingForServer(ts.getServer());
 	    			if(res != null) {
-	    				if (res.isOnline()) {
+	    				if(res.get(4).equalsIgnoreCase("true")) {
+		    				s.setLine(0, res.get(0));
+		    				s.setLine(1, res.get(3));
+		    				s.setLine(2, ChatColor.GREEN + res.get(1) + "/" + res.get(2));
+		    				s.setLine(3, ChatColor.GREEN + "Online");
+		    				s.update();
+	    				} else {
+	    					s.setLine(0, res.get(0));
+	    					s.setLine(2, ChatColor.RED+ "-/-");
+	    					s.setLine(3, ChatColor.RED + "Offline");
+	    					s.update();
+	    				}
+	    			} else {
+	    				s.setLine(1, "Please Contact");
+	    				s.setLine(2, "Admin");
+	    				s.update();
+	    			}
+
+	    				/*if (res.isOnline()) {
 	    					String npl = String.valueOf(res.getPlayersOnline());
 	    					String mpl = String.valueOf(res.getMaxPlayers());
 	    					String motd = res.getMotd();
@@ -118,12 +174,12 @@ public class CCLobby extends JavaPlugin {
 	    					s.update();
 	    				} else {
 	    					s.setLine(0, ts.server);
-	    					s.setLine(1, (String)Ping.getInstance().display.get(ts.getServer()));
+	    					s.setLine(1, ts.getName());
 	    					s.setLine(2, ChatColor.RED+ "-/-");
 	    					s.setLine(3, ChatColor.RED + "Offline");
 	    					s.update();
-	    				}
-	       			}
+	    				}*/
+	       			
 	    		}
 	    		Location sign2loc = ts.SignBlock2.getBlock().getLocation();
 	    		Block sb = sign2loc.getBlock();

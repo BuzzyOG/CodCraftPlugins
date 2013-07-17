@@ -1,10 +1,10 @@
 package com.codcraft.weapons;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -35,7 +36,11 @@ public class C4 implements Listener {
 		plugin.api.getModuleForClass(CaCModule.class).addweapon("C4", "equipment");
 	}
 	
-	private Map<Location, String> c4spots = new ConcurrentHashMap<Location, String>();
+	private Map<Location, String> c4spots = new HashMap<Location, String>();
+	
+		public synchronized Map<Location, String> getC4Spots() {
+			return c4spots;
+		}
 	
 	   @EventHandler
 	   public void onEntdamage(PlayerDamgedByWeaponEvent e) {
@@ -63,16 +68,14 @@ public class C4 implements Listener {
 			return;
 		}
 		if(e.getBlockPlaced().getType() == Material.LEVER) {
-			c4spots.put(e.getBlockPlaced().getLocation(), e.getPlayer().getName());
+			getC4Spots().put(e.getBlockPlaced().getLocation(), e.getPlayer().getName());
 			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 				
 				@SuppressWarnings("deprecation")
 				@Override
 				public void run() {
-					if(!e.getPlayer().getInventory().contains(Material.LEVER)) {
-						e.getPlayer().setItemInHand(new ItemStack(Material.STICK));
+						e.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
 						e.getPlayer().updateInventory();
-					}
 				}
 			}, 2);
 
@@ -80,13 +83,34 @@ public class C4 implements Listener {
 	}
 	
 	@EventHandler
+	public void onHit(ProjectileHitEvent e) {
+		if(e.getEntity().getShooter() instanceof Player) {
+			Player p = (Player) e.getEntity().getShooter();
+			Game<?> g = plugin.api.getModuleForClass(GameManager.class).getGameWithPlayer(p);
+			if(g != null) {
+				if(plugin.checkIfGameIsInstanceOfPlugin(g)) {
+					for(Entry<Location, String> en : getC4Spots().entrySet()) {
+						List<Entity> enties = getNearbyEntities(en.getKey(), 1);
+						for(Entity entity : enties) {
+							if(entity instanceof Player) {
+								((Player) entity).damage(20D);
+								
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		if(c4spots.containsValue(e.getEntity().getName())) {
-			Map<Location, String> endt = c4spots;
+		if(getC4Spots().containsValue(e.getEntity().getName())) {
+			Map<Location, String> endt = getC4Spots();
 			for(Entry<Location, String> entry : endt.entrySet()) {
 				if(entry.getValue().equalsIgnoreCase(e.getEntity().getName())) {
 					entry.getKey().getBlock().setType(Material.AIR);
-					c4spots.remove(e.getEntity().getName());
+					getC4Spots().remove(e.getEntity().getName());
 				}
 			}
 		}
@@ -100,7 +124,7 @@ public class C4 implements Listener {
 			if(e.getPlayer().getItemInHand().getType() == Material.STICK) {
 				e.getPlayer().getInventory().remove(Material.STICK);
 				e.getPlayer().updateInventory();
-				Map<Location, String> s = c4spots;
+				Map<Location, String> s = getC4Spots();
 				for(Entry<Location, String> en : s.entrySet()) {
 					if(en.getValue().equalsIgnoreCase(e.getPlayer().getName())) {
 						for(Entity ent : getNearbyEntities(en.getKey(), 3)) {
@@ -110,7 +134,7 @@ public class C4 implements Listener {
 						}
 						en.getKey().getWorld().createExplosion(en.getKey(), 0);
 						en.getKey().getBlock().setType(Material.AIR);
-						c4spots.remove(en.getKey());
+						getC4Spots().remove(en.getKey());
 					}
 				}
 			}
@@ -150,12 +174,12 @@ public class C4 implements Listener {
 		   Team p1 = game.findTeamWithPlayer(p);
 		   Team k1 = game.findTeamWithPlayer(k);
 		   if (p== k){
-			   p.damage(20);
+			   p.damage(20D);
 			   return true;
 		   } else if( p1.getId().equalsIgnoreCase(k1.getId()))  {
 			   return false;
 		   } else {
-			   k.damage(20, p);
+			   k.damage(20D, p);
 			   return true;
 		   }
 	   }

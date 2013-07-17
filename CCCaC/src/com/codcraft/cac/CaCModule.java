@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.CodCraft.api.CCAPI;
-import com.CodCraft.api.event.CaCEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.GameManager;
@@ -31,7 +30,7 @@ public class CaCModule extends CCModule {
 	}
 	
 	public void forceAddCaCUser(final Player p, int box) {
-		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		GameManager gm = api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
 		
 	      CaCEvent event = new CaCEvent(p);
@@ -56,7 +55,7 @@ public class CaCModule extends CCModule {
 	}
 	
 	public void addCaCUser(final Player p) {
-		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		GameManager gm = api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
 		
 	      CaCEvent event = new CaCEvent(p);
@@ -67,29 +66,48 @@ public class CaCModule extends CCModule {
 	      if(!isCaCUser(p)) {
 	         plugin.locations.CaCBox.put(p.getName(), GetBoxtoput());
 	      }
-	      p.sendMessage("Telporting in 5 secs");
-			CCPlayerModule playermodule = plugin.api.getModuleForClass(CCPlayerModule.class);
+	      if(g != null) {
+	    	  p.sendMessage("Telporting in 5 secs");
+				CCPlayerModule playermodule = api.getModuleForClass(CCPlayerModule.class);
+				CCPlayer player = playermodule.getPlayer(p);
+				final CCClass clazz = player.getClass(1);
+
+		      Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+				
+				@Override
+				public void run() {
+					if(g != null) {
+						g.findTeamWithPlayer(p).removePlayer(p);
+					}
+					p.getInventory().clear();
+					ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
+					BookMeta bm = (BookMeta) book.getItemMeta();
+					bm.addPage("Welcome to Create A Class! Please go up to signs and right click to configure your classes!");
+					book.setItemMeta(bm);
+					p.getInventory().addItem(book);
+					p.teleport(plugin.locations.LobbySpawn.get(GetBox(p)));
+					LoadSigns(p, clazz.getGun(), clazz.getPerk1(), clazz.getPerk2(), clazz.getPerk3(),
+							clazz.getEquipment(), clazz.getKillStreak());
+				}
+			}, 100);
+		      
+	      } else {
+	    	  p.sendMessage("Telporting...");
+			CCPlayerModule playermodule = api.getModuleForClass(CCPlayerModule.class);
 			CCPlayer player = playermodule.getPlayer(p);
 			final CCClass clazz = player.getClass(1);
-
-	      Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-			
-			@Override
-			public void run() {
-				if(g != null) {
-					g.findTeamWithPlayer(p).removePlayer(p);
-				}
-				p.getInventory().clear();
-				ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
-				BookMeta bm = (BookMeta) book.getItemMeta();
-				bm.addPage("Welcome to Create A Class! Please go up to signs and right click to configure your classes!");
-				book.setItemMeta(bm);
-				p.getInventory().addItem(book);
-				p.teleport(plugin.locations.LobbySpawn.get(GetBox(p)));
-				LoadSigns(p, clazz.getGun(), clazz.getPerk1(), clazz.getPerk2(), clazz.getPerk3(),
-						clazz.getEquipment(), clazz.getKillStreak());
-			}
-		}, 100);
+			p.getInventory().clear();
+			ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
+			BookMeta bm = (BookMeta) book.getItemMeta();
+			bm.addPage("Welcome to Create A Class! Please go up to signs and right click to configure your classes!");
+			book.setItemMeta(bm);
+			p.getInventory().addItem(book);
+			p.teleport(plugin.locations.LobbySpawn.get(GetBox(p)));
+			LoadSigns(p, clazz.getGun(), clazz.getPerk1(), clazz.getPerk2(),
+					clazz.getPerk3(), clazz.getEquipment(),
+					clazz.getKillStreak());
+	      }
+	       
 	      
 	}
 	public int GetBox(Player p) {

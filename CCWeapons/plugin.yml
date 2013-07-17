@@ -1,4 +1,7 @@
 name: CCWeapon
 main: com.codcraft.weapons.Weapons
-version: 1
-depend: [CodCraftAPI]
+version: 0.0.001
+depend: [CodCraftAPI, FFA]
+commands: 
+    vote:
+      description: Got to cac

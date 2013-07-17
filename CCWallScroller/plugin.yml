@@ -1,4 +1,4 @@
 name: CCWAll
 main: com.codcraft.walls.WS
-version: 1
+version: 0.0.001
 depend: [WorldGuard]

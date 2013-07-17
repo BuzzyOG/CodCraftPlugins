@@ -18,11 +18,39 @@ public class ClassCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(label.equalsIgnoreCase("class")) {
 			if(args.length == 1) {
-				CCPlayerModule ccp = plugin.api.getModuleForClass(CCPlayerModule.class);
-				ccp.getPlayer((Player) (sender)).setCurrentclass(Integer.parseInt(args[0]));
+				Player p = (Player) sender;
+				String clas = args[0];
+				Integer atuall = isInt(clas);
+				if(atuall != null) {
+					CCPlayerModule ccp = plugin.api.getModuleForClass(CCPlayerModule.class);
+					if(ccp.getPlayer(p).setCurrentclass(atuall)) {
+						sender.sendMessage("Set your class to " + atuall);
+					} else {
+						sender.sendMessage("Must be a class you have!");
+					}
+					
+					return true;
+				} else {
+					sender.sendMessage("Must be a number!");
+					return true;
+				}
+			} else {
+				sender.sendMessage("Ussage: /class <num>");
+				return true;
 			}
 		}
 		return false;
+	}
+	
+	public Integer isInt(String i) {
+		Integer integer = null;
+		try {
+			integer = Integer.parseInt(i);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+		return integer;
+		
 	}
 
 }

@@ -1,6 +1,6 @@
 name: FPL
 main: com.codcraft.fpl.FunPointLogger
-version: 1
+version: 0.0.001
 depend: [CodCraftAPI]
 softdepend: [CodCraftPlayer]
 commands:

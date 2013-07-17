@@ -3,7 +3,6 @@ package com.codcraft.lobby;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,14 +12,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.CodCraft.api.CCAPI;
-import com.codcraft.ffa.CodCraftFFA;
 
 public class CCLobby extends JavaPlugin {
 	
 	public CCAPI CCAPI;
 	public Map<String, Lobby> configmap = new HashMap<String, Lobby>();
 	public LobbySign sign;
-	public CodCraftFFA FFA;
 	
 	
 	public void onEnable() {
@@ -36,7 +33,6 @@ public class CCLobby extends JavaPlugin {
 		//Load Config
 		LoadConfig();
 		
-		checkplugins();
 		
 		//register events
 		getServer().getPluginManager().registerEvents(new LobbyListener(this), this);
@@ -44,15 +40,6 @@ public class CCLobby extends JavaPlugin {
 		sign.UpdateSigns();
 	}
 
-	private void checkplugins() {
-		final Plugin ffa = this.getServer().getPluginManager().getPlugin("FFA");
-		if(ffa == null) {
-			getLogger().log(Level.WARNING, "FFA was not found disanbling name system for it");
-		} else {
-			this.FFA = (CodCraftFFA) ffa;
-		}
-		
-	}
 
 	private void LoadConfig() {
 		File Games = new File(getDataFolder(), "games.yml");
@@ -92,7 +79,7 @@ public class CCLobby extends JavaPlugin {
 				mapLobby.setName(name);
 				mapLobby.setSignBlock(SignBlock);
 				mapLobby.setLampblock(lampblock);
-				configmap.put(Gamestring, mapLobby);
+				configmap.put(name, mapLobby);
 			}
 		}
 		

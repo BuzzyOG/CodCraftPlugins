@@ -47,11 +47,16 @@
 		<module>TFM2</module>
 		<module>ccssbb</module>
 		<module>CCKingOfTheLadder</module>
+		<module>CCMusic</module>
+		<module>CCSG</module>
+		<module>CCMusic</module>
+		<module>CCCopsAndRobbers</module>
 	</modules>
 	<!-- Properties. -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<codcraft.plugin.version>10</codcraft.plugin.version>
+		<codcraft.plugins.version>0.0.001</codcraft.plugins.version>
 	</properties>
 	<!-- Dependencies. -->
 	<dependencies>
@@ -63,7 +68,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.5-R0.1-SNAPSHOT</version>
+			<version>1.6.1-R0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.kitteh</groupId>

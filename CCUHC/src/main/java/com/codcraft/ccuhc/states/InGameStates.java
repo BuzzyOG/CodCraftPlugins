@@ -1,33 +1,43 @@
 package com.codcraft.ccuhc.states;
 
 
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
+
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
 import com.codcraft.ccuhc.UHC;
+import com.codcraft.ccuhc.UHCGame;
+import com.codcraft.lobby.LobbyModule;
 
 public class InGameStates implements GameState<UHC> {
+	
+	public InGameStates(Game<?> g) {
+		this.g = (UHCGame) g;
+	}
 
 	private Game<UHC> g;
-	private String id = "1453645";
+	private String id = "Game";
+	private BukkitTask task;
 	
 	@Override
 	public String getId() {
 		return id;
 	}
 
-	@Override
-	public void setInterval(int duration) {
-		
-	}
-
-	@Override
-	public int getInterval() {
-		return 0;
-	}
 
 	@Override
 	public Runnable getTask() {
-		return null;
+		Runnable run = new Runnable() {
+			
+			@Override
+			public void run() {
+				LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+				lm.UpdateSign(lm.getLobby(getGame().getName()));
+				
+			}
+		};
+		return run;
 	}
 
 	@Override
@@ -39,6 +49,32 @@ public class InGameStates implements GameState<UHC> {
 	@Override
 	public Game<UHC> getGame() {
 		return g;
+	}
+
+	@Override
+	public void setTimeLeft(int duration) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getTimeLeft() {
+		// TODO Auto-generated method stub
+		return -2;
+	}
+
+	@Override
+	public void Start() {
+		task = Bukkit.getScheduler().runTaskTimer(getGame().getPlugin(), getTask(), 0, 20);
+		
+	}
+
+	@Override
+	public void Stop() {
+		if(task != null) {
+			task.cancel();
+		}
+		
 	}
 
 }

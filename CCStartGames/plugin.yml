@@ -1,4 +1,4 @@
 name: startgames
 main: com.codcraft.ccstartgame.CCStartGame
-version: 1
+version: 0.0.001
 depend: [CCCommands]

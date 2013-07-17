@@ -8,17 +8,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.CodCraft.api.event.RequestJoinGameEvent;
-import com.CodCraft.api.event.team.TeamPlayerLostEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.GameManager;
+import com.codcraft.ccommands.PlayerDoSpawnEvent;
 import com.codcraft.lobby.event.PlayerEnterLobbyEvent;
 import com.codcraft.lobby.event.PlayerToLobbyEvent;
 
@@ -34,15 +33,12 @@ public class LobbyListener implements Listener {
 		Bukkit.getPluginManager().callEvent(event);
 	}
 	
-	@EventHandler
-	public void firstjoin(AsyncPlayerPreLoginEvent e) {
-		
-		
-	}
+	
+
 	
 	
 	@EventHandler (priority = EventPriority.LOWEST)
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(PlayerInteractEvent e) {
 		GameManager gamemanger = plugin.CCAPI.getModuleForClass(GameManager.class);
 
 		for(Entry<String, Lobby> lobby : plugin.configmap.entrySet()) {
@@ -72,7 +68,7 @@ public class LobbyListener implements Listener {
 				
 				RequestJoinGameEvent revent = new RequestJoinGameEvent(p, game, null);
 				Bukkit.getPluginManager().callEvent(revent);
-				plugin.sign.UpdateSigns();
+				plugin.sign.updateSign(plugin.CCAPI.getModuleForClass(LobbyModule.class).getLobby(game.getName()));
 				if(revent.getTeam() == null) {
 					return;
 				}
@@ -84,13 +80,18 @@ public class LobbyListener implements Listener {
 		}
 		
 	}
+	
 	@EventHandler
-	public void onLeaveGame(TeamPlayerLostEvent e) {
-		
+	public void onDisbatch(PlayerDoSpawnEvent e) {
 		PlayerToLobbyEvent event = new PlayerToLobbyEvent(e.getPlayer());
 		Bukkit.getPluginManager().callEvent(event);
-		plugin.sign.UpdateSigns();
+		if(e.getGame() == null) {
+			return;
+		}
+		plugin.sign.updateSign(plugin.CCAPI.getModuleForClass(LobbyModule.class).getLobby(e.getGame().getName()));
 	}
+	
+
 	@EventHandler
 	public void playerquit(PlayerQuitEvent e) {
 		plugin.sign.UpdateSigns();

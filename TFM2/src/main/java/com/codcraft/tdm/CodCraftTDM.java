@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -29,15 +28,11 @@ public class CodCraftTDM extends CCGamePlugin {
 	public CCAPI api;
 	public Map<String, ArrayList<Location>> teamonespawns = new HashMap<>();
 	public Map<String, ArrayList<Location>> teamtwospawns = new HashMap<>();
-	
-	
 	public Map<String, ArrayList<Location>> spawnpoints = new HashMap<>();
-	public Map<String, TDMModel> currentmap = new HashMap<>();
 	public ArrayList<String> maps  = new ArrayList<>();
-	private CodCraftTDM plugin;
+
 
 	public void onEnable() {
-
 	      final Plugin api = this.getServer().getPluginManager().getPlugin("CodCraftAPI");
 	      if(api != null || !(api instanceof CCAPI)) {
 	         this.api = (CCAPI) api;
@@ -50,39 +45,51 @@ public class CodCraftTDM extends CCGamePlugin {
 	      spawnLoad();
 	      team1Load();
 	      team2Load();
-	      Bukkit.getPluginManager().registerEvents(new GameListener(this), this);
-	      getCommand("vote").setExecutor(new VoteCommand(this));
-	      
-	      	plugin = this;
-	      
-
-	      GameTimer();
+	      Bukkit.getPluginManager().registerEvents(new GameListener(this), this);  
+	      alwaysDay();
 	    }
 	
+	   private void alwaysDay() {
+		   final CodCraftTDM ffa = this;
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				List<Game<?>> games = api.getModuleForClass(GameManager.class).getGamesForPlugin(ffa);
+				for(Game<?> g : games) {
+					World world = Bukkit.getWorld(g.getName());
+					if(world != null) {
+						world.setTime(6062);
+					}
+				}
+			}
+		}, 0, 200);
+		
+	}
+	
 	private void team2Load() {
-	    File spawns = new File("./plugins/TDM/team2.yml");
+	    File spawns = new File("./plugins/TDM/config.yml");
 	    YamlConfiguration config = YamlConfiguration.loadConfiguration(spawns);
-	    for(String s : config.getConfigurationSection("maps").getKeys(false)) {
+	    for(String s : config.getConfigurationSection("Team2.maps").getKeys(false)) {
 		      teamtwospawns.put(s, new ArrayList<Location>());
-		      for(String location : config.getConfigurationSection("maps."+s).getKeys(false)) {
-		    	  Location loc = new Location(Bukkit.getWorld("world"), Double.parseDouble(config.getString("maps."+s+"."+location+".x")),
-		                       Double.parseDouble(config.getString("maps."+s+"."+location+".y")), Double.parseDouble(config	
-		                             .getString("maps."+s+"."+location+".z")));
+		      for(String location : config.getConfigurationSection("Team2.maps."+s).getKeys(false)) {
+		    	  Location loc = new Location(Bukkit.getWorld("world"), Double.parseDouble(config.getString("Team2.maps."+s+"."+location+".x")),
+		                       Double.parseDouble(config.getString("Team2.maps."+s+"."+location+".y")), Double.parseDouble(config	
+		                             .getString("Team2.maps."+s+"."+location+".z")));
 		    	  teamtwospawns.get(s).add(loc);
 		      }
 	      }
-		
 	}
 
 	private void team1Load() {
-	     File spawns = new File("./plugins/TDM/team1.yml");
+	     File spawns = new File("./plugins/TDM/config.yml");
 	     YamlConfiguration config = YamlConfiguration.loadConfiguration(spawns);
-		    for(String s : config.getConfigurationSection("maps").getKeys(false)) {
+		    for(String s : config.getConfigurationSection("Team1.maps").getKeys(false)) {
 			      teamonespawns.put(s, new ArrayList<Location>());
-			      for(String location : config.getConfigurationSection("maps."+s).getKeys(false)) {
-			    	  Location loc = new Location(Bukkit.getWorld("world"), Double.parseDouble(config.getString("maps."+s+"."+location+".x")),
-			                       Double.parseDouble(config.getString("maps."+s+"."+location+".y")), Double.parseDouble(config	
-			                             .getString("maps."+s+"."+location+".z")));
+			      for(String location : config.getConfigurationSection("Team1.maps."+s).getKeys(false)) {
+			    	  Location loc = new Location(Bukkit.getWorld("world"), Double.parseDouble(config.getString("Team1.maps."+s+"."+location+".x")),
+			                       Double.parseDouble(config.getString("Team1.maps."+s+"."+location+".y")), Double.parseDouble(config	
+			                             .getString("Team1.maps."+s+"."+location+".z")));
 			    	  teamonespawns.get(s).add(loc);
 			      }
 		      }
@@ -125,134 +132,42 @@ public class CodCraftTDM extends CCGamePlugin {
 		return "[TDM]";
 	}
 	
-	public enum GameState {
-		
-		LOBBY,
-		INGAME,
-		
-	}
-	public void GameTimer() {
-		
-		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
-			
-			@Override
-			public void run() {
-				GameManager gm = api.getModuleForClass(GameManager.class);
-				for(Entry<String, TDMModel> model : currentmap.entrySet()) {
-					if(model.getValue().state == null) {
-						model.getValue().state = com.codcraft.tdm.CodCraftTDM.GameState.LOBBY;
-						model.getValue().gametime = 30;
-					}
-					Random rnd = new Random();
-					if(model.getValue().state == com.codcraft.tdm.CodCraftTDM.GameState.LOBBY) {
-						if(model.getValue().Map2 == null) {
-							model.getValue().Map2 = maps.get(rnd.nextInt(maps.size()));
-						}
-						if(model.getValue().Map1 == null) {
-							model.getValue().Map1 = maps.get(rnd.nextInt(maps.size()));
-						}
-						
-						while(model.getValue().Map1.equalsIgnoreCase(model.getValue().Map2)) {
-							model.getValue().Map1 = maps.get(rnd.nextInt(maps.size()));
-						}
-						
-						if(model.getValue().gametime > 0) {
-							model.getValue().gametime--;
-						} else {
-							List<TeamPlayer> teamPlayers = new ArrayList<>();
-							for(Team t : gm.getGameWithId(model.getKey()).getTeams()) {
-								for(TeamPlayer tp : t.getPlayers()) {
-									teamPlayers.add(tp);
-								}
-							}
-							if(teamPlayers.size() == 0) {
-								model.getValue().state = com.codcraft.tdm.CodCraftTDM.GameState.LOBBY;
-								model.getValue().gametime = 30;
-							} else {
-								if(model.getValue().map1 > model.getValue().map2) {
-									model.getValue().map = model.getValue().Map1;
-									
-								} else {
-									model.getValue().map = model.getValue().Map2;
-								}
-								
-								model.getValue().map1 = 0;
-								model.getValue().map2 = 0;
-								model.getValue().voters.clear();
-								model.getValue().state = com.codcraft.tdm.CodCraftTDM.GameState.INGAME;
-								model.getValue().gametime = 600;
-								Game<?> g = gm.getGameWithId(model.getKey());
-
-								RespawnAll(Bukkit.getWorld(g.getName()), model.getValue().map, g);
-							}
-						}
-							
-					}
-					if(model.getValue().state == com.codcraft.tdm.CodCraftTDM.GameState.INGAME) {
-						if(model.getValue().gametime > 0) {
-							model.getValue().gametime--;
-						} else {
-							
-							detectWin(gm.getGameWithId(model.getKey()));
-
-							model.getValue().state = com.codcraft.tdm.CodCraftTDM.GameState.LOBBY;
-							model.getValue().gametime = 30;
-							
-						}
-					}
-					
-					
-				}
-				for(Game<?> g1 : api.getModuleForClass(GameManager.class).getGamesForPlugin(plugin)) {
-					for(Team t : g1.getTeams()) {
-						for(TeamPlayer p1 : t.getPlayers()) {
-							Player p = Bukkit.getPlayer(p1.getName());
-							if(!p.isOnline()) {
-								break;
-							}
-							p.setLevel(currentmap.get(g1.getId()).gametime);
-						}
-					}
-				}
-				
-				
+	public void detectWin(Game<?> g) {
+		Team team = null;
+		int score = 0;
+		for(Team t : g.getTeams()) {
+			if(t.getScore() >= score) {
+				team = t;
+				score = t.getScore();
 			}
-
-			private void detectWin(Game<?> g) {
-				Team team = null;
-				int score = 0;
-				for(Team t : g.getTeams()) {
-					if(t.getScore() >= score) {
-						team = t;
-						score = t.getScore();
-					}
-				}
-				
-				GameWinEvent event = new GameWinEvent(team.getName()+" has won!", team, g);
-				Bukkit.getPluginManager().callEvent(event);
-				Bukkit.broadcastMessage(event.getWinMessage());
-				
-			}
-		}, 1, 20);
+		}
+		
+		GameWinEvent event = new GameWinEvent(team.getName()+" has won!", team, g);
+		Bukkit.getPluginManager().callEvent(event);
+		Bukkit.broadcastMessage(event.getWinMessage());
+		//TODO telport
+		
 	}
 	
-	public void RespawnAll(World world, String map, Game<?> g) {
-		
-		int i = 0;
-		for(TeamPlayer tp : g.getTeams().get(0).getPlayers()) {
-			Player p = Bukkit.getPlayer(tp.getName());
-			Location loc = teamonespawns.get(map).get(i);
-			p.teleport(new Location(world, loc.getX(), loc.getY(), loc.getZ()));
-			i++;
+	
+	public void RespawnAll(String map, Game<?> g) {
+		for(Team t : g.getTeams()) {
+			TDMTeam team = (TDMTeam) t;
+			List<TeamPlayer> players = new ArrayList<>(team.getPlayers());
+			for(int i = 0; i < players.size(); i++) {
+				TeamPlayer tp = players.get(i);
+				Location spawn = team.getLocations(map).get(i);
+				if(tp != null) {
+					if(spawn != null) {
+					Player p = Bukkit.getPlayer(tp.getName());
+						if(p != null) {
+							p.teleport(spawn);
+						}
+					}
+				}
+			}
 		}
-		i = 0;
-		for(TeamPlayer tp : g.getTeams().get(1).getPlayers()) {
-			Player p = Bukkit.getPlayer(tp.getName());
-			Location loc = teamtwospawns.get(map).get(i);
-			p.teleport(new Location(world, loc.getX(), loc.getY(), loc.getZ()));
-			i++;
-		}
-		
+
 		
 	}
 	
@@ -270,7 +185,7 @@ public class CodCraftTDM extends CCGamePlugin {
 	        	}
 	        	Team team2 = g.findTeamWithPlayer(p1); 
 	        	if(team2 == null) {
-	        		getLogger().info("null");
+	        		break;
 	        	}
 	        	if(team1.getId().equalsIgnoreCase(team2.getId())) {
 	        		b1++;
@@ -297,7 +212,7 @@ public class CodCraftTDM extends CCGamePlugin {
 		      return new Location(Bukkit.getWorld(g.getName()), loc.getX(), loc.getY(), loc.getZ());
 	      }
 	      Random rnd = new Random();
-	      int i = rnd.nextInt(Aloowed.size());
+	      int i = rnd.nextInt(Aloowed.size() - 1);
 	      Location loc = Aloowed.get(i);
 	      
 	      return new Location(Bukkit.getWorld(g.getName()), loc.getX(), loc.getY(), loc.getZ());
@@ -305,23 +220,24 @@ public class CodCraftTDM extends CCGamePlugin {
 	   }
 	   public List<Player> getNearbyEntities(Location where, int range) {
 		      List<Player> found = new ArrayList<Player>();
-
 		      for(Player p : where.getWorld().getPlayers()) {
 		         if(isInBorder(where, p.getLocation(), range)) {
 		            found.add(p);
-		         }
-		      }
-		      return found;
-		   }
+		       }
+		  }
+		  
+		  return found;
+	   }
 
-		   public boolean isInBorder(Location center, Location notCenter, int range) {
-		      int x = center.getBlockX(), z = center.getBlockZ();
-		      int x1 = notCenter.getBlockX(), z1 = notCenter.getBlockZ();
+	public boolean isInBorder(Location center, Location notCenter, int range) {
+		int x = center.getBlockX(), z = center.getBlockZ();
+		int x1 = notCenter.getBlockX(), z1 = notCenter.getBlockZ();
 
-		      if(x1 >= (x + range) || z1 >= (z + range) || x1 <= (x - range) || z1 <= (z - range)) {
-		         return false;
-		      }
-		      return true;
-		   }
+		if (x1 >= (x + range) || z1 >= (z + range) || x1 <= (x - range)
+				|| z1 <= (z - range)) {
+			return false;
+		}
+		return true;
+	}
 
 }

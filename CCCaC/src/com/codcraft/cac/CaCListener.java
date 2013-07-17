@@ -1,5 +1,6 @@
 package com.codcraft.cac;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,14 +22,29 @@ public class CaCListener implements Listener {
 		this.plugin = plugin;
 	}
 	
+	
+	
+	@EventHandler
+	public void onLeft(PlayerInteractEvent e) {
+		Player p = e.getPlayer();
+		if(e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			Block clickedblock = e.getClickedBlock();
+			if(clickedblock != null) {
+				if(clickedblock.getState() instanceof Sign) {
+					Location loc = new Location(Bukkit.getWorld("world"), -111, 139, 62);
+					if(clickedblock.getLocation().equals(loc)) {
+						p.performCommand("cac join");
+					}
+				}
+			}
+		}
+	}
+	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
-		//GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		CCPlayerModule playermodule = plugin.api.getModuleForClass(CCPlayerModule.class);
 		CCPlayer player = playermodule.getPlayer(p);
-		
-		
 		CaCModule cac = plugin.api.getModuleForClass(CaCModule.class);
 		if(cac.isCaCUser(p)) {
 			if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -38,6 +54,7 @@ public class CaCListener implements Listener {
 					if(s.getLine(0).equalsIgnoreCase("lobby"+cac.GetBox(p))) {
 						switch (s.getLine(1)) {
 						case "Class":
+							System.out.println("6");
 							int i = Integer.parseInt(s.getLine(3));
 							if(i >= player.getCaCint()) {
 								i = 1;

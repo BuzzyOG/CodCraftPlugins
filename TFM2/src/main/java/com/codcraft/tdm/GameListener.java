@@ -4,13 +4,16 @@ package com.codcraft.tdm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,6 +21,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.CodCraft.api.event.GameWinEvent;
+import com.CodCraft.api.event.PlayerDamgedByWeaponEvent;
 import com.CodCraft.api.event.RequestJoinGameEvent;
 import com.CodCraft.api.event.team.TeamPlayerGainedEvent;
 import com.CodCraft.api.model.Game;
@@ -25,11 +29,12 @@ import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.GUI;
 import com.CodCraft.api.modules.GameManager;
+import com.CodCraft.api.modules.ScoreBoard;
 import com.CodCraft.api.services.CCGameListener;
 import com.codcraft.codcraftplayer.CCPlayer;
 import com.codcraft.codcraftplayer.CCPlayerModule;
 import com.codcraft.codcraftplayer.PlayerGetClassEvent;
-import com.codcraft.tdm.CodCraftTDM.GameState;
+import com.codcraft.tdm.states.LobbyState;
 
 public class GameListener extends CCGameListener {
 
@@ -44,8 +49,7 @@ public class GameListener extends CCGameListener {
 		if(!(e.getGame().getPlugin() == plugin)) {
 			return;
 		}
-		@SuppressWarnings("unchecked")
-		Game<CodCraftTDM> game = (Game<CodCraftTDM>) e.getGame();
+		TDMGame game = (TDMGame) e.getGame();
 		plugin.getLogger().info(e.getPlayer().getName()+" has requested to join a TDM game named " + game.getName()+".");
 		if(game.findTeamWithPlayer(e.getPlayer()) != null) {
 			return;
@@ -66,27 +70,27 @@ public class GameListener extends CCGameListener {
 		  final Game<?> g = gm.getGameWithTeam(e.getTeam());
 		  
 		  if( g == null) {
-			  plugin.getLogger().info("null");
+			  return;
 		  }
 		  
 		if(g.getPlugin() != plugin) {
 			return;
 		}
 		plugin.getLogger().info(e.getPlayer().getName()+" has join a TDM game named " + g.getName()+".");
-		@SuppressWarnings("unchecked")
-		final Game<CodCraftTDM> game = (Game<CodCraftTDM>)g;
-		final String currentmap = plugin.currentmap.get(game.getId()).map;
-		final Player p = Bukkit.getPlayer(e.getPlayer().getName());
-		TDMModel model = plugin.currentmap.get(g.getId());
-		if(model.state == GameState.LOBBY) {
-			p.sendMessage(ChatColor.BLUE+"Please vote for a map!");
-			p.sendMessage(ChatColor.BLUE+model.Map1);
-			p.sendMessage(ChatColor.BLUE+"or");
-			p.sendMessage(ChatColor.BLUE+model.Map2);
-		}
-
+		final TDMGame game = (TDMGame) g;
 		
-		p.teleport(plugin.Respawn(p, Bukkit.getWorld(game.getName()), currentmap, g));
+		final String currentmap = game.map;
+		final Player p = Bukkit.getPlayer(e.getPlayer().getName());
+		if(game.getCurrentState().getId().equals(new LobbyState(game).getId())) {
+			p.sendMessage(ChatColor.BLUE+"Please vote for a map!");
+			p.sendMessage(ChatColor.BLUE+game.Map1);
+			p.sendMessage(ChatColor.BLUE+"or");
+			p.sendMessage(ChatColor.BLUE+game.Map2);
+			p.teleport(new Location(Bukkit.getWorld(g.getName()), 30, 40, 195));
+		} else {
+			p.teleport(plugin.Respawn(p, Bukkit.getWorld(game.getName()), currentmap, g));
+		}
+		
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			@Override
@@ -102,6 +106,25 @@ public class GameListener extends CCGameListener {
 		}, 3);
 		
 
+	}
+	@EventHandler
+	public void onDamage(PlayerDamgedByWeaponEvent e) {
+		if(e.getGame().getPlugin() == plugin) {
+			if(e.getGame().getCurrentState().getId().equalsIgnoreCase(new LobbyState((TDMGame) e.getGame()).getId())){
+				e.setCancelled(true);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onMobSpawn(CreatureSpawnEvent e) {
+		for(Game<?> g : plugin.api.getModuleForClass(GameManager.class).getAllGames()) {
+			if(g.getPlugin() == plugin) {
+				if(e.getLocation().getWorld().getName().equalsIgnoreCase(g.getName())) {
+					e.setCancelled(true);
+				}
+			}
+		}
 	}
 	
 	
@@ -123,7 +146,6 @@ public class GameListener extends CCGameListener {
 		 
 		CCPlayerModule ccplayerm = plugin.api.getModuleForClass(CCPlayerModule.class);
 		CCPlayer player1 = ccplayerm.getPlayer(p);
-		System.out.println(player1);
 		team1.findPlayer(p).incrementDeaths(1);
 		if(player1.getDeaths() == null) {
 			player1.setDeaths(0);
@@ -155,8 +177,6 @@ public class GameListener extends CCGameListener {
 	
 	@EventHandler
 	public void onExspotion(EntityExplodeEvent e) {
-		System.out.println(e);
-		System.out.println(e.getEntity());
 		if(e.getEntity() == null) {
 			return;
 		}
@@ -200,14 +220,12 @@ public class GameListener extends CCGameListener {
 		Team t1 = g.getTeams().get(0);
 		Team t2 = g.getTeams().get(1);
 		
-		ArrayList<String> l1 = new ArrayList<>();
-		l1.add(t1.getName()+t1.getScore());
+		TreeMap<String, String> l1 = new TreeMap<>();
 		for(TeamPlayer tp1 : t1.getPlayers()) {
-			l1.add(tp1.getName().substring(0, 4)+"K:"+tp1.getKills()+"D:"+tp1.getDeaths());
+			l1.put(""+tp1.getKills(), t1.getColor()+tp1.getName().substring(0, 4)+"K:"+tp1.getKills()+"D:"+tp1.getDeaths());
 		}
-		l1.add(t2.getName()+t2.getScore());
 		for(TeamPlayer tp1 : t1.getPlayers()) {
-			l1.add(tp1.getName().substring(0, 4)+"K:"+tp1.getKills()+"D:"+tp1.getDeaths());
+			l1.put(""+tp1.getKills(), t2.getColor()+tp1.getName().substring(0, 4)+"K:"+tp1.getKills()+"D:"+tp1.getDeaths());
 		}
 		gui.updateplayerlist(p, l1);
 	}
@@ -251,16 +269,15 @@ public class GameListener extends CCGameListener {
 	@EventHandler
 	public void onWIn(GameWinEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
-		Game<?> g = gm.getGameWithTeam(e.getTeam());
-		if(g == null) {
-			plugin.getLogger().info("null");
+		Game<?> game = gm.getGameWithTeam(e.getTeam());
+		if(game == null) {
+			return; 
 		}  
-		if(g.getPlugin() != plugin) {
+		if(game.getPlugin() != plugin) {
 			return;
 		}
-		
-		plugin.currentmap.get(g.getId()).state = GameState.LOBBY;
-		plugin.currentmap.get(g.getId()).gametime = 30;
+		TDMGame g = (TDMGame) game;
+		g.setState(new LobbyState((TDMGame) g));
 		List<TeamPlayer> test = new ArrayList<>();
 		for(TeamPlayer t : e.getTeam().getPlayers()) {
 			test.add(t);
@@ -275,39 +292,43 @@ public class GameListener extends CCGameListener {
 			e.setWinMessage(t.getName()+" has won the game");
 			CCPlayer player = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(Bukkit.getPlayer(t.getName()));
 			player.setWins(player.getWins() + 1);
-			player.setTDMWins(player.getTDMWins() + 1);
+			player.setFFAWins(player.getFFAWins() + 1);
 		}
 		Random rnd = new Random();
-		plugin.currentmap.get(g.getId()).Map1 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
-		plugin.currentmap.get(g.getId()).Map2 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
-		while(plugin.currentmap.get(g.getId()).Map1.equalsIgnoreCase(plugin.currentmap.get(g.getId()).Map2)) {
-			plugin.currentmap.get(g.getId()).Map1 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
+		g.Map1 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
+		g.Map2 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
+		while(g.Map1.equalsIgnoreCase(g.Map2)) {
+			g.Map1 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
 		}
 		for(Team team : g.getTeams()) {
 			for(TeamPlayer tp : team.getPlayers()) {
 				tp.setDeaths(0);
 				tp.setKills(0);
-				TDMModel model = plugin.currentmap.get(g.getId());
 				Player p = Bukkit.getPlayer(tp.getName());
 
 				p.sendMessage(ChatColor.BLUE+"Please vote for a map!");
-				p.sendMessage(ChatColor.BLUE+model.Map1);
+				p.sendMessage(ChatColor.BLUE+g.Map1);
 				p.sendMessage(ChatColor.BLUE+"or");
-				p.sendMessage(ChatColor.BLUE+model.Map2);
+				p.sendMessage(ChatColor.BLUE+g.Map2);
+				p.teleport(new Location(Bukkit.getWorld(g.getName()), 30, 40, 195));
 						
 			}
 			team.setScore(0);
 		}
+		ScoreBoard sb = plugin.api.getModuleForClass(ScoreBoard.class);
 		for(Team team : g.getTeams()) {
 			if(team != e.getTeam()) {
 				for(TeamPlayer tp : team.getPlayers()) {
 					CCPlayer player2 = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(Bukkit.getPlayer(tp.getName()));
 					player2.setLosses(player2.getLosses() + 1);
-					player2.setTDMLosses(player2.getTDMLosses() + 1);
+					player2.setFFALosses(player2.getFFALosses() + 1);
+					
+					sb.resetPlayerScore(g, Bukkit.getPlayer(tp.getName()));
 				}
 			}
 		}
 		updateallgui(g);
+
 
 	}
 	@EventHandler (priority = EventPriority.LOWEST)
@@ -318,15 +339,15 @@ public class GameListener extends CCGameListener {
 		  if(g == null) {
 			 return;
 		  }
-		  /*System.out.println(g);
-		  System.out.println(g.getPlugin());
-		  System.out.println(plugin);*/
 		  
 		if(!(g.getPlugin() == plugin)) {
 			return;
 		}
 		Player p = e.getPlayer();
-		final String currentmap = plugin.currentmap.get(g.getId()).map;
+		final String currentmap = ((TDMGame)g).map;
+		if(g.getCurrentState().getId().equalsIgnoreCase(new LobbyState((TDMGame) g).getId())) {
+			e.setRespawnLocation(new Location(Bukkit.getWorld(g.getName()), 30, 40, 195));
+		}
 		e.setRespawnLocation(plugin.Respawn(p, Bukkit.getWorld(g.getName()), currentmap, g));
 	}
 	

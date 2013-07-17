@@ -95,14 +95,14 @@ public class CaCLocations {
 	      SignLocation.get(6).add(new Location(Bukkit.getWorld("CreateAClass"), -79.6, 7, -0.9));
 	      SignLocation.get(6).add(new Location(Bukkit.getWorld("CreateAClass"), -80.6, 7, -0.9));
 	      // Sign Location for Lobby 7
-	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -86.6, 7, -0.9));
-	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -87.6, 7, -0.9));
-	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -88.6, 7, -0.9));
-	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -89.6, 7, -0.9));
-	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -90.6, 7, -0.9));
-	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -91.6, 7, -0.9));
-	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -92.6, 7, -0.9));
-	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -93.6, 7, -0.9));
+	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -86, 7, -1));
+	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -87, 7, -1));
+	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -88, 7, -1));
+	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -89, 7, -1));
+	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -90, 7, -1));
+	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -91, 7, -1));
+	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -92, 7, -1));
+	      SignLocation.get(7).add(new Location(Bukkit.getWorld("CreateAClass"), -93, 7, -1));
 	      // Sign Location for Lobby 8
 	      SignLocation.get(8).add(new Location(Bukkit.getWorld("CreateAClass"), -97.6, 7, -0.9));
 	      SignLocation.get(8).add(new Location(Bukkit.getWorld("CreateAClass"), -98.6, 7, -0.9));
@@ -222,8 +222,8 @@ public class CaCLocations {
 	      LobbySpawn.put(7, new Location(Bukkit.getWorld("CreateAClass"), -88, 5, -9));
 	      LobbySpawn.put(8, new Location(Bukkit.getWorld("CreateAClass"), -100, 5, -9));
 	      LobbySpawn.put(9, new Location(Bukkit.getWorld("CreateAClass"), -112, 5, -9));
-	      LobbySpawn.put(10, new Location(Bukkit.getWorld("CreateAClass"), -101, 5, 3));
-	      LobbySpawn.put(11, new Location(Bukkit.getWorld("CreateAClass"), -16, 5, 3));
+	      LobbySpawn.put(10, new Location(Bukkit.getWorld("CreateAClass"), -113, 5, 3));
+	      LobbySpawn.put(11, new Location(Bukkit.getWorld("CreateAClass"), -100, 5, 3));
 	      LobbySpawn.put(12, new Location(Bukkit.getWorld("CreateAClass"), -88, 5, 3));
 	      LobbySpawn.put(13, new Location(Bukkit.getWorld("CreateAClass"), -76, 5, 3));
 	      LobbySpawn.put(14, new Location(Bukkit.getWorld("CreateAClass"), -66, 5, 3));

@@ -43,6 +43,9 @@ public class RecipeHandler
   public void onPrepareCraftItemEvent(PrepareItemCraftEvent e)
   {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		if(e.getViewers().isEmpty()) {
+			return;
+		}
 		if(gm.getGameWithPlayer((Player) e.getViewers().get(0)) == null) {
 			return;
 		}

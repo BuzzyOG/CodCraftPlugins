@@ -1,0 +1,6 @@
+name: CCMapMaker
+main: com.codcraft.ccmapmaker.CCMM
+version: 0.0.001
+depend: [CodCraftAPI]
+commands: 
+    mm: 

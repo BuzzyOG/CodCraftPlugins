@@ -1,8 +1,7 @@
 package com.codcraft.ccommands;
 
-import java.util.ArrayList;
-
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,9 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-import com.CodCraft.api.modules.GUI;
+import com.CodCraft.api.model.Game;
 import com.CodCraft.api.modules.GameManager;
-import com.codcraft.lobby.LobbyModule;
 
 public class SpawnCommand implements CommandExecutor {
 	private CCCommands plugin;
@@ -27,32 +25,24 @@ public class SpawnCommand implements CommandExecutor {
 			if(sender instanceof Player) {
 				Player p = (Player) sender;
 				GameManager gm = plugin.api.getModuleForClass(GameManager.class);
-				GUI gui = plugin.api.getModuleForClass(GUI.class);
-				ArrayList<String> s = new ArrayList<>();
-				for(Player p1 : Bukkit.getOnlinePlayers()) {
-					s.add(p1.getName());
+				Game<?> g = gm.getGameWithPlayer(p);
+				if(g != null) {
+					g.findTeamWithPlayer(p).removePlayer(p);
 				}
-				gui.updateplayerlist(p, s);
-				if(gm.getGameWithPlayer(p) == null) {
-					p.teleport(new Location(Bukkit.getWorld("world"), -102, 138, 60));
-					plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
-					p.getInventory().clear();
-					for(PotionEffect pe : p.getActivePotionEffects()) {
-						p.removePotionEffect(pe.getType());
-					}
-					return true;
-				} else {
-					gm.getGameWithPlayer(p).findTeamWithPlayer(p).removePlayer(p);
-					p.teleport(new Location(Bukkit.getWorld("world"), -102, 138, 60));
-					plugin.api.getModuleForClass(LobbyModule.class).UpdateSigns();
-					p.getInventory().clear();
-					for(PotionEffect pe : p.getActivePotionEffects()) {
-						p.removePotionEffect(pe.getType());
-					}
-					
-					
-					return true;
+				p.teleport(new Location(Bukkit.getWorld("world"), -102.5, 138.5, 60.4, 90, 0));
+				p.getInventory().clear();
+				for(PotionEffect pe : p.getActivePotionEffects()) {
+					p.removePotionEffect(pe.getType());
 				}
+				p.setLevel(0);
+				p.setAllowFlight(false);
+				p.setGameMode(GameMode.SURVIVAL);
+				p.setHealth(20D);
+				p.setFoodLevel(20);
+				p.setExp(0);
+				PlayerDoSpawnEvent event = new PlayerDoSpawnEvent(p, g);
+				Bukkit.getPluginManager().callEvent(event);
+				return true;
 			}
 		}
 		

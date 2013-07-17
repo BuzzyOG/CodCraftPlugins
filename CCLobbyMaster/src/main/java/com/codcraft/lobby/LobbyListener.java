@@ -11,9 +11,15 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.codcraft.lobby.ping.Ping;
 
 public class LobbyListener implements Listener {
 
@@ -23,10 +29,26 @@ public class LobbyListener implements Listener {
 	public LobbyListener(CCLobby plugin) {
 		this.plugin = plugin;
 	}
+	
+	@EventHandler
+	public void onBreal(BlockBreakEvent e) {
+		if(!e.getPlayer().hasPermission("CodCraft.Build")) {
+			e.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onPlace(BlockPlaceEvent e) {
+		if(!e.getPlayer().hasPermission("CodCraft.Build")) {
+			e.setCancelled(true);
+		}
+	}
+
+	
 	@EventHandler
 	public void onjoin(final PlayerJoinEvent e) {
-		e.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -1.02, 29.5, -30.7, (float) 180, (float) 0.6));
-		e.setJoinMessage(null);
+		e.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -132, 44, 108, (float) 90, (float) 0.6));
+		//e.setJoinMessage(null);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			@Override
@@ -53,32 +75,54 @@ public class LobbyListener implements Listener {
 	
 	private List<String> telporters = new ArrayList<>();
 	@EventHandler
-	public void onMove(final PlayerMoveEvent e) {
-		if(!telporters.contains(e.getPlayer().getName())) {
-			for(Module module : plugin.configmap) {
-				if(isInside(e.getPlayer(), module.Block1, module.Block2)){
-					plugin.getLogger().info("In: " + module.server);
-					ByteArrayOutputStream b = new ByteArrayOutputStream();
-				      DataOutputStream out = new DataOutputStream(b);
-				      try {
-				        out.writeUTF("Connect");
-				        out.writeUTF(module.server);
-				      } catch (IOException localIOException) {
-				    	  plugin.getLogger().info("Error: " + module.server);
-				      }
-				      e.getPlayer().sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
-				      plugin.updateSigns();
-				      telporters.add(e.getPlayer().getName());
-				      Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-						
-						@Override
-						public void run() {
-							telporters.remove(e.getPlayer().getName());
+	public void onMove(final PlayerInteractEvent e) {
+		if(e.getAction() == Action.PHYSICAL) {
+			if(!telporters.contains(e.getPlayer().getName())) {
+				for(Module module : plugin.configmap) {
+					if(isInside(e.getPlayer(), module.Block1, module.Block2)){
+						plugin.getLogger().info("In: " + module.server);
+						ByteArrayOutputStream b = new ByteArrayOutputStream();
+					      DataOutputStream out = new DataOutputStream(b);
+					      try {
+					        out.writeUTF("Connect");
+					        out.writeUTF(module.server);
+					      } catch (IOException localIOException) {
+					    	  plugin.getLogger().info("Error: " + module.server);
+					      }
+					      e.getPlayer().sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
+					      plugin.pingManager.updateData(module.server);
+					      Ping ping = plugin.pingManager.getPing(module.server);
+					      if(!ping.isUpdating()) {
+					    	  plugin.updateSigns();
+					      } else {
+					    	  Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+								
+								@Override
+								public void run() {
+									plugin.updateSigns();
+								}
+							}, 20);
+					      }
+					      
+					      telporters.add(e.getPlayer().getName());
+					      Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 							
-						}
-					}, 5);
-				}		
+							@Override
+							public void run() {
+								telporters.remove(e.getPlayer().getName());
+								
+							}
+						}, 5);
+					}		
+				}
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onDamage(EntityDamageEvent e) {
+		if(e.getEntity() instanceof Player) {
+			e.setCancelled(true);
 		}
 	}
 	

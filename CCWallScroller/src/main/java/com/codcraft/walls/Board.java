@@ -10,7 +10,7 @@ public class Board {
 	
 	public void sendToBoard(String s) {
 		for(int i = 0; i < plugin.Strips.size(); i++) {
-			Strip strip = plugin.Strips.get(i);
+			//Strip strip = plugin.Strips.get(i);
 		}
 	}
 

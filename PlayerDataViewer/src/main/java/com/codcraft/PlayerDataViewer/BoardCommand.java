@@ -25,7 +25,7 @@ public class BoardCommand implements CommandExecutor {
 				if(p.hasPermission("CodCraft.Board")) {
 					if(args.length == 1) {
 						for(Segment seg : plugin.board.lines.get(0).segmants) {
-							Letter let = new Letter() {};
+							Letter let = new Letter("") {};
 							 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
 							 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
 							 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
@@ -43,7 +43,7 @@ public class BoardCommand implements CommandExecutor {
 							 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);	
 						}
 						for(Segment seg : plugin.kills) {
-							Letter let = new Letter() {};
+							Letter let = new Letter("") {};
 							 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
 							 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
 							 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
@@ -61,7 +61,7 @@ public class BoardCommand implements CommandExecutor {
 							 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);	
 						}
 						for(Segment seg : plugin.deaths) {
-							Letter let = new Letter() {};
+							Letter let = new Letter("") {};
 							 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
 							 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
 							 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
@@ -79,7 +79,7 @@ public class BoardCommand implements CommandExecutor {
 							 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);	
 						}
 						for(Segment seg : plugin.wins) {
-							Letter let = new Letter() {};
+							Letter let = new Letter("") {};
 							 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
 							 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
 							 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
@@ -97,7 +97,7 @@ public class BoardCommand implements CommandExecutor {
 							 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);	
 						}
 						for(Segment seg : plugin.losses) {
-							Letter let = new Letter() {};
+							Letter let = new Letter("") {};
 							 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
 							 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
 							 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
@@ -115,7 +115,7 @@ public class BoardCommand implements CommandExecutor {
 							 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);	
 						}
 						for(Segment seg : plugin.level) {
-							Letter let = new Letter() {};
+							Letter let = new Letter("") {};
 							 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
 							 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
 							 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);
@@ -133,7 +133,7 @@ public class BoardCommand implements CommandExecutor {
 							 p.sendBlockChange(seg.loc15, Material.WOOL.getId(), let.block15);	
 						}
 						for(Segment seg : plugin.points) {
-							Letter let = new Letter() {};
+							Letter let = new Letter("") {};
 							 p.sendBlockChange(seg.loc1, Material.WOOL.getId(), let.block1);
 							 p.sendBlockChange(seg.loc2, Material.WOOL.getId(), let.block2);
 							 p.sendBlockChange(seg.loc3, Material.WOOL.getId(), let.block3);

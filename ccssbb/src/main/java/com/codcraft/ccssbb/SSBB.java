@@ -1,15 +1,23 @@
 package com.codcraft.ccssbb;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
 import com.CodCraft.api.model.Team;
-import com.codcraft.ccssbb.CCSSBB.states;
 
 public class SSBB extends Game<CCSSBB> {
+	
+	@SuppressWarnings("unused")
 	private CCSSBB plugin;
+	
+	public String map;
+	
+	protected Map<String, String> playerclass = new HashMap<String, String>();
 	
 	public SSBB(CCSSBB instance) {
 		super(instance);
@@ -25,15 +33,17 @@ public class SSBB extends Game<CCSSBB> {
 			this.addTeam(t);
 		}
 		Bukkit.createWorld(new WorldCreator(getName()));
-		SSBmodel game = new SSBmodel();
-		game.setState(states.LOBBY);
-		
-		plugin.games.put(getId(), game);
+		knownStates.put(new PreGameState(this).getId(), new PreGameState(this));
+		knownStates.put(new InGameState(this).getId(), new InGameState(this));
+		setState(new PreGameState(this));
 	}
 	
 	@Override
 	public void deinitialize() {
 		Bukkit.unloadWorld(getName(), false);
+		for(Team t : getTeams()) {
+			removeTeam(t);
+		}
 	}
 	
 	

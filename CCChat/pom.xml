@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.codcraft</groupId>
   <artifactId>CCChat</artifactId>
-  <version>1</version>
+  <version>0.0.001</version>
   <name>CCChat</name>
   <description>ADBlock system for CC servers.</description>
   <packaging>jar</packaging>

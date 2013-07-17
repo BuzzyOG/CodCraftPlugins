@@ -52,7 +52,6 @@ public class CodCraftInfected extends CCGamePlugin {
 	      team1Load();
 	      team2Load();
 	      Bukkit.getPluginManager().registerEvents(new GameListener(this), this);
-	      getCommand("vote").setExecutor(new VoteCommand(this));
 	      
 	      	plugin = this;
 	      

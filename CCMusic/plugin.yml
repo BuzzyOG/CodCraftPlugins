@@ -1,0 +1,4 @@
+name: CCMusic
+main: com.codcraft.ccmusic.CCMusic
+version: 0.0.001
+depend: [CCLobby]

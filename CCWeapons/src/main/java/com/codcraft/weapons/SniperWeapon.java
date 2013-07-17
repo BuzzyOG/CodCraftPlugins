@@ -1,13 +1,16 @@
 package com.codcraft.weapons;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,13 +20,18 @@ import com.CodCraft.api.event.PlayerDamgedByWeaponEvent;
 import com.CodCraft.api.event.PlayerDamgedByWeaponEvent.DamageCause;
 import com.codcraft.codcraftplayer.CCPlayerModule;
 import com.codcraft.codcraftplayer.PlayerGetClassEvent;
+import com.codcraft.weapons.old.ReloadTimer;
 
 
 public class SniperWeapon implements Listener {
+	
 	private Weapons plugin;
+	public List<String> waiters = new ArrayList<>();
+	
 	public SniperWeapon(Weapons plugin) {
 		this.plugin = plugin;
 		plugin.cac.weapons.add("Sniper");
+		Bukkit.getScheduler().runTaskTimer(plugin, new SniperWait(this), 0, 10);
 	}
 	
 	
@@ -35,15 +43,17 @@ public class SniperWeapon implements Listener {
 				
 				ItemMeta meta = e.getPlayer().getItemInHand().getItemMeta();
 				if(meta != null) {
-					if(meta.getDisplayName().equalsIgnoreCase("Sniper")) {
-						if(e.getPlayer().getInventory().contains(Material.BLAZE_ROD)) {
-							if(!plugin.reloaders.contains(e.getPlayer().getName())) {
-								e.getPlayer().getInventory().remove(Material.ARROW);
-								e.getPlayer().getInventory().removeItem(new ItemStack(Material.BLAZE_ROD, 1));
-								e.getPlayer().updateInventory();
-								e.getPlayer().setExp((float) .9);
-								plugin.reloaders.add(e.getPlayer().getName());
-								Bukkit.getScheduler().runTaskLater(plugin, new ReloadTimer(plugin, e.getPlayer(), 64, .2), 5);
+					if(meta.getDisplayName() != null) {
+						if(meta.getDisplayName().equalsIgnoreCase("Sniper")) {
+							if(e.getPlayer().getInventory().contains(Material.BLAZE_ROD)) {
+								if(!plugin.reloaders.contains(e.getPlayer().getName())) {
+									e.getPlayer().getInventory().remove(Material.ARROW);
+									e.getPlayer().getInventory().removeItem(new ItemStack(Material.BLAZE_ROD, 1));
+									e.getPlayer().updateInventory();
+									e.getPlayer().setExp((float) .9);
+									plugin.reloaders.add(e.getPlayer().getName());
+									Bukkit.getScheduler().runTaskLater(plugin, new ReloadTimer(plugin, e.getPlayer(), 64, .2), 5);
+								}
 							}
 						}
 					}
@@ -55,37 +65,33 @@ public class SniperWeapon implements Listener {
 	
 	
 	@EventHandler
-	public void onInteracr(EntityShootBowEvent e) {
-		if(!(e.getProjectile() instanceof Arrow)) {
-			return;
-		}
-		if(e.getForce() <=  .5) {
-			return;
-		}
-		if(e.getEntity() instanceof Player) {
-			Player p = (Player) e.getEntity();
-			ItemStack bow = null;
-			if(p.getItemInHand().getType() == Material.BOW) {
-				bow = p.getItemInHand();
-			} else {
-				for(ItemStack i : p.getInventory()) {
-					if(i.getType() == Material.BOW) {
-						bow = i;
-						break;
+	public void onInteracr(PlayerInteractEvent e) {
+		
+		if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+			Player p = (Player) e.getPlayer();
+			if(!waiters.contains(p.getName())) {
+				ItemStack bow = null;
+				if(p.getItemInHand().getType() == Material.BOW) {
+					bow = p.getItemInHand();
+				}
+				if(bow == null) return;
+				ItemMeta meta = bow.getItemMeta();
+				if(meta != null) {
+					if("Sniper".equalsIgnoreCase(meta.getDisplayName())) {
+						Projectile proj = p.launchProjectile(Arrow.class);
+						Vector v = proj.getVelocity();
+						Vector v1 = v.multiply(100);
+						proj.setVelocity(v1);
+						waiters.add(p.getName());
+						p.setExp(1);
 					}
+					
 				}
 			}
-			ItemMeta meta = bow.getItemMeta();
-			if(meta.getDisplayName().equalsIgnoreCase("Sniper")) {
-				Vector v = e.getProjectile().getVelocity();
-				Vector v1 = v.multiply(1000);
-				e.getProjectile().setVelocity(v1);
-
-			}
-			
 		}
 	}
-	
+
+
 	@EventHandler
 	public void onuser(PlayerDamgedByWeaponEvent e) {
 		

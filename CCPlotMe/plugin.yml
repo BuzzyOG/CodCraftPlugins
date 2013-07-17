@@ -1,4 +1,4 @@
 name: CCPloteMe
 main: com.codcraft.ccplotme.PlotMe
-version: 1
+version: 0.0.001
 depend: [CodCraftAPI, PlotMe]

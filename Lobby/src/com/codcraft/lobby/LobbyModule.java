@@ -1,7 +1,6 @@
 package com.codcraft.lobby;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.CodCraft.api.CCAPI;
 import com.CodCraft.api.services.CCModule;
@@ -17,8 +16,18 @@ public class LobbyModule extends CCModule{
 		plugin.sign.UpdateSigns();
 	}
 	
+	public void UpdateSign(Lobby lobby) {
+		plugin.sign.updateSign(lobby);
+	}
 	
-	public Map<String, Lobby> getLobby() {
+	public Lobby getLobby(String s) {
+		if(plugin.configmap.get(s) != null) {
+			return plugin.configmap.get(s);
+		}
+		return null;
+	}
+	
+	public Map<String, Lobby> getLobbys() {
 		return plugin.configmap;
 	}
 	
@@ -30,32 +39,20 @@ public class LobbyModule extends CCModule{
 	}
 	
 	public boolean isLobby(String string) {
-		if(plugin.configmap.containsKey(string)) {
-			return true;
-		} 
-		return false;
+		return plugin.configmap.containsKey(string);
 	}
 	
 	public boolean isLobby(Lobby lobby) {
-		for(Entry<String, Lobby> lobbymap : plugin.configmap.entrySet()) {
-			if(lobbymap.getValue().equals(lobby)) {
-				return true;
-			}
-		}
-		return false;
+		return plugin.configmap.containsValue(lobby);
 	}
 	
 
 	@Override
 	public void starting() {
-		
-		
 	}
 
 	@Override
 	public void closing() {
-		// TODO Auto-generated method stub
-		
 	}
 
 

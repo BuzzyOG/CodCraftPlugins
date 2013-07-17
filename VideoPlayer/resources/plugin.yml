@@ -1,0 +1,4 @@
+name: VideoPlayer
+main: com.codcraft.videoplayer.VideoPlayer
+version: 1
+depend: [ProtocolLib]

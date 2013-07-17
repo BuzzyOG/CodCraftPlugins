@@ -1,4 +1,4 @@
 name: Perks
 main: com.codcraft.perks.Perks
-version: 1
+version: 0.0.001
 depend: [CodCraftAPI, FFA]

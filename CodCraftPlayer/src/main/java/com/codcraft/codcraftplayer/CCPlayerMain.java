@@ -30,18 +30,26 @@ public class CCPlayerMain extends JavaPlugin {
 		}
 		
 		getServer().getPluginManager().registerEvents(new CCPlayerLister(this), this);
-			try {
-				con = DriverManager.getConnection("jdbc:mysql://" + "173.237.196.204/" + "Minecraft", "root", "j2CksZq9");
-				getLogger().info("Got connection!");
-			} catch (SQLException e) {
-				getLogger().log(Level.WARNING, "Connection not found");
-				e.printStackTrace();
-			}
+		connect();
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			getCCDatabase.getp(p.getName());
 		}
 
 	}
+	
+	public boolean connect() {
+		con = null;
+		try {
+			con = DriverManager.getConnection("jdbc:mysql://" + "localhost/" + "minecraft", "root", "YDsD9Cz3");
+			getLogger().info("Got connection!");
+		} catch (SQLException e) {
+			getLogger().log(Level.WARNING, "Connection not found");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 	public void onDisable() {
 		api.deregisterModuleForClass(CCPlayerModule.class);
 		for(Player p : Bukkit.getOnlinePlayers()) {

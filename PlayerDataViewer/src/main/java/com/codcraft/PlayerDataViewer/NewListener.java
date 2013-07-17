@@ -65,7 +65,7 @@ public class NewListener implements Listener {
 					 } catch (IndexOutOfBoundsException e) {
 					 }
 					 Segment seg2 = plugin.kills.get(0);
-					 Letter let = new Letter() {};
+					 Letter let = plugin.letters.get("");
 					 updatesegment(p, seg2, let);
 				 } else if (killsa.size() <= 6 && killsa.size() >= 4){
 					 Integer ints = Integer.parseInt(kills);
@@ -98,8 +98,7 @@ public class NewListener implements Listener {
 					 } catch (IndexOutOfBoundsException e) {
 					 }
 					 Segment seg2 = plugin.kills.get(0);
-					 updatesegment(p, seg2, new Letter() {
-					});
+					 updatesegment(p, seg2, plugin.letters.get(""));
 				 }
 				 String deaths = getScore(plugin.game, "deaths", name);
 				    ArrayList<Integer> deathsa = new ArrayList<>();  
@@ -129,7 +128,7 @@ public class NewListener implements Listener {
 						 } catch (IndexOutOfBoundsException e) {
 						 }
 						 Segment seg2 = plugin.deaths.get(0);
-						 Letter let = new Letter() {};
+						 Letter let = plugin.letters.get("");
 						 updatesegment(p, seg2, let);
 					 } else if (deathsa.size() <= 6 && deathsa.size() >= 4){
 						 Integer ints = Integer.parseInt(deaths);
@@ -162,8 +161,7 @@ public class NewListener implements Listener {
 						 } catch (IndexOutOfBoundsException e) {
 						 }
 						 Segment seg2 = plugin.deaths.get(0);
-						 updatesegment(p, seg2, new Letter() {
-						});
+						 updatesegment(p, seg2, plugin.letters.get("k"));
 					 }
 					 String wins = getScore(plugin.game, "wins", name);
 					    ArrayList<Integer> winsa = new ArrayList<>();  
@@ -193,7 +191,7 @@ public class NewListener implements Listener {
 							 } catch (IndexOutOfBoundsException e) {
 							 }
 							 Segment seg2 = plugin.wins.get(0);
-							 Letter let = new Letter() {};
+							 Letter let = plugin.letters.get("");
 							 updatesegment(p, seg2, let);
 						 } else if (winsa.size() <= 6 && winsa.size() >= 4){
 							 Integer ints = Integer.parseInt(wins);
@@ -226,8 +224,7 @@ public class NewListener implements Listener {
 							 } catch (IndexOutOfBoundsException e) {
 							 }
 							 Segment seg2 = plugin.wins.get(0);
-							 updatesegment(p, seg2, new Letter() {
-							});
+							 updatesegment(p, seg2, plugin.letters.get("k"));
 						 }
 						 String losses = getScore(plugin.game, "losses", name);
 						    ArrayList<Integer> lossesa = new ArrayList<>();  
@@ -257,7 +254,7 @@ public class NewListener implements Listener {
 								 } catch (IndexOutOfBoundsException e) {
 								 }
 								 Segment seg2 = plugin.losses.get(0);
-								 Letter let = new Letter() {};
+								 Letter let = plugin.letters.get("");
 								 updatesegment(p, seg2, let);
 							 } else if (lossesa.size() <= 6 && lossesa.size() >= 4){
 								 Integer ints = Integer.parseInt(losses);
@@ -290,8 +287,7 @@ public class NewListener implements Listener {
 								 } catch (IndexOutOfBoundsException e) {
 								 }
 								 Segment seg2 = plugin.losses.get(0);
-								 updatesegment(p, seg2, new Letter() {
-								});
+								 updatesegment(p, seg2, plugin.letters.get("k"));
 							 }
 							 String level = getScore(plugin.game, "level", name);
 							    ArrayList<Integer> levela = new ArrayList<>();  
@@ -321,7 +317,7 @@ public class NewListener implements Listener {
 									 } catch (IndexOutOfBoundsException e) {
 									 }
 									 Segment seg2 = plugin.level.get(0);
-									 Letter let = new Letter() {};
+									 Letter let = plugin.letters.get("");
 									 updatesegment(p, seg2, let);
 								 } else if (levela.size() <= 6 && levela.size() >= 4){
 									 Integer ints = Integer.parseInt(level);
@@ -354,8 +350,7 @@ public class NewListener implements Listener {
 									 } catch (IndexOutOfBoundsException e) {
 									 }
 									 Segment seg2 = plugin.level.get(0);
-									 updatesegment(p, seg2, new Letter() {
-									});
+									 updatesegment(p, seg2, plugin.letters.get("k"));
 								 }
 								 String points = getScore(plugin.game, "point", name);
 								    ArrayList<Integer> pointsa = new ArrayList<>();  
@@ -385,7 +380,7 @@ public class NewListener implements Listener {
 										 } catch (IndexOutOfBoundsException e) {
 										 }
 										 Segment seg2 = plugin.points.get(0);
-										 Letter let = new Letter() {};
+										 Letter let = plugin.letters.get("");
 										 updatesegment(p, seg2, let);
 									 } else if (pointsa.size() <= 6 && pointsa.size() >= 4){
 										 Integer ints = Integer.parseInt(points);
@@ -418,8 +413,7 @@ public class NewListener implements Listener {
 										 } catch (IndexOutOfBoundsException e) {
 										 }
 										 Segment seg2 = plugin.points.get(0);
-										 updatesegment(p, seg2, new Letter() {
-										});
+										 updatesegment(p, seg2, plugin.letters.get("k"));
 									 }
 			
 			
@@ -438,21 +432,45 @@ public class NewListener implements Listener {
 		case "kills":
 			if(lobby.equalsIgnoreCase("ffa")) {
 				Return = ""+player.getFFAKills();
+			} else if (lobby.equalsIgnoreCase("tdm")) {
+				Return = ""+player.getTDMKills();
+			} else if (lobby.equalsIgnoreCase("ssb")) {
+				Return = ""+player.getSSBKills();
+			} else if (lobby.equalsIgnoreCase("uhc")) {
+				Return = ""+player.getUHCKills();
 			}
 			break;
 		case "deaths":
 			if(lobby.equalsIgnoreCase("ffa")) {
 				Return = ""+player.getFFADeaths();
+			} else if (lobby.equalsIgnoreCase("tdm")) {
+				Return = ""+player.getTDMDeaths();
+			} else if (lobby.equalsIgnoreCase("ssb")) {
+				Return = ""+player.getSSBDeaths();
+			} else if (lobby.equalsIgnoreCase("uhc")) {
+				Return = ""+player.getUHCDeaths();
 			}
 			break;
 		case "wins":
 			if(lobby.equalsIgnoreCase("ffa")) {
 				Return = ""+player.getFFAWins();
+			} else if (lobby.equalsIgnoreCase("tdm")) {
+				Return = ""+player.getTDMWins();
+			} else if (lobby.equalsIgnoreCase("ssb")) {
+				Return = ""+player.getSSBWins();
+			} else if (lobby.equalsIgnoreCase("uhc")) {
+				Return = ""+player.getUHCWins();
 			}
 			break;
 		case "losses":
 			if(lobby.equalsIgnoreCase("ffa")) {
 				Return = ""+player.getFFALosses();
+			} else if (lobby.equalsIgnoreCase("tdm")) {
+				Return = ""+player.getTDMLosses();
+			} else if (lobby.equalsIgnoreCase("ssb")) {
+				Return = ""+player.getSSBLosses();
+			} else if (lobby.equalsIgnoreCase("uhc")) {
+				Return = ""+player.getUHCLosses();
 			}
 			break;
 		case "point":

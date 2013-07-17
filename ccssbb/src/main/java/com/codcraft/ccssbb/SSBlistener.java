@@ -16,6 +16,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
@@ -26,6 +27,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -44,9 +46,9 @@ import com.CodCraft.api.modules.Broadcast;
 import com.CodCraft.api.modules.GUI;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCGameListener;
-import com.codcraft.ccssbb.CCSSBB.states;
 import com.codcraft.codcraftplayer.CCPlayer;
 import com.codcraft.codcraftplayer.CCPlayerModule;
+import com.codcraft.lobby.LobbyModule;
 
 public class SSBlistener extends CCGameListener {
 	private CCSSBB plugin;
@@ -58,9 +60,20 @@ public class SSBlistener extends CCGameListener {
 	
 	
 	@EventHandler
-	public void onExplotion(EntityExplodeEvent e) {
-		e.blockList().clear();
+	public void onExspotion(EntityExplodeEvent e) {
+		if(e.getEntity() == null) {
+			return;
+		}
+		for(Game<?> g : plugin.api.getModuleForClass(GameManager.class).getAllGames()) {
+
+			if(e.getEntity().getWorld().getName().equalsIgnoreCase(g.getName())) {
+				if(g.getPlugin() == plugin) {
+					e.blockList().clear();
+				}
+			}
+		}
 	}
+	
 	
 	List<String> endermanusers = new ArrayList<>();
 	
@@ -69,6 +82,7 @@ public class SSBlistener extends CCGameListener {
 	
 	
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onRightClick(final PlayerInteractEvent e) {
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -81,6 +95,7 @@ public class SSBlistener extends CCGameListener {
 						loc.setY(loc.getY() + 1);
 						e.getPlayer().teleport(loc);
 						endermanusers.add(e.getPlayer().getName());
+						e.getPlayer().updateInventory();
 						Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 							
 							@Override
@@ -102,10 +117,16 @@ public class SSBlistener extends CCGameListener {
 			Game<?> g = gm.getGameWithPlayer(p);
 			if(g != null) {
 				if(g.getPlugin() == plugin) {
-					if(plugin.games.get(g.getId()).playerclass.get(p.getName()).equalsIgnoreCase("wither")) {
+					SSBB game = (SSBB) g;
+					if(game.playerclass.get(p.getName()).equalsIgnoreCase("wither")) {
 						e.setCancelled(true);
-						p.launchProjectile(WitherSkull.class);
-					} else if(plugin.games.get(g.getId()).playerclass.get(p.getName()).equalsIgnoreCase("creeper")) {
+						Projectile wither = p.launchProjectile(WitherSkull.class);
+						if(wither instanceof WitherSkull) {
+							//WitherSkull skull = (WitherSkull) wither;
+							
+						}
+						
+					} else if(game.playerclass.get(p.getName()).equalsIgnoreCase("creeper")) {
 						TNTPrimed tnt = (TNTPrimed) p.getPlayer().getWorld().spawnEntity(p.getLocation(), EntityType.PRIMED_TNT);
 						tnt.setFuseTicks(5);
 						if(e.getForce() <= .5) {
@@ -133,15 +154,27 @@ public class SSBlistener extends CCGameListener {
 	public void onRequest(RequestJoinGameEvent e) {
 		Game<?> g = e.getGame();
 		if(g.getPlugin() == plugin) {
-			for(Team t : g.getTeams()) {
-				if(t.containsPlayer(e.getPlayer())){
-					return;
+			if(!g.getCurrentState().getId().equalsIgnoreCase(new InGameState(g).getId())) {
+				for(Team t : g.getTeams()) {
+					if(t.containsPlayer(e.getPlayer())){
+						return;
+					}
+					if(t.getPlayers().size() == 0) {
+						t.addPlayer(e.getPlayer());
+						plugin.getLogger().info(e.getPlayer().getName()+" has requested to join a SSB game named " + g.getName()+".");
+						return;
+					}
 				}
-				if(t.getPlayers().size() == 0) {
-					t.addPlayer(e.getPlayer());
-					plugin.getLogger().info(e.getPlayer().getName()+" has requested to join a SSB game named " + g.getName()+".");
-					return;
-				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onQuit(PlayerQuitEvent e) {
+		Game<?> g = gm.getGameWithPlayer(e.getPlayer());
+		if(g != null) {
+			if(g.getPlugin() == plugin) {
+				g.findTeamWithPlayer(e.getPlayer()).removePlayer(e.getPlayer());
 			}
 		}
 	}
@@ -231,11 +264,12 @@ public class SSBlistener extends CCGameListener {
 		final Game<?> g = gm.getGameWithPlayer(p);
 		if(!(g == null)) {
 			if(g.getPlugin() == plugin) {
+				final SSBB game = (SSBB) g;
 				final TeamPlayer p1 = g.findTeamWithPlayer(p).findPlayer(p);
 				if(p1.getDeaths() >= 5) {
 					p.getInventory().clear();
 					p.setAllowFlight(true);
-					Location loc = plugin.specspot.get(plugin.games.get(g.getId()).getMap());
+					Location loc = plugin.specspot.get(game.map);
 					e.setRespawnLocation(new Location(Bukkit.getWorld(g.getName()), loc.getX(), loc.getY(), loc.getZ()));
 					Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 						
@@ -251,7 +285,7 @@ public class SSBlistener extends CCGameListener {
 						
 						@Override
 						public void run() {
-							String s = plugin.games.get(g.getId()).playerclass.get(p.getName());
+							String s = game.playerclass.get(p.getName());
 							if(s.equalsIgnoreCase("skeleton")) {
 								skeleton(p);
 							} else if (s.equalsIgnoreCase("zombie")) {
@@ -274,9 +308,8 @@ public class SSBlistener extends CCGameListener {
 						}
 					}, 20);
 					
-					Location loc1 = plugin.spawnpoints.get(plugin.games.get
-							(g.getId()).getMap()).get(rnd.nextInt(plugin.spawnpoints.get
-									(plugin.games.get(g.getId()).getMap()).size())); 
+					Location loc1 = plugin.spawnpoints.get(game.map).get(rnd.nextInt(plugin.spawnpoints.get
+									(game.map).size())); 
 					
 					e.setRespawnLocation(new Location(Bukkit.getWorld(g.getName()), loc1.getX(), loc1.getY(), loc1.getZ()));
 				}
@@ -315,15 +348,17 @@ public class SSBlistener extends CCGameListener {
 						Bukkit.broadcastMessage(p2.getName()+" can fly =(");
 					}
 					if(!p2.isDead()) {
-						p2.teleport(new Location(Bukkit.getWorld("world"), -102, 138, 60));
+						Bukkit.dispatchCommand(p2, "spawn");
+						//p2.teleport(new Location(Bukkit.getWorld("world"), -102, 138, 60));
 					}
 					onGUI(p2);
 					
 				}
 			}
-			plugin.games.remove(e.getGame().getId());
 			e.getGame().deinitialize();
 			e.getGame().initialize();
+			LobbyModule lm = plugin.api.getModuleForClass(LobbyModule.class);
+			lm.UpdateSign(lm.getLobby(e.getGame().getName()));
 			
 		}
 	}
@@ -396,35 +431,36 @@ public class SSBlistener extends CCGameListener {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
 		if(g.getPlugin() == plugin) {
-			plugin.games.get(g.getId()).playerclass.put(p.getName(), "wither");
+			SSBB game = (SSBB) g;
+			game.playerclass.put(p.getName(), "wither");
+			ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+			c.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+			LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
+			lam.setColor(org.bukkit.Color.fromRGB(40, 40, 40));
+			c.setItemMeta(lam);
+			p.getInventory().setChestplate(c);
+			ItemStack l = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+			LeatherArmorMeta llam = (LeatherArmorMeta) l.getItemMeta();
+			llam.setColor(org.bukkit.Color.fromRGB(40, 40, 40));
+			l.setItemMeta(llam);
+			p.getInventory().setLeggings(l);
+			ItemStack b = new ItemStack(Material.LEATHER_BOOTS, 1);
+			b.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 10);
+			b.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+			LeatherArmorMeta ban = (LeatherArmorMeta) b.getItemMeta();
+			ban.setColor(org.bukkit.Color.fromRGB(40, 40, 40));
+			b.setItemMeta(ban);
+			p.getInventory().setBoots(b);
+			p.getInventory().addItem(new ItemStack(Material.ARROW, 1));
+			ItemStack wither = new ItemStack(397, 1, (short)SkullType.WITHER.ordinal());
+			p.getInventory().setHelmet(wither);
+			ItemStack bow = new ItemStack(Material.BOW);
+			bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+			bow.addUnsafeEnchantment(Enchantment.KNOCKBACK, 1);
+			p.getInventory().addItem(bow);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 500000, 5));
+			p.updateInventory();
 		}
-		ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
-		c.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-		LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
-		lam.setColor(org.bukkit.Color.fromRGB(40, 40, 40));
-		c.setItemMeta(lam);
-		p.getInventory().setChestplate(c);
-		ItemStack l = new ItemStack(Material.LEATHER_LEGGINGS, 1);
-		LeatherArmorMeta llam = (LeatherArmorMeta) l.getItemMeta();
-		llam.setColor(org.bukkit.Color.fromRGB(40, 40, 40));
-		l.setItemMeta(llam);
-		p.getInventory().setLeggings(l);
-		ItemStack b = new ItemStack(Material.LEATHER_BOOTS, 1);
-		b.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 10);
-		b.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
-		LeatherArmorMeta ban = (LeatherArmorMeta) b.getItemMeta();
-		ban.setColor(org.bukkit.Color.fromRGB(40, 40, 40));
-		b.setItemMeta(ban);
-		p.getInventory().setBoots(b);
-		ItemStack wither = new ItemStack(397, 1, (short)SkullType.WITHER.ordinal());
-		p.getInventory().setHelmet(wither);
-		ItemStack bow = new ItemStack(Material.BOW);
-		bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
-		bow.addUnsafeEnchantment(Enchantment.KNOCKBACK, 1);
-		p.getInventory().addItem(bow);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 500000, 5));
-		p.updateInventory();
-		
 	}
 
 	@SuppressWarnings("deprecation")
@@ -432,35 +468,37 @@ public class SSBlistener extends CCGameListener {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
 		if(g.getPlugin() == plugin) {
-			plugin.games.get(g.getId()).playerclass.put(p.getName(), "cati");
+			SSBB game = (SSBB) g;
+			game.playerclass.put(p.getName(), "cati");
+			ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+			c.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+			c.addEnchantment(Enchantment.THORNS, 2);
+			LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
+			lam.setColor(org.bukkit.Color.fromRGB(56, 161, 65));
+			c.setItemMeta(lam);
+			p.getInventory().setChestplate(c);
+			ItemStack l = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+			LeatherArmorMeta llam = (LeatherArmorMeta) l.getItemMeta();
+			llam.setColor(org.bukkit.Color.fromRGB(56, 161, 65));
+			l.setItemMeta(llam);
+			p.getInventory().setLeggings(l);
+			ItemStack b = new ItemStack(Material.LEATHER_BOOTS, 1);
+			b.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 10);
+			b.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+			LeatherArmorMeta ban = (LeatherArmorMeta) b.getItemMeta();
+			ban.setColor(org.bukkit.Color.fromRGB(56, 161, 65));
+			b.setItemMeta(ban);
+			p.getInventory().setBoots(b);
+			ItemStack wither = new ItemStack(Material.CACTUS);
+			p.getInventory().setHelmet(wither);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 500000, 2));
+			ItemStack sword = new ItemStack(Material.WOOD_SWORD);
+			sword.addEnchantment(Enchantment.KNOCKBACK, 1);
+			sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+			p.getInventory().addItem(sword);
+			p.updateInventory();
 		}
-		ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
-		c.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-		c.addEnchantment(Enchantment.THORNS, 2);
-		LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
-		lam.setColor(org.bukkit.Color.fromRGB(56, 161, 65));
-		c.setItemMeta(lam);
-		p.getInventory().setChestplate(c);
-		ItemStack l = new ItemStack(Material.LEATHER_LEGGINGS, 1);
-		LeatherArmorMeta llam = (LeatherArmorMeta) l.getItemMeta();
-		llam.setColor(org.bukkit.Color.fromRGB(56, 161, 65));
-		l.setItemMeta(llam);
-		p.getInventory().setLeggings(l);
-		ItemStack b = new ItemStack(Material.LEATHER_BOOTS, 1);
-		b.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 10);
-		b.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
-		LeatherArmorMeta ban = (LeatherArmorMeta) b.getItemMeta();
-		ban.setColor(org.bukkit.Color.fromRGB(56, 161, 65));
-		b.setItemMeta(ban);
-		p.getInventory().setBoots(b);
-		ItemStack wither = new ItemStack(Material.CACTUS);
-		p.getInventory().setHelmet(wither);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 500000, 2));
-		ItemStack sword = new ItemStack(Material.WOOD_SWORD);
-		sword.addEnchantment(Enchantment.KNOCKBACK, 1);
-		sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-		p.getInventory().addItem(sword);
-		p.updateInventory();
+
 		
 	}
 
@@ -469,39 +507,41 @@ public class SSBlistener extends CCGameListener {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
 		if(g.getPlugin() == plugin) {
-			plugin.games.get(g.getId()).playerclass.put(p.getName(), "blaze");
+			SSBB game = (SSBB) g;
+			game.playerclass.put(p.getName(), "blaze");
+			ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+			LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
+			lam.setColor(org.bukkit.Color.fromRGB(255, 255, 0));
+			c.setItemMeta(lam);
+			p.getInventory().setChestplate(c);
+			ItemStack l = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+			LeatherArmorMeta llam = (LeatherArmorMeta) l.getItemMeta();
+			llam.setColor(org.bukkit.Color.fromRGB(255, 255, 0));
+			l.setItemMeta(llam);
+			p.getInventory().setLeggings(l);
+			ItemStack b = new ItemStack(Material.LEATHER_BOOTS, 1);
+			b.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 10);
+			b.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+			LeatherArmorMeta ban = (LeatherArmorMeta) b.getItemMeta();
+			ban.setColor(org.bukkit.Color.fromRGB(255, 255, 0));
+			b.setItemMeta(ban);
+			p.getInventory().setBoots(b);
+			Enum<?> type = CustomSkullType.BLAZE;
+			ItemStack wither = CCSSBB.Skull((CustomSkullType)type);
+			p.getInventory().setHelmet(wither);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 500000, 5));
+			ItemStack bow = new ItemStack(Material.BOW);
+			bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+			bow.addEnchantment(Enchantment.ARROW_FIRE, 1);
+			p.getInventory().addItem(bow);
+			ItemStack rod = new ItemStack(Material.BLAZE_ROD);
+			rod.addUnsafeEnchantment(Enchantment.KNOCKBACK, 1);
+			rod.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 1);
+			p.getInventory().addItem(rod);
+			p.getInventory().addItem(new ItemStack(Material.ARROW));
+			p.updateInventory();
 		}
-		ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
-		LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
-		lam.setColor(org.bukkit.Color.fromRGB(255, 255, 0));
-		c.setItemMeta(lam);
-		p.getInventory().setChestplate(c);
-		ItemStack l = new ItemStack(Material.LEATHER_LEGGINGS, 1);
-		LeatherArmorMeta llam = (LeatherArmorMeta) l.getItemMeta();
-		llam.setColor(org.bukkit.Color.fromRGB(255, 255, 0));
-		l.setItemMeta(llam);
-		p.getInventory().setLeggings(l);
-		ItemStack b = new ItemStack(Material.LEATHER_BOOTS, 1);
-		b.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 10);
-		b.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
-		LeatherArmorMeta ban = (LeatherArmorMeta) b.getItemMeta();
-		ban.setColor(org.bukkit.Color.fromRGB(255, 255, 0));
-		b.setItemMeta(ban);
-		p.getInventory().setBoots(b);
-		Enum<?> type = CustomSkullType.BLAZE;
-		ItemStack wither = CCSSBB.Skull((CustomSkullType)type);
-		p.getInventory().setHelmet(wither);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 500000, 5));
-		ItemStack bow = new ItemStack(Material.BOW);
-		bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
-		bow.addEnchantment(Enchantment.ARROW_FIRE, 1);
-		p.getInventory().addItem(bow);
-		ItemStack rod = new ItemStack(Material.BLAZE_ROD);
-		rod.addUnsafeEnchantment(Enchantment.KNOCKBACK, 1);
-		rod.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 1);
-		p.getInventory().addItem(rod);
-		p.getInventory().addItem(new ItemStack(Material.ARROW));
-		p.updateInventory();
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -509,7 +549,8 @@ public class SSBlistener extends CCGameListener {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
 		if(g.getPlugin() == plugin) {
-			plugin.games.get(g.getId()).playerclass.put(p.getName(), "enderman");
+			SSBB game = (SSBB) g;
+			game.playerclass.put(p.getName(), "enderman");
 			ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
 			LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
 			lam.setColor(org.bukkit.Color.fromRGB(0, 0, 0));
@@ -549,7 +590,8 @@ public class SSBlistener extends CCGameListener {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
 		if(g.getPlugin() == plugin) {
-			plugin.games.get(g.getId()).playerclass.put(p.getName(), "creeper");
+			SSBB game = (SSBB) g;
+			game.playerclass.put(p.getName(), "creeper");
 			ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
 			LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
 			lam.setColor(org.bukkit.Color.fromRGB(50, 255, 50));
@@ -589,7 +631,8 @@ public class SSBlistener extends CCGameListener {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
 		if(g.getPlugin() == plugin) {
-			plugin.games.get(g.getId()).playerclass.put(p.getName(), "spider");
+			SSBB game = (SSBB) g;
+			game.playerclass.put(p.getName(), "spider");
 			ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
 			LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
 			lam.setColor(org.bukkit.Color.fromRGB(57, 49, 42));
@@ -626,7 +669,8 @@ public class SSBlistener extends CCGameListener {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
 		if(g.getPlugin() == plugin) {
-			plugin.games.get(g.getId()).playerclass.put(p.getName(), "zombie");
+			SSBB game = (SSBB) g;
+			game.playerclass.put(p.getName(), "zombie");
 			ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
 			LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
 			lam.setColor(org.bukkit.Color.fromRGB(40, 0, 160));
@@ -662,7 +706,8 @@ public class SSBlistener extends CCGameListener {
 		final Game<?> g = gm.getGameWithPlayer(p);
 
 		if(g.getPlugin() == plugin) {
-			plugin.games.get(g.getId()).playerclass.put(p.getName(), "skeleton");
+			SSBB game = (SSBB) g;
+			game.playerclass.put(p.getName(), "skeleton");
 			ItemStack c = new ItemStack(Material.LEATHER_CHESTPLATE);
 			LeatherArmorMeta lam = (LeatherArmorMeta) c.getItemMeta();
 			lam.setColor(Color.fromRGB(210, 210, 210));
@@ -708,19 +753,36 @@ public class SSBlistener extends CCGameListener {
 				ArrayList<String> test = new ArrayList<>();
 				for(Team t : g.getTeams()) {
 					for(TeamPlayer p2 : t.getPlayers()) {
-						if(p2.getDeaths() == 0) {
-							test.add(p2.getName() + ChatColor.GREEN+"5/5" );
-						} else if(p2.getDeaths() == 1) {
-							test.add(p2.getName() + ChatColor.GREEN+"4/5" );
-						} else if(p2.getDeaths() == 2) {
-							test.add(p2.getName() + ChatColor.YELLOW+"3/5" );
-						} else if(p2.getDeaths() == 3) {
-							test.add(p2.getName() + ChatColor.RED+"2/5" );
-						} else if(p2.getDeaths() == 4) {
-							test.add(p2.getName() + ChatColor.RED+"1/5" );
-						} else if(p2.getDeaths() == 5) {
-							test.add(p2.getName() + ChatColor.RED+"0/5" );
+						if(p2.getName().length() > 10) {
+							if(p2.getDeaths() == 0) {
+								test.add(p2.getName().substring(0, 8) + ChatColor.GREEN+"5/5" );
+							} else if(p2.getDeaths() == 1) {
+								test.add(p2.getName().substring(0, 8) + ChatColor.GREEN+"4/5" );
+							} else if(p2.getDeaths() == 2) {
+								test.add(p2.getName().substring(0, 8) + ChatColor.YELLOW+"3/5" );
+							} else if(p2.getDeaths() == 3) {
+								test.add(p2.getName().substring(0, 8) + ChatColor.RED+"2/5" );
+							} else if(p2.getDeaths() == 4) {
+								test.add(p2.getName().substring(0, 8) + ChatColor.RED+"1/5" );
+							} else if(p2.getDeaths() == 5) {
+								test.add(p2.getName().substring(0, 8) + ChatColor.RED+"0/5" );
+							}
+						} else {
+							if(p2.getDeaths() == 0) {
+								test.add(p2.getName() + ChatColor.GREEN+"5/5" );
+							} else if(p2.getDeaths() == 1) {
+								test.add(p2.getName() + ChatColor.GREEN+"4/5" );
+							} else if(p2.getDeaths() == 2) {
+								test.add(p2.getName() + ChatColor.YELLOW+"3/5" );
+							} else if(p2.getDeaths() == 3) {
+								test.add(p2.getName() + ChatColor.RED+"2/5" );
+							} else if(p2.getDeaths() == 4) {
+								test.add(p2.getName() + ChatColor.RED+"1/5" );
+							} else if(p2.getDeaths() == 5) {
+								test.add(p2.getName() + ChatColor.RED+"0/5" );
+							}
 						}
+
 					}
 				}
 				for(Team t : g.getTeams()) {
@@ -740,8 +802,9 @@ public class SSBlistener extends CCGameListener {
 		Player p = e.getPlayer();
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithPlayer(p);
-		if(!(g == null)) {
+		if(g != null) {
 			if(g.getPlugin() == plugin) {
+				SSBB game = (SSBB) g;
 				if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 					if(e.getClickedBlock().getType() == Material.STONE_BUTTON) {
 						if(e.getClickedBlock().getRelative(BlockFace.UP).getType() == Material.SIGN ||
@@ -757,20 +820,21 @@ public class SSBlistener extends CCGameListener {
 										}
 									}
 									if(teapPlayers.size() <= 1) {
+										e.getPlayer().sendMessage("Need to have more then one person!");
 										return;
 									}
-									plugin.games.get(g.getId()).setMap(s.getLine(1));
-									plugin.games.get(g.getId()).setState(states.PREGAME);
+									game.map = s.getLine(1);
 									for(Team t : g.getTeams()) {
-										Location loc = plugin.pregamespots.get(plugin.games.get(g.getId()).getMap()).get(Integer.parseInt(t.getName())-1);
+										Location loc = plugin.pregamespots.get(game.map).get(Integer.parseInt(t.getName())-1);
 										Location loc2 = new Location(Bukkit.getWorld(g.getName()), loc.getX(), loc.getY(), loc.getZ());
 										for(TeamPlayer p1 : t.getPlayers()) {
 											Player p2 = Bukkit.getPlayer(p1.getName());
 											p2.teleport(loc2);
-											p2.setHealth(20);
+											p2.setHealth(20D);
 											p2.setFoodLevel(20);
 										}
 									}
+									g.setState(new InGameState(g));
 									runtask(g);
 								}
 							}
@@ -788,11 +852,12 @@ public class SSBlistener extends CCGameListener {
 		final Game<?> g = gm.getGameWithPlayer(p);
 		if(!(g == null)) {
 			if(g.getPlugin() == plugin) {
-				if(plugin.games.get(g.getId()).playerclass.get(p.getName()) == null) {
+				SSBB game = (SSBB) g;
+				if(game.playerclass.get(p.getName()) == null) {
 					return;
 				}
-				if(plugin.games.get(g.getId()).playerclass.get(p.getName()).equalsIgnoreCase("spider")) {
-					if(!p.hasPermission("CodCraft.ssb.spiderclimb")) {
+				if(game.playerclass.get(p.getName()).equalsIgnoreCase("spider")) {
+					if(!p.hasPermission("codcraft.climb")) {
 						return;
 					}
 					if(!e.getPlayer().isSneaking()) {
@@ -818,11 +883,9 @@ public class SSBlistener extends CCGameListener {
 					
 			@Override
 			public void run() {
-				plugin.games.get(g.getId()).setState(states.INGAME);
 				for(Team t : g.getTeams()) {
-					Location loc1 = plugin.spawnpoints.get(plugin.games.get
-							(g.getId()).getMap()).get(rnd.nextInt(plugin.spawnpoints.get
-									(plugin.games.get(g.getId()).getMap()).size())); 
+					SSBB game = (SSBB) g;
+					Location loc1 = plugin.spawnpoints.get(game.map).get(rnd.nextInt(plugin.spawnpoints.get(game.map).size())); 
 					Location loc2 = new Location(Bukkit.getWorld(g.getName()), loc1.getX(), loc1.getY(), loc1.getZ());
 					for(TeamPlayer p4 : t.getPlayers()) {
 						Player p5 = Bukkit.getPlayer(p4.getName());

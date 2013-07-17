@@ -1,21 +1,25 @@
 package com.codcraft.CCKOTL;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
+import com.CodCraft.api.CCAPI;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
+import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCGamePlugin;
 
 public class KOTL extends CCGamePlugin {
 	
-	private List<Game> games = new ArrayList<>();
+	private CCAPI api;
 
 	public void onEnable() {
+		Plugin ccapi = Bukkit.getPluginManager().getPlugin("CodCraftAPI");
+		if(ccapi != null) {
+			api = (CCAPI) ccapi;
+		}
 		StartTIMER();
 	}
 	
@@ -26,7 +30,7 @@ public class KOTL extends CCGamePlugin {
 
 			@Override
 			public void run() {
-				for(Game<?> g : games) {
+				for(Game<?> g : api.getModuleForClass(GameManager.class).getAllGames()) {
 					Player p = null;
 					int height = 0;
 					for(Team t : g.getTeams()) {
@@ -35,8 +39,9 @@ public class KOTL extends CCGamePlugin {
 							p2 = Bukkit.getPlayer(tp.getName());
 						}
 						if(p2 != null) {
-							if(p2.getHealth() > height) {
-								
+							if(p2.getLocation().getY() > height) {
+								p = p2;
+								p.getName();
 							}
 						}
 					}

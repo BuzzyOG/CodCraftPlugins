@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class CCdatabase {
@@ -19,12 +18,15 @@ public class CCdatabase {
 	
 	
 	public void savep(Player p) {
+		if(plugin.con == null) {
+			plugin.getLogger().severe("Connection not setup. Stopping!");
+			return;
+		}
 		CCPlayer player = plugin.players.get(p.getName());
 		if(player != null) {
 			Statement statement5;
 			try {
 				statement5 = plugin.con.createStatement();
-				Bukkit.broadcastMessage(""+player.mysqlid);
 				String SQL2 = "UPDATE players SET kills = '"+player.getKills()+"', deaths = '"+player.Deaths+"', wins = '"+player.getWins()+
 						"',losses = '"+player.getLosses()+"',Levels = '"+player.getLevel()+"', Points = '"+player.getPoints()+"', classes = '"+player.CaCint+
 						"', TDMKills = '"+player.getTDMKills()+"', TDMDeaths = '"+player.getTDMDeaths()+"', TDMWins = '"+player.getTDMWins()+"', TDMLosses = '"+player.getTDMLosses()+
@@ -78,6 +80,10 @@ public class CCdatabase {
 	
 	public void getp(String p) {
 		Statement statement1 = null;
+		if(plugin.con == null) {
+			plugin.getLogger().severe("Connection not setup. Stopping!");
+			return;
+		}
 
 		try {
 			statement1 = plugin.con.createStatement();
@@ -96,7 +102,7 @@ public class CCdatabase {
 				plasyers.setLosses(0);
 				plasyers.setLevel(0);
 				plasyers.setPoints(0);
-				plasyers.CaCint = 0;
+				plasyers.CaCint = 3;
 				plasyers.setTDMKills(0);
 				plasyers.setTDMDeaths(0);
 				plasyers.setTDMLosses(0);
@@ -203,6 +209,11 @@ public class CCdatabase {
 			}
 	}
 	public void updatep(Player p) {
+		if(plugin.con == null) {
+			plugin.getLogger().severe("Connection not setup. Stopping!");
+			return;
+		}
+		
 		//Saving
 			CCPlayer player = plugin.players.get(p.getName());
 			if(player != null) {
@@ -277,7 +288,7 @@ public class CCdatabase {
 			plasyers.setLosses(0);
 			plasyers.setLevel(0);
 			plasyers.setPoints(0);
-			plasyers.CaCint = 0;
+			plasyers.CaCint = 3;
 			plasyers.setTDMKills(0);
 			plasyers.setTDMDeaths(0);
 			plasyers.setTDMLosses(0);
@@ -416,7 +427,7 @@ private void addefaults(String p) {
 		pst.setInt(5, 0);
 		pst.setInt(6, 1);
 		pst.setInt(7, 0);
-		pst.setInt(8, 1);
+		pst.setInt(8, 3);
 		pst.setInt(9, 0);
 		pst.setInt(10, 0);
 		pst.setInt(11, 0);

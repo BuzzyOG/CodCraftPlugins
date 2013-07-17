@@ -1,7 +1,7 @@
 name: PDY
 author: Joby
 main: com.codcraft.PlayerDataViewer.Main
-version: 1
+version: 0.0.001
 depend: [CodCraftAPI, CCLobby]
 commands: 
     board: 

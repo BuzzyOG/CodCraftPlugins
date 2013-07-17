@@ -22,7 +22,6 @@ import com.CodCraft.api.services.CCGamePlugin;
 public class CCSSBB extends CCGamePlugin {
 
 	public CCAPI api;
-	public Map<String, SSBmodel> games = new HashMap<String, SSBmodel>();
 	public Map<String, ArrayList<Location>> spawnpoints = new HashMap<>();
 	public Map<String, ArrayList<Location>> pregamespots = new HashMap<>();
 	public Map<String, Location> specspot = new HashMap<>();
@@ -33,7 +32,6 @@ public class CCSSBB extends CCGamePlugin {
 			getServer().getPluginManager().disablePlugin(this);
 		} 
 		api = (CCAPI) ccapi;
-		makegame("SSB1");
 		loadmap();
 		specspot();
 		Bukkit.getPluginManager().registerEvents(new SSBlistener(this), this);
@@ -94,16 +92,8 @@ public class CCSSBB extends CCGamePlugin {
 	    }
 	    return ChatColor.translateAlternateColorCodes('&', output);
 	  }
-	
-	
-	public enum states {
-		LOBBY,
-		PREGAME,
-		INGAME,
-		
-	}
-
-
+	  
+	  
 	  public static ItemStack Skull(CustomSkullType type) {
 		    return Skull(type.getOwner(), type.getDisplayName());
 		  }

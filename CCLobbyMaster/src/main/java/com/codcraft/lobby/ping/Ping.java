@@ -1,80 +1,211 @@
 package com.codcraft.lobby.ping;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
-import com.codcraft.lobby.CCLobby;
-import com.codcraft.lobby.Module;
+public class Ping {
+	
+	//Info
+	private final String name;
+	private InetSocketAddress server;
+	private int port;
+	
+	//ReturnInfo
+	private Integer players;
+	private Integer maxplayers;
+	private String motd;
+	private int pingVersion;
+	private int protocolVersion;
+	private String gameVersion;
+	private boolean online = false;
+	
+	//updating
+	private boolean updating = false;
+	
 
-public class Ping
-{
-  static Ping _instance = null;
-  File configfile;
-  FileConfiguration config;
-  public Map<String, Result> results = new ConcurrentHashMap<String, Result>();
-  public Map<String, String> pinglist = new ConcurrentHashMap<String, String>();
-  public HashMap<String, String> display = new HashMap<String, String>();
-  public ConfigurationSection servers;
+	public Ping(String name, String IP, int port) {
+		this.name = name;
+		this.server = new InetSocketAddress(IP, port);
+		this.port = port;
+	}
+	
+	public Ping(String name) {
+		this.name = name;
+	}
+	
+	public List<String> getData() {
+		List<String> data = new ArrayList<>();
+		data.add(name);
+		data.add(""+players);
+		data.add(""+maxplayers);
+		data.add(motd);
+		data.add(""+isOnline());
+		return data;
+	}
+	
+	@SuppressWarnings("resource")
+	public boolean ping() {
+		updating = true;
+		online = false;
+		try {
+	      Socket socket = new Socket();
 
-  public static Ping getInstance()
-  {
-    if (_instance == null) {
-      _instance = new Ping();
-    }
+	      socket.setSoTimeout(200);
 
-    return _instance;
-  }
-  
-  public void loadConfig2() {
-	  CCLobby plugin = (CCLobby) Bukkit.getServer().getPluginManager().getPlugin("CCLobbyMaker");
-	  for(Module modle : plugin.configmap) {
-		  plugin.getLogger().info("Load Config" + modle.IP);
-		  this.pinglist.put(modle.name, modle.IP);
-		  this.display.put(modle.name, modle.server);
-	  }
-	  
-  }
+	      socket.connect(this.server, 200);
 
-  public void loadConfig() {
-    Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("TeleportSigns");
-    this.configfile = new File(plugin.getDataFolder(), "ping.yml");
-    if (!this.configfile.exists()) {
-      plugin.saveResource("ping.yml", false);
-    }
-    this.config = YamlConfiguration.loadConfiguration(this.configfile);
-    this.servers = this.config.getConfigurationSection("servers");
-    Set<String> keys = this.servers.getKeys(false);
-    for (String s : keys) {
-      ConfigurationSection cs = this.servers.getConfigurationSection(s);
-      this.pinglist.put(s, cs.getString("address"));
-      this.display.put(s, cs.getString("displayname"));
-    }
-  }
+	      OutputStream outputStream = socket.getOutputStream();
+	      DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-  public void startPing() {
-    startPing(this.pinglist);
-  }
+	      InputStream inputStream = socket.getInputStream();
+	      InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-16BE"));
 
-  public void startPing(Map<String, String> toping) {
-    final PingThread pt = new PingThread(toping);
-    Timer timer = new Timer();
-    TimerTask task = new TimerTask()
-    {
-      public void run() {
-        pt.ping();
-      }
-    };
-    timer.schedule(task, 2000L, 5000L);
-  }
+	      dataOutputStream.write(new byte[] { -2, 1, -6 });
+
+	      dataOutputStream.writeShort(11);
+	      dataOutputStream.write("MC|PingHost".getBytes("UTF-16BE"));
+	      dataOutputStream.writeShort(server.getHostString().length() * 2 + 7);
+	      dataOutputStream.write(73);
+	      dataOutputStream.writeShort(server.getHostString().length());
+	      dataOutputStream.write(server.getHostString().getBytes("UTF-16BE"));
+	      dataOutputStream.writeInt(server.getPort());
+
+	      int packetId = inputStream.read();
+
+	      if (packetId == -1) {
+	        throw new IOException("Premature end of stream.");
+	      }
+
+	      if (packetId != 255) {
+	        throw new IOException("Invalid packet ID (" + packetId + ").");
+	      }
+
+	      int length = inputStreamReader.read();
+
+	      if (length == -1) {
+	        throw new IOException("Premature end of stream.");
+	      }
+
+	      if (length == 0) {
+	        throw new IOException("Invalid string length.");
+	      }
+
+	      char[] chars = new char[length];
+
+	      if (inputStreamReader.read(chars, 0, length) != length) {
+	        throw new IOException("Premature end of stream.");
+	      }
+
+	      String string = new String(chars); 
+	      if (string.startsWith("\247")) {
+	        String[] data = string.split("\0");
+	        online = true;
+	        this.pingVersion = Integer.parseInt(data[0].substring(1));
+	        this.protocolVersion = Integer.parseInt(data[1]);
+	        this.gameVersion = data[2];
+	        this.motd = data[3];
+	        this.players = Integer.parseInt(data[4]);
+	        this.maxplayers = Integer.parseInt(data[5]);
+	      } else {
+	    	  online = true;
+	        String[] data = string.split("§");
+	        this.motd = data[0];
+	        this.players = Integer.parseInt(data[1]);
+	        this.maxplayers = Integer.parseInt(data[2]);
+	      }
+	      try {
+	        Thread.sleep(100L);
+	      } catch (InterruptedException ex) {
+	    	  Bukkit.getLogger().log(Level.SEVERE, "[TeleportSigns] Something is wrong here!", ex);
+	      }
+	      dataOutputStream.close();
+	      outputStream.close();
+
+	      inputStreamReader.close();
+	      inputStream.close();
+	      socket.close();
+	    } catch (SocketException exception) {
+	      updating = false;
+	      return false;
+	    } catch (IOException exception) {
+	      updating = false;
+	      return false;
+	    }
+		updating = false;
+		return true;
+	}
+	
+
+	
+	
+	public String getName() {
+		return name;
+	}
+
+
+	public InetSocketAddress getServer() {
+		return server;
+	}
+
+
+	public void setServer(String server) {
+		this.server = new InetSocketAddress(server, port);
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public Integer getPlayers() {
+		return players;
+	}
+
+	public Integer getMaxplayers() {
+		return maxplayers;
+	}
+
+	public String getMotd() {
+		return motd;
+	}
+
+	public int getPingVersion() {
+		return pingVersion;
+	}
+
+	public int getProtocolVersion() {
+		return protocolVersion;
+	}
+
+	public String getGameVersion() {
+		return gameVersion;
+	}
+
+	public boolean isUpdating() {
+		return updating;
+	}
+
+	public void setUpdating(boolean updating) {
+		this.updating = updating;
+	}
+
+	public boolean isOnline() {
+		return online;
+	}
+	
 }

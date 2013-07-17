@@ -17,6 +17,8 @@ public class Module {
 	public String name;
 	
 	public String IP;
+	
+	public int port;
 
 	public Location getSignBlock2() {
 		return SignBlock2;

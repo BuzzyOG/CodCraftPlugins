@@ -6,10 +6,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/CodCraftAPI"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Lobby"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CodCraftPlayer"/>
-	<classpathentry kind="lib" path="E:/downloads/craftbukkit-1.5-R0.1-20130315.183908-1.jar"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="optional" value="true"/>

@@ -1,7 +1,10 @@
 name: CCLobbyMaker
 main: com.codcraft.lobby.CCLobby
-version: 1
+version: 0.0.001
 commands: 
+    send:
+      description: go to be f
+      usage: /send
     maker:
       description: go to be maker
       usage: /maker

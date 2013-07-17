@@ -1,9 +1,5 @@
 name: Infected
 main: com.codcraft.infected.CodCraftInfected
-version: 1
+version: 0.0.001
 depend: [CodCraftAPI, TagAPI]
 description: First test of CodCraftAPI
-commands:
-   vote:
-      description: vote
-      usage: /vote

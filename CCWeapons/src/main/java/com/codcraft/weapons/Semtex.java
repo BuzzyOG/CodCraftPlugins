@@ -47,11 +47,11 @@ public class Semtex implements Listener {
 											Team t1 = g.findTeamWithPlayer(p);
 											Team t2 = g.findTeamWithPlayer(p2);
 											if(p == p2) {
-												p.damage(20);
+												p.damage(20D);
 											} else if(t1 == t2) {
 												
 											} else if (t1 != t2) {
-												p2.damage(20, p);
+												p2.damage(20D, p);
 											}
 										}
 									}

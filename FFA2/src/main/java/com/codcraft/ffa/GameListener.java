@@ -3,11 +3,14 @@ package com.codcraft.ffa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NavigableMap;
 import java.util.Random;
+import java.util.TreeMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,11 +22,14 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.CodCraft.api.event.GameWinEvent;
+import com.CodCraft.api.event.PlayerDamgedByWeaponEvent;
 import com.CodCraft.api.event.RequestJoinGameEvent;
 import com.CodCraft.api.event.team.TeamPlayerGainedEvent;
+import com.CodCraft.api.event.team.TeamPlayerLostEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
@@ -34,7 +40,7 @@ import com.CodCraft.api.services.CCGameListener;
 import com.codcraft.codcraftplayer.CCPlayer;
 import com.codcraft.codcraftplayer.CCPlayerModule;
 import com.codcraft.codcraftplayer.PlayerGetClassEvent;
-import com.codcraft.ffa.CodCraftFFA.GameState;
+import com.codcraft.ffa.states.LobbyState;
 
 public class GameListener extends CCGameListener {
 
@@ -42,6 +48,19 @@ public class GameListener extends CCGameListener {
 	
 	public GameListener(CodCraftFFA plugin) {
 		this.plugin = plugin;
+	}
+	
+	
+	@EventHandler
+	public void onChange(WeatherChangeEvent e) {
+		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		for(Game<?> g : gm.getAllGames()) {
+			if(g.getName().equalsIgnoreCase(e.getWorld().getName())) {
+				if(e.toWeatherState()) {
+					e.setCancelled(true);
+				}
+			}
+		}
 	}
 	
 	@EventHandler
@@ -66,16 +85,26 @@ public class GameListener extends CCGameListener {
 	
 	@EventHandler
 	public void onPlace(BlockPlaceEvent e) {
-		for(Game<?> g : plugin.api.getModuleForClass(GameManager.class).getAllGames()) {
+		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		Game<?> g = gm.getGameWithPlayer(e.getPlayer());
+		if(g != null) {
 			if(g.getPlugin() == plugin) {
-				if(e.getBlockPlaced().getLocation().getWorld().getName().equalsIgnoreCase(g.getName())) {
-					if(e.getBlockPlaced().getType() != Material.LEVER) {
-						e.setCancelled(true);
-					}
-
+				if(e.getBlockPlaced().getType() != Material.LEVER) {
+					e.setCancelled(true);
 				}
 			}
 		}
+		/*for(Game<?> g : plugin.api.getModuleForClass(GameManager.class).getAllGames()) {
+			if(g.getPlugin() == plugin) {
+				if(e.getBlockPlaced().getLocation().getWorld().getName().equalsIgnoreCase(g.getName())) {
+					if(e.getBlockPlaced().getType() != Material.LEVER) {
+						if(e.getPlayer().hasPermission("CodCraft.Admin")) {
+							e.setCancelled(true);
+						}	
+					}
+				}
+			}
+		}*/
 	}
 	
 	@EventHandler
@@ -91,6 +120,7 @@ public class GameListener extends CCGameListener {
 	
 	@EventHandler
 	public void onGameJoin(TeamPlayerGainedEvent e) {
+		  final ScoreBoard SB = plugin.api.getModuleForClass(ScoreBoard.class);
 		  final GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		  final Game<?> g = gm.getGameWithTeam(e.getTeam());
 		  
@@ -102,23 +132,25 @@ public class GameListener extends CCGameListener {
 			return;
 		}
 		plugin.getLogger().info(e.getPlayer().getName()+" has join a FFA game named " + g.getName()+".");
-		@SuppressWarnings("unchecked")
-		final Game<CodCraftFFA> game = (Game<CodCraftFFA>)g;
-		final String currentmap = plugin.currentmap.get(game.getId()).map;
+		final FFAGame game = (FFAGame) g;
+		SB.addPlayerToScoreBoard(Bukkit.getPlayer(e.getPlayer().getName()), SB.getScoreBoardFromGame(game));
+		final String currentmap = game.map;
 		final Player p = Bukkit.getPlayer(e.getPlayer().getName());
-		FFAModel model = plugin.currentmap.get(g.getId());
 		if(p.getGameMode() != GameMode.SURVIVAL) {
 			p.setGameMode(GameMode.SURVIVAL);
 		}
 		p.getInventory().clear();
-		if(model.state == GameState.LOBBY) {
+		if(game.getCurrentState().getId().equalsIgnoreCase(new LobbyState(game).getId())) {
 			p.sendMessage(ChatColor.BLUE+"Please vote for a map!");
-			p.sendMessage(ChatColor.BLUE+model.Map1);
+			p.sendMessage(ChatColor.BLUE+game.Map1);
 			p.sendMessage(ChatColor.BLUE+"or");
-			p.sendMessage(ChatColor.BLUE+model.Map2);
+			p.sendMessage(ChatColor.BLUE+game.Map2);
+			p.teleport(new Location(Bukkit.getWorld(g.getName()), 30, 40, 195));
+		} else {
+			p.teleport(plugin.Respawn(p, Bukkit.getWorld(game.getName()), currentmap, g));
 		}
 		
-		p.teleport(plugin.Respawn(p, Bukkit.getWorld(game.getName()), currentmap, g));
+		
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			@Override
@@ -129,12 +161,18 @@ public class GameListener extends CCGameListener {
 					p.getInventory().addItem(i);
 				}
 				updateallgui(g);
-				plugin.api.getModuleForClass(ScoreBoard.class).setPlayerBoard(p, null);
-				
 			}
 		}, 3);
 		
 
+	}
+	@EventHandler
+	public void onDamage(PlayerDamgedByWeaponEvent e) {
+		if(e.getGame().getPlugin() == plugin) {
+			if(e.getGame().getCurrentState().getId().equalsIgnoreCase(new LobbyState((FFAGame) e.getGame()).getId())){
+				e.setCancelled(true);
+			}
+		}
 	}
 	
 	
@@ -162,11 +200,13 @@ public class GameListener extends CCGameListener {
 		}
 		player1.setDeaths(player1.getDeaths() +1);
 		player1.setFFADeaths(player1.getFFADeaths() + 1);
+		ScoreBoard SB = plugin.api.getModuleForClass(ScoreBoard.class);
+		
 		if(e.getEntity().getKiller() instanceof Player) {
 
 			Player k =(Player) e.getEntity().getKiller();
 			Team team2 = g.findTeamWithPlayer(k);
-
+			SB.addPoint(k, SB.getScoreBoardFromGame(g));
 			team2.setScore(team2.getScore() + 1);
 			if(checkwin(team2)) {
 				GameWinEvent event = new GameWinEvent(team2.getName()+" has won!", team2, g);
@@ -227,14 +267,22 @@ public class GameListener extends CCGameListener {
 	public void guiupdate(Player p) {
 		GUI gui = plugin.api.getModuleForClass(GUI.class);
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
-		ArrayList<String> l = new ArrayList<>();
-		l.add(gm.getGameWithPlayer(p).getName());
+		TreeMap<String, String> sorted = new TreeMap<>();
 		for(Team t : gm.getGameWithPlayer(p).getTeams()) {
 			for(TeamPlayer tp : t.getPlayers()) {
-				l.add(tp.getName().substring(0, 4)+"K:"+tp.getKills()+"D:"+tp.getDeaths());
+				if(sorted.containsKey(""+tp.getKills())) {
+					String s = ""+tp.getKills() + "." + "0";
+					while(sorted.containsKey(s)) {
+						s = s + "0";
+					} 
+					sorted.put(""+s, tp.getName().substring(0, 4)+"K:"+tp.getKills()+"D:"+tp.getDeaths());
+				} else {
+					sorted.put(""+tp.getKills(), tp.getName().substring(0, 4)+"K:"+tp.getKills()+"D:"+tp.getDeaths());
+				}
 			}
 		}
-		gui.updateplayerlist(p, l);
+		NavigableMap<String, String> sorted2 = sorted.descendingMap();
+		gui.updateplayerlist(p, sorted2);
 	}
 	
 	@EventHandler
@@ -276,16 +324,15 @@ public class GameListener extends CCGameListener {
 	@EventHandler
 	public void onWIn(GameWinEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
-		Game<?> g = gm.getGameWithTeam(e.getTeam());
-		if(g == null) {
-			plugin.getLogger().info("null");
+		Game<?> game = gm.getGameWithTeam(e.getTeam());
+		if(game == null) {
+			return;
 		}  
-		if(g.getPlugin() != plugin) {
+		if(game.getPlugin() != plugin) {
 			return;
 		}
-		
-		plugin.currentmap.get(g.getId()).state = GameState.LOBBY;
-		plugin.currentmap.get(g.getId()).gametime = 30;
+		FFAGame g = (FFAGame) game;
+		g.setState(new LobbyState((FFAGame) g));
 		List<TeamPlayer> test = new ArrayList<>();
 		for(TeamPlayer t : e.getTeam().getPlayers()) {
 			test.add(t);
@@ -303,36 +350,39 @@ public class GameListener extends CCGameListener {
 			player.setFFAWins(player.getFFAWins() + 1);
 		}
 		Random rnd = new Random();
-		plugin.currentmap.get(g.getId()).Map1 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
-		plugin.currentmap.get(g.getId()).Map2 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
-		while(plugin.currentmap.get(g.getId()).Map1.equalsIgnoreCase(plugin.currentmap.get(g.getId()).Map2)) {
-			plugin.currentmap.get(g.getId()).Map1 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
+		g.Map1 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
+		g.Map2 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
+		while(g.Map1.equalsIgnoreCase(g.Map2)) {
+			g.Map1 = plugin.maps.get(rnd.nextInt(plugin.maps.size()));
 		}
 		for(Team team : g.getTeams()) {
 			for(TeamPlayer tp : team.getPlayers()) {
 				tp.setDeaths(0);
 				tp.setKills(0);
-				FFAModel model = plugin.currentmap.get(g.getId());
 				Player p = Bukkit.getPlayer(tp.getName());
-
+				p.teleport(new Location(Bukkit.getWorld(g.getName()), 30, 40, 195));
 				p.sendMessage(ChatColor.BLUE+"Please vote for a map!");
-				p.sendMessage(ChatColor.BLUE+model.Map1);
+				p.sendMessage(ChatColor.BLUE+g.Map1);
 				p.sendMessage(ChatColor.BLUE+"or");
-				p.sendMessage(ChatColor.BLUE+model.Map2);
+				p.sendMessage(ChatColor.BLUE+g.Map2);
 						
 			}
 			team.setScore(0);
 		}
+		ScoreBoard sb = plugin.api.getModuleForClass(ScoreBoard.class);
 		for(Team team : g.getTeams()) {
 			if(team != e.getTeam()) {
 				for(TeamPlayer tp : team.getPlayers()) {
 					CCPlayer player2 = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(Bukkit.getPlayer(tp.getName()));
 					player2.setLosses(player2.getLosses() + 1);
 					player2.setFFALosses(player2.getFFALosses() + 1);
+					
+					sb.resetPlayerScore(g, Bukkit.getPlayer(tp.getName()));
 				}
 			}
 		}
 		updateallgui(g);
+
 
 	}
 	@EventHandler (priority = EventPriority.LOWEST)
@@ -345,16 +395,26 @@ public class GameListener extends CCGameListener {
 		if(!(g.getPlugin() == plugin)) {
 			return;
 		}
+		FFAGame game = (FFAGame) g;
 		Player p = e.getPlayer();
-		final String currentmap = plugin.currentmap.get(g.getId()).map;
-		e.setRespawnLocation(plugin.Respawn(p, Bukkit.getWorld(g.getName()), currentmap, g));
-		/* For HAMMER Random rnd = new Random();
-		for(int i = 0; i <= 5; i++) {
-			int x = rnd.nextInt(5);
-			int z = rnd.nextInt(5);
-			Location loc = new Location(Bukkit.getWorld("world"), x, Bukkit.getWorld("world").getHighestBlockYAt(x, z), z);
-			plugin.getServer().getWorld("world").spawnEntity(loc, EntityType.ZOMBIE);
-		}*/
+		final String currentmap = game.map;
+		if(g.getCurrentState().getId().equalsIgnoreCase(new LobbyState(game).getId())) {
+			e.setRespawnLocation(new Location(Bukkit.getWorld(g.getName()), 30, 40, 195));
+		} else {
+			e.setRespawnLocation(plugin.Respawn(p, Bukkit.getWorld(g.getName()), currentmap, g));
+		}
+	}
+	
+	@EventHandler
+	public void onLose(TeamPlayerLostEvent e) {
+		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		Game<?> g = gm.getGameWithPlayer(e.getPlayer());
+		if(g != null) {
+			if(g.getPlugin() == plugin) {
+				ScoreBoard sb = plugin.api.getModuleForClass(ScoreBoard.class);
+				sb.removePlayerFromScoreBoard(Bukkit.getPlayer(e.getPlayer().getName()));
+			}
+		}
 	}
 	
 	private boolean checkwin(Team t) {

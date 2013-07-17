@@ -324,7 +324,7 @@ public class GameListener extends CCGameListener {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		Game<?> g = gm.getGameWithTeam(e.getTeam());
 		if(g == null) {
-			plugin.getLogger().info("null");
+			return;
 		}  
 		if(g.getPlugin() != plugin) {
 			return;

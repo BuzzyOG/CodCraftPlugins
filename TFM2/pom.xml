@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>TDM</groupId>
+  <groupId>com.codcraft</groupId>
   <artifactId>TDM</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.001</version>
     <packaging>jar</packaging>
    <!-- Parent project -->
     <parent>
@@ -12,6 +12,18 @@
         <version>${codcraft.plugin.version}</version>
     </parent>
   <build>
+    <finalName>${project.artifactId}</finalName>
+        <defaultGoal>compile package</defaultGoal>
+        <sourceDirectory>${basedir}/src/</sourceDirectory>
+        <resources>
+            <resource>
+                <includes>
+                    <include>plugin.yml</include>
+                </includes>
+                <directory>${basedir}</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -23,4 +35,16 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.codcraft</groupId>
+  		<artifactId>Lobby</artifactId>
+  		<version>${codcraft.plugins.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.codcraft</groupId>
+  		<artifactId>CodCraftPlayer</artifactId>
+  		<version>${codcraft.plugins.version}</version>
+  	</dependency>
+  </dependencies>
 </project>

@@ -21,15 +21,15 @@ public class CCPlayer {
 	protected Map<Integer, CCClass> classes = new HashMap<Integer, CCClass>();
 	
 	
-	public Integer mysqlid;
+	public Integer mysqlid = 0;
 	
-	protected Integer CCPoints;
+	protected Integer CCPoints = 0;
 	
-	protected Integer CCLevel;
+	protected Integer CCLevel = 0;
 	
-	protected Integer Kills;
+	protected Integer Kills = 0;
 	
-	protected Integer Deaths;
+	protected Integer Deaths = 0;
 	
 	protected Integer TDMKills = 0;
 	
@@ -63,9 +63,9 @@ public class CCPlayer {
 	
 	protected Integer UHCLosses = 0;
 	
-	protected Integer Wins;
+	protected Integer Wins = 0;
 	
-	protected Integer Losses;
+	protected Integer Losses = 0;
 
 	protected Integer currentclass = 1;
 	
@@ -83,8 +83,12 @@ public class CCPlayer {
 	public Integer getCurrentclass() {
 		return currentclass;
 	}
-	public void setCurrentclass(Integer currentclass) {
+	public boolean setCurrentclass(Integer currentclass) {
+		if(currentclass > CaCint || currentclass <= 0) {
+			return false;
+		}
 		this.currentclass = currentclass;
+		return true;
 	}
 	public Integer getLosses() {
 		return Losses;
