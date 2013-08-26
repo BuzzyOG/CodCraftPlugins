@@ -103,9 +103,7 @@ public class CaCModule extends CCModule {
 			book.setItemMeta(bm);
 			p.getInventory().addItem(book);
 			p.teleport(plugin.locations.LobbySpawn.get(GetBox(p)));
-			LoadSigns(p, clazz.getGun(), clazz.getPerk1(), clazz.getPerk2(),
-					clazz.getPerk3(), clazz.getEquipment(),
-					clazz.getKillStreak());
+			LoadSigns(p, clazz.getGun(), clazz.getPerk1(), clazz.getPerk2(), clazz.getPerk3(), clazz.getEquipment(), clazz.getKillStreak());
 	      }
 	       
 	      
@@ -177,10 +175,10 @@ public class CaCModule extends CCModule {
 		      equimpent.update();
 		      killStreak.update();
 		   }
-	public void addweapon(String name, String list) {
+	public void addweapon(String name, String list, String permission) {
 		switch (list.toLowerCase()) {
 		case "weapons":
-			plugin.weapons.add(name);
+			plugin.weapons.put(name, permission);
 			break;
 		case "attachement":
 			plugin.Attachement.add(name);
@@ -198,7 +196,7 @@ public class CaCModule extends CCModule {
 		case "equipment":
 			plugin.Equipment.add(name);
 			break;
-		case "killStreak":
+		case "killstreak":
 			plugin.KillStreak.add(name);
 			break;
 

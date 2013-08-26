@@ -1,5 +1,7 @@
 package com.codcraft.cac;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,9 +33,14 @@ public class CaCListener implements Listener {
 			Block clickedblock = e.getClickedBlock();
 			if(clickedblock != null) {
 				if(clickedblock.getState() instanceof Sign) {
+					Sign sign = (Sign) clickedblock.getState();
 					Location loc = new Location(Bukkit.getWorld("world"), -111, 139, 62);
 					if(clickedblock.getLocation().equals(loc)) {
 						p.performCommand("cac join");
+					} else {
+						if(sign.getLine(0).equalsIgnoreCase("Leave Create") && sign.getLine(3).equalsIgnoreCase("*Click Here*")) {
+							p.performCommand("cac leave");
+						}
 					}
 				}
 			}
@@ -72,13 +79,30 @@ public class CaCListener implements Listener {
 							Location signloc = plugin.locations.SignLocation.get(cac.GetBox(p)).get(0);
 							Block sb = signloc.getBlock();
 							if(sb.getType() == Material.SIGN_POST || sb.getType() == Material.SIGN || sb.getType() == Material.WALL_SIGN) {
+								boolean gotweapon = false;
+								ArrayList<String> weapons = new ArrayList<>(plugin.weapons.keySet());
 								Sign ssb = (Sign) sb.getState();
 								Integer ci = Integer.parseInt(ssb.getLine(3));
-								int index = plugin.weapons.indexOf(s.getLine(3)) + 1;
-								if(index >= plugin.weapons.size()){
-								    index = 0;
+								String nextGun = "";
+								int timesrun = 0;
+								while (!gotweapon) {
+									timesrun++;
+									int index = weapons.indexOf(s.getLine(3)) + 1;
+									if(index >= weapons.size()){
+									    index = 0;
+									}
+									nextGun = weapons.get(index);
+									String permission = plugin.weapons.get(nextGun);
+									if(permission != null && !permission.equalsIgnoreCase("")) {
+										if(p.hasPermission(permission)) {
+											gotweapon = true;
+										}
+									}
+									if(timesrun > 50) {
+										gotweapon = true;
+									}
+
 								}
-								String nextGun = plugin.weapons.get(index);
 								s.setLine(3, nextGun);
 								s.update();
 								player.getClass(ci).setGun(s.getLine(3));
@@ -169,10 +193,9 @@ public class CaCListener implements Listener {
 								player.getClass(ci).setEquipment(s.getLine(3));
 							}
 							break;
-						case "KillStreak":
+						case "KillStreaks":
 							Location ksignloc = plugin.locations.SignLocation.get(cac.GetBox(p)).get(0);
 							Block ksb = ksignloc.getBlock();
-							
 							if(ksb.getType() == Material.SIGN_POST || ksb.getType() == Material.SIGN || ksb.getType() == Material.WALL_SIGN) {
 								Sign ssb = (Sign) ksb.getState();
 								Integer ci = Integer.parseInt(ssb.getLine(3));

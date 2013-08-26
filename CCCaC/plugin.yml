@@ -1,6 +1,6 @@
 name: Cac
 main: com.codcraft.cac.Cac
-version: 0.0.001
+version: 0.0.002
 depend: [CodCraftAPI]
 commands: 
     CaC:

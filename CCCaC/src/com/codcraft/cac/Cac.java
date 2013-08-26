@@ -1,7 +1,9 @@
 package com.codcraft.cac;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
@@ -14,7 +16,7 @@ public class Cac extends JavaPlugin {
 
 	public CCAPI api;
 	public CaCLocations locations;
-	public List<String> weapons = new ArrayList<>();
+	public Map<String, String> weapons = new HashMap<>();
 	public List<String> Attachement = new ArrayList<>();
 	public List<String> Perk1 = new ArrayList<>();
 	public List<String> Perk2 = new ArrayList<>();
