@@ -1,6 +1,6 @@
 name: CCLobbyMaker
 main: com.codcraft.lobby.CCLobby
-version: 0.0.001
+version: 0.0.002
 commands: 
     send:
       description: go to be f

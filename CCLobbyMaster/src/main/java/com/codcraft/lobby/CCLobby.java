@@ -64,7 +64,7 @@ public class CCLobby extends JavaPlugin {
 				pingManager.pingServers();
 				updateSigns();
 			}
-		}, 0, 1200);
+		}, 0, 600);
 		
 	}
 
@@ -136,7 +136,6 @@ public class CCLobby extends JavaPlugin {
 	}
 	
 	public void updateSigns() {
-		Bukkit.broadcastMessage("Starting updating!");
 		if(configmap != null) {
 	    	for (Module ts : configmap) {
 	    		Location l = ts.SignBlock1.getBlock().getLocation();

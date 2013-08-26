@@ -15,9 +15,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 
 import com.codcraft.lobby.ping.Ping;
 
@@ -46,9 +48,23 @@ public class LobbyListener implements Listener {
 
 	
 	@EventHandler
+	public void onChange(WeatherChangeEvent e) {
+		if(e.toWeatherState()) {
+			e.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
 	public void onjoin(final PlayerJoinEvent e) {
 		e.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -132, 44, 108, (float) 90, (float) 0.6));
-		//e.setJoinMessage(null);
+		e.setJoinMessage(null);
+		if(e.getPlayer().hasPermission("codcraft.fly")) {
+			e.getPlayer().setAllowFlight(true);
+			e.getPlayer().setFlying(true);
+		} else {
+			e.getPlayer().setAllowFlight(false);
+			e.getPlayer().setFlying(false);
+		}
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			@Override
@@ -118,6 +134,14 @@ public class LobbyListener implements Listener {
 			}
 		}
 	}
+	
+	@EventHandler
+	public void onEnityRegain(FoodLevelChangeEvent e) {
+		if(e.getEntity() instanceof Player) {
+			e.setFoodLevel(20);
+		}
+	}
+	
 	
 	@EventHandler
 	public void onDamage(EntityDamageEvent e) {
