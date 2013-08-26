@@ -40,7 +40,7 @@ public class CCCommands extends JavaPlugin {
 		getCommand("class").setExecutor(new ClassCommand(this)); 
 		
 		connect();
-		Bukkit.getScheduler().runTaskTimer(this, new LeaderBoard(this), 0, 12000);
+		Bukkit.getScheduler().runTaskTimer(this, new LeaderBoard(this), 0, 3600);
 		
 	}
 	

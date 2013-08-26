@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.CodCraft.api.model.Game;
+import com.CodCraft.api.model.Team;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCGamePlugin;
 import com.codcraft.codcraftplayer.CCPlayer;
@@ -32,12 +33,26 @@ public class AdminCommand implements CommandExecutor {
 				return true;
 			}
 			final GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+			
+			if(args[0].equalsIgnoreCase("showplugins")) {
+				Player p = (Player) sender;
+				for(Plugin plug : Bukkit.getPluginManager().getPlugins()) {
+					p.sendMessage(plug.getName() + " version: " + plug.getDescription().getVersion());
+				}
+				return true;
+			}
+			
 			if(args[0].equalsIgnoreCase("setteam")) {
 				Player p = (Player) sender;
 				Game<?> g = gm.getGameWithPlayer((Player)sender);
-				g.findTeamWithPlayer(p).removePlayer(p);
-				g.findTeamWithName(args[1]).addPlayer(p);
-				p.sendMessage("You are now on "+ g.findTeamWithPlayer(p).getName());
+				Team team = g.findTeamWithName(args[1]);
+				if(team == null) {
+					p.sendMessage(args[1] + " is not a current team!");
+				} else {
+					g.findTeamWithPlayer(p).removePlayer(p);
+					g.findTeamWithName(args[1]).addPlayer(p);
+					p.sendMessage("You are now on "+ g.findTeamWithPlayer(p).getName());
+				}
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("endallgames")) {
@@ -64,6 +79,7 @@ public class AdminCommand implements CommandExecutor {
 				for(Game<?> g : gm.getAllGames()) {
 					sender.sendMessage(g.getName());
 				}
+				return true;
 			}
 			if(args[0].equalsIgnoreCase("getBuddies")) {
 				//for(String s : bud.getBuddys(new Buddies(args[1]))) {
@@ -172,6 +188,9 @@ public class AdminCommand implements CommandExecutor {
 		return false;
 	}
 	private void showhelp(CommandSender sender) {
+		sender.sendMessage("Commands");
+		sender.sendMessage("setTeam");
+		
 	}
 
 }

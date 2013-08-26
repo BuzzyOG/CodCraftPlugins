@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,6 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.CodCraft.api.event.RequestJoinGameEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.modules.GameManager;
 import com.codcraft.cchat.ChatType;
@@ -96,7 +98,7 @@ public class CCListener implements Listener {
 	@EventHandler
 	public void onBreak(BlockBreakEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
-		if(!e.getPlayer().hasPermission("CodCraft.Admin")) {
+		if(!e.getPlayer().hasPermission("CodCraft.build")) {
 			if(gm.getGameWithPlayer(e.getPlayer()) == null) {
 				e.setCancelled(true);
 			}
@@ -218,6 +220,26 @@ public class CCListener implements Listener {
 				}
 			}
 		}
+		
+	@EventHandler
+	public void onSpawn(PlayerDoSpawnEvent e) {
+		if(e.getPlayer().hasPermission("codcraft.fly")) {
+			e.getPlayer().setAllowFlight(true);
+			e.getPlayer().setFlying(true);
+		} else {
+			e.getPlayer().setAllowFlight(false);
+			e.getPlayer().setFlying(false);
+		}
+	}
+	
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onRequest(RequestJoinGameEvent e) {
+		Player p = Bukkit.getPlayer(e.getPlayer().getName());
+		if(p != null) {
+			p.setAllowFlight(false);
+			p.setFlying(false);
+		}
+	}
 	
 	@EventHandler
 	public void commandhappen(PlayerCommandPreprocessEvent e) {
