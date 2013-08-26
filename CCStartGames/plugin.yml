@@ -1,4 +1,5 @@
 name: startgames
 main: com.codcraft.ccstartgame.CCStartGame
-version: 0.0.001
+version: 0.0.002
 depend: [CCCommands]
+softdepend: [TDM, FFA]
