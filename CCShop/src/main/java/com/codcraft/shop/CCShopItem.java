@@ -9,7 +9,7 @@ public class CCShopItem {
 	
 	private String addition;
 	
-	private Type type1;
+	private Type type1 = Type.PERMISSION;
 	
 	private String name;
 	

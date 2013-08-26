@@ -20,7 +20,7 @@ import com.CodCraft.api.CCAPI;
 public class CCShop extends JavaPlugin {
 	public List<CCShopItem> items = new ArrayList<>();
 	public CCAPI api;
-	public Permission perms;
+	private Permission perms;
 
 	public void onEnable() {
 		final Plugin ccapi = Bukkit.getPluginManager().getPlugin("CodCraftAPI");
@@ -176,6 +176,9 @@ public class CCShop extends JavaPlugin {
 			item.Sign3info3 = config.getString("Shops."+shop+".s3i3");
 			item.Sign3info4 = config.getString("Shops."+shop+".s3i4");
 			item.setMaterial(config.getString("Shops."+shop+".Item"));
+			if(item.getPermisison().equalsIgnoreCase("false")) {
+				item.setType1(Type.COMMAND);
+			}
 			items.add(item);
 		}
 		return true;

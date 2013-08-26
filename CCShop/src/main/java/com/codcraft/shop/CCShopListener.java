@@ -23,8 +23,10 @@ public class CCShopListener implements Listener {
 	
 	@EventHandler
 	public void CommandShopEvent(ShopCommandEvent e) {
-		if(e.getItem().getName().equalsIgnoreCase("Add CaC")) {
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "a setClasses" + e.getPlayer().getName() + plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(e.getPlayer()).getCaCint() + 1);
+		if(e.getItem().getName().equalsIgnoreCase("Add Class")) {
+			CCPlayerModule ccpm = plugin.api.getModuleForClass(CCPlayerModule.class);
+			CCPlayer player = ccpm.getPlayer(e.getPlayer());
+			player.setCaCint(player.getCaCint() + 1);
 		}
 	}
 	
@@ -49,7 +51,8 @@ public class CCShopListener implements Listener {
 											event.getPlayer().sendMessage(event.getItem().getBoughtmessage());
 											if(item.getType1() == Type.PERMISSION) {
 												try {
-													plugin.perms.playerAdd(e.getPlayer(), item.getPermisison());
+													Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + e.getPlayer().getName() + " add " + item.getPermisison());
+													//plugin.perms.playerAdd(e.getPlayer(), item.getPermisison());
 												} catch (Exception e2) {
 													event.getPlayer().sendMessage("Error in buying!");
 												}
