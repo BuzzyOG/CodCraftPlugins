@@ -11,11 +11,6 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 public class CCBansListener implements PluginMessageListener {
 
-	private CCBans plugin;
-
-	public CCBansListener(CCBans plugin) {
-		this.plugin = plugin;
-	}
 	@Override
 	public void onPluginMessageReceived(String pluginChannel, Player reciever, byte[] message) {
 		if(!pluginChannel.equalsIgnoreCase(CCBans.INCOMING_PLUGIN_CHANNEL)) {

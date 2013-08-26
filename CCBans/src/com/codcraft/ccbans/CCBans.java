@@ -31,7 +31,7 @@ public class CCBans extends JavaPlugin implements Listener {
 	}
 	
     private void registerChannels() {
-        Bukkit.getMessenger().registerIncomingPluginChannel(this, INCOMING_PLUGIN_CHANNEL, new CCBansListener(this));
+        Bukkit.getMessenger().registerIncomingPluginChannel(this, INCOMING_PLUGIN_CHANNEL, new CCBansListener());
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, OUTGOING_PLUGIN_CHANNEL);
 	}
 
