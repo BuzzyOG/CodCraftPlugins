@@ -1,4 +1,0 @@
-name: SG
-main: com.codcraft.CCSG.SurvialGames
-version: 0.0.001
-depend: [CodCraftAPI, TagAPI]
