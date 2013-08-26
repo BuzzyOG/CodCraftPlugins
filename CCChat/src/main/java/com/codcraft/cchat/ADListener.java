@@ -35,9 +35,13 @@ public class ADListener implements Listener {
         		String m = e.getMessage();
 				e.setFormat(ChatColor.RED + "[OP] "+ p.getName()+": "+ ChatColor.WHITE  + m);
 				e.setMessage(ChatColor.WHITE   + m);
-        	}else if (p.hasPermission("CodCraft.Owner")) {
+        	} else if (p.hasPermission("CodCraft.Owner")) {
 				String m = e.getMessage();
 				e.setFormat(ChatColor.RED + "[O] "+ p.getName()+": "+ ChatColor.WHITE  + m);
+				e.setMessage(ChatColor.WHITE   + m);
+        	} else if (p.hasPermission("CodCraft.SrAdmin")) {
+				String m = e.getMessage();
+				e.setFormat(ChatColor.RED + "[Sr_A] "+ p.getName()+": "+ ChatColor.WHITE  + m);
 				e.setMessage(ChatColor.WHITE   + m);
 			} else if (p.hasPermission("CodCraft.Admin")) {
 				String m = e.getMessage();
@@ -46,6 +50,10 @@ public class ADListener implements Listener {
 			}  else if (p.hasPermission("CodCraft.Mod")) {
 				String m = e.getMessage();
 				e.setFormat(ChatColor.RED + "[M] " + p.getName()+": "+ ChatColor.WHITE  + m);
+				e.setMessage(ChatColor.WHITE +  m);
+			}  else if (p.hasPermission("CodCraft.YT")) {
+				String m = e.getMessage();
+				e.setFormat("["+ChatColor.RED+"Y"+ChatColor.WHITE+"T] " + p.getName()+": "+ ChatColor.WHITE  + m);
 				e.setMessage(ChatColor.WHITE +  m);
 			} else {
 				String m = e.getMessage();
@@ -60,6 +68,8 @@ public class ADListener implements Listener {
     
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+    	e.setJoinMessage(null);
+    	plugin.sendGlobalMessage(" ", ChatColor.GRAY + e.getPlayer().getName() + " has joined " + plugin.getConfig().getString("Name"));
     	plugin.players.put(e.getPlayer().getName(), ChatType.ALL);
     }
     
