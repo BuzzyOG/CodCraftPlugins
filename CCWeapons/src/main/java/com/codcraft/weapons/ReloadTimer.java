@@ -4,36 +4,33 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
+import org.bukkit.scheduler.BukkitTask;
 
 public class ReloadTimer implements Runnable {
-	
-	private Weapons plugin;
-	private String name;
-	private Double time;
-	private int snowballs;
+  private Weapons plugin;
+  private String name;
+  private PlayerReloadEvent event;
 
-	public ReloadTimer(Weapons plugin, String name, double time, int snowballs) {
-		this.plugin = plugin;
-		this.name = name;
-		this.time = time;
-		this.snowballs = snowballs;
-	}
+  public ReloadTimer(Weapons plugin, String name, PlayerReloadEvent event)
+  {
+    this.plugin = plugin;
+    this.name = name;
+    this.event = event;
+  }
 
-	@Override
-	public void run() {
-		Player p = Bukkit.getPlayer(name);
-		if(p != null) {
-			if(p.getExp() <= 0) {
-				p.getInventory().addItem(new ItemStack(Material.SNOW_BALL, snowballs));
-				if(plugin.reloders.containsKey(p.getName())) {
-					plugin.reloders.get(p.getName()).cancel();
-					plugin.reloders.remove(p.getName());
-				}
-			} else {
-				p.setExp((float) (p.getExp() - .1));
-			}
-		}
-	}
-
+  public void run()
+  {
+    Player p = Bukkit.getPlayer(this.name);
+    if (p != null)
+      if (p.getExp() <= 0.0F)
+      {
+        p.getInventory().addItem(new ItemStack[] { new ItemStack(Material.SNOW_BALL, this.event.getAmmo()) });
+        if (this.plugin.reloders.containsKey(p.getName())) {
+          ((BukkitTask)this.plugin.reloders.get(p.getName())).cancel();
+          this.plugin.reloders.remove(p.getName());
+        }
+      } else {
+        p.setExp((float)(p.getExp() - 0.1D));
+      }
+  }
 }

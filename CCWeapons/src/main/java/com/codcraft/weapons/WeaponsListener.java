@@ -92,31 +92,37 @@ public class WeaponsListener implements Listener {
 		}
 	}
 	
-	@EventHandler
-	public void onLeftClick(PlayerInteractEvent e) {
-		if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-			for(Weapon weap : plugin.weapons) {
-				if(weap.getMat() == e.getPlayer().getItemInHand().getType()) {
-					ItemMeta meta = e.getPlayer().getItemInHand().getItemMeta();
-					if(meta != null) {
-						if(weap.getName().equalsIgnoreCase(meta.getDisplayName())) {
-							if(e.getPlayer().getInventory().contains(Material.BLAZE_ROD)) {
-								if(plugin.reloders.containsKey(e.getPlayer().getName())) {
-									plugin.reloders.get(e.getPlayer().getName()).cancel();
-									plugin.reloders.remove(e.getPlayer().getName());
-								}
-								e.getPlayer().getInventory().removeItem(new ItemStack(Material.BLAZE_ROD, 1));
-								e.getPlayer().getInventory().removeItem(new ItemStack(Material.SNOW_BALL, weap.getAmmo()));
-								e.getPlayer().setExp(1);
-								plugin.reloders.put(e.getPlayer().getName(), Bukkit.getScheduler().runTaskTimer(plugin, new ReloadTimer(plugin, e.getPlayer().getName(),
-										weap.getReloadTime(), weap.getAmmo()), 0, weap.getReloadTime()));
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	  @EventHandler
+	  public void onLeftClick(PlayerInteractEvent e) {
+	    if ((e.getAction() == Action.LEFT_CLICK_AIR) || (e.getAction() == Action.LEFT_CLICK_BLOCK))
+	      for (Weapon weap : this.plugin.weapons)
+	        if (weap.getMat() == e.getPlayer().getItemInHand().getType()) {
+	          ItemMeta meta = e.getPlayer().getItemInHand().getItemMeta();
+	          if ((meta != null) && 
+	            (weap.getName().equalsIgnoreCase(meta.getDisplayName())) && 
+	            (e.getPlayer().getInventory().contains(Material.BLAZE_ROD))) {
+	            if (this.plugin.reloders.containsKey(e.getPlayer().getName())) {
+	              plugin.reloders.get(e.getPlayer().getName()).cancel();
+	              this.plugin.reloders.remove(e.getPlayer().getName());
+	            }
+	            e.getPlayer().getInventory().removeItem(new ItemStack[] { new ItemStack(Material.BLAZE_ROD, 1) });
+	            e.getPlayer().getInventory().remove(Material.SNOW_BALL);
+	            e.getPlayer().setExp(1.0F);
+	            GameManager gm = (GameManager)this.plugin.api.getModuleForClass(GameManager.class);
+	            Game<?> g = gm.getGameWithPlayer(e.getPlayer());
+	            if ((this.plugin.checkIfGameIsInstanceOfPlugin(g)) && 
+	              (this.plugin.firing.containsKey(e.getPlayer().getName()))) {
+	              plugin.firing.get(e.getPlayer().getName()).cancel();
+	              this.plugin.firing.remove(e.getPlayer().getName());
+	            }
+
+	            PlayerReloadEvent event = new PlayerReloadEvent(e.getPlayer(), weap.getAmmo(), weap.getReloadTime());
+	            Bukkit.getPluginManager().callEvent(event);
+	            this.plugin.reloders.put(e.getPlayer().getName(), Bukkit.getScheduler().runTaskTimer(this.plugin, new ReloadTimer(this.plugin, e.getPlayer().getName(), 
+	              event), 0L, event.getReloadTime()));
+	          }
+	        }
+	  }
 	
 	
 	@EventHandler

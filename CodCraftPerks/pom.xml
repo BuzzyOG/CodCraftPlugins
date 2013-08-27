@@ -53,5 +53,10 @@
   		<artifactId>Infectedf</artifactId>
   		<version>${codcraft.plugins.version}</version>
   	</dependency>
+  	<dependency>
+  		<groupId>com.codcraft</groupId>
+  		<artifactId>CCWeapons</artifactId>
+  		<version>${codcraft.plugins.version}</version>
+  	</dependency>
     </dependencies>
 </project>

@@ -53,5 +53,5 @@
   		<artifactId>Infectedf</artifactId>
   		<version>${codcraft.plugins.version}</version>
   	</dependency>
-  	</dependencies>
+  </dependencies>
 </project>
