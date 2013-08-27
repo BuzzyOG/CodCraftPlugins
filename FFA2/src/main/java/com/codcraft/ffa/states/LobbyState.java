@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import com.CodCraft.api.model.GameState;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.Broadcast;
+import com.CodCraft.api.modules.ScoreBoard;
 import com.codcraft.ffa.CodCraftFFA;
 import com.codcraft.ffa.FFAGame;
 import com.codcraft.lobby.Lobby;
@@ -66,6 +68,16 @@ public class LobbyState implements GameState<CodCraftFFA> {
 			public void run() {
 				if (duration >= 1) {
 					duration--;
+					ScoreBoard SB = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
+			        int seconds = getGame().getCurrentState().getTimeLeft() % 60;
+			        String seconds1 = "";
+			        if (seconds < 10) {
+			            seconds1 = "0" + seconds;
+				 	} else {
+				 		seconds1 = "" + seconds;
+			        }
+			        int minutes = LobbyState.this.getGame().getCurrentState().getTimeLeft() / 60;
+			        SB.getObjectiveForGame(LobbyState.this.getGame()).setDisplayName(ChatColor.GRAY + "Pre Game " + minutes + ":" + seconds1);
 					sign1 = (Sign) new Location(Bukkit.getWorld(game.getName()), 58, 43, 194).getBlock().getState();
 					sign2 = (Sign) new Location(Bukkit.getWorld(game.getName()), 58, 43, 195).getBlock().getState();
 					sign3 = (Sign) new Location(Bukkit.getWorld(game.getName()), 58, 43, 196).getBlock().getState();

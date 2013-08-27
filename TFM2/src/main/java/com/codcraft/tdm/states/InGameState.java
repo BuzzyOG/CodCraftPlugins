@@ -1,6 +1,7 @@
 package com.codcraft.tdm.states;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -8,6 +9,7 @@ import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
+import com.CodCraft.api.modules.ScoreBoard;
 import com.codcraft.lobby.LobbyModule;
 import com.codcraft.tdm.CodCraftTDM;
 import com.codcraft.tdm.TDMGame;
@@ -47,6 +49,17 @@ public class InGameState implements GameState<CodCraftTDM> {
 				if(duration >= 1) {
 					duration--;
 					LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+			          ScoreBoard SB = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
+			          lm.UpdateSign(lm.getLobby(InGameState.this.getGame().getName()));
+			          int seconds = InGameState.this.getGame().getCurrentState().getTimeLeft() % 60;
+			          String seconds1 = "";
+			          if (seconds < 10)
+			            seconds1 = "0" + seconds;
+			          else {
+			            seconds1 = ""+seconds;
+			          }
+			          int minutes = InGameState.this.getGame().getCurrentState().getTimeLeft() / 60;
+			          SB.getObjectiveForGame(InGameState.this.getGame()).setDisplayName(ChatColor.GRAY + "Time Left " + minutes + ":" + seconds1);
 					lm.UpdateSign(lm.getLobby(getGame().getName()));
 					for (Team t : game.getTeams()) {
 						for (TeamPlayer p1 : t.getPlayers()) {

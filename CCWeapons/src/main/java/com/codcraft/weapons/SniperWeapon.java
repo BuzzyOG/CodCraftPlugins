@@ -30,7 +30,7 @@ public class SniperWeapon implements Listener {
 	
 	public SniperWeapon(Weapons plugin) {
 		this.plugin = plugin;
-		plugin.cac.weapons.add("Sniper");
+		plugin.cac.weapons.put("Sniper", "");
 		Bukkit.getScheduler().runTaskTimer(plugin, new SniperWait(this), 0, 10);
 	}
 	

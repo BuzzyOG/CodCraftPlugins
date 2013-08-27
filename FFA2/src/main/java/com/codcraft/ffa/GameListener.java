@@ -133,7 +133,7 @@ public class GameListener extends CCGameListener {
 		}
 		plugin.getLogger().info(e.getPlayer().getName()+" has join a FFA game named " + g.getName()+".");
 		final FFAGame game = (FFAGame) g;
-		SB.addPlayerToScoreBoard(Bukkit.getPlayer(e.getPlayer().getName()), SB.getScoreBoardFromGame(game));
+		SB.addPlayerToScoreBoard(Bukkit.getPlayer(e.getPlayer().getName()), game);
 		final String currentmap = game.map;
 		final Player p = Bukkit.getPlayer(e.getPlayer().getName());
 		if(p.getGameMode() != GameMode.SURVIVAL) {
@@ -206,7 +206,7 @@ public class GameListener extends CCGameListener {
 
 			Player k =(Player) e.getEntity().getKiller();
 			Team team2 = g.findTeamWithPlayer(k);
-			SB.addPoint(k, SB.getScoreBoardFromGame(g));
+			SB.updatePoint(k, g);
 			team2.setScore(team2.getScore() + 1);
 			if(checkwin(team2)) {
 				GameWinEvent event = new GameWinEvent(team2.getName()+" has won!", team2, g);

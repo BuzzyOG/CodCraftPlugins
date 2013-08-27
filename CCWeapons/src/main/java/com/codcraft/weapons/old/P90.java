@@ -21,7 +21,7 @@ public class P90 implements Listener {
 
 	public P90(Weapons plugin) {
 		this.plugin = plugin;
-		plugin.cac.weapons.add("P90");
+		plugin.cac.weapons.put("P90", "");
 	}
 	
 	@EventHandler

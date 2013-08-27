@@ -13,6 +13,7 @@ public class Weapon {
 	private int rpm = 0;
 	private int reloads;
 	private int reloadTime;
+	private String permission;
 
 	public Weapon(String name) {
 		this.name = name;
@@ -67,5 +68,9 @@ public class Weapon {
 
 	public void setReloadTime(int reloadTime) {
 		this.reloadTime = reloadTime;
+	}
+
+	public String getPermission() {
+		return permission;
 	}
 }

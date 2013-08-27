@@ -25,7 +25,7 @@ public class LMGWeapon implements Listener {
 	
 	public LMGWeapon(Weapons plugin) {
 		this.plugin = plugin;
-		plugin.cac.weapons.add("LMG");
+		plugin.cac.weapons.put("LMG", "");
 	}
 	
 	@SuppressWarnings("deprecation")

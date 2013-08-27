@@ -21,7 +21,7 @@ public class MarathonListener implements Listener {
 	public MarathonListener(Perks plugin) {
 		this.plugin = plugin;
 		timer();
-		plugin.api.getModuleForClass(CaCModule.class).addweapon("Marathon", "Perk1");
+		plugin.api.getModuleForClass(CaCModule.class).addweapon("Marathon", "Perk1", null);
 	}
 	
 	private Map<String, Boolean> users = new HashMap<String, Boolean>();

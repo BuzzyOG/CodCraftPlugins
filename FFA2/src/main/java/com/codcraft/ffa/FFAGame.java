@@ -35,8 +35,7 @@ public class FFAGame extends Game<CodCraftFFA> {
 	public void initialize() {
 		ScoreBoard SB = getPlugin().api.getModuleForClass(ScoreBoard.class);
 		SB.createScoreBoardForGame(this);
-		Scoreboard sb = SB.getScoreBoardFromGame(this);
-		SB.addObjective("kills", sb);
+		SB.setObjective("Time Left", this);
 		knownStates.put(new InGameState(this).getId(), new InGameState(this));
 		knownStates.put(new LobbyState(this).getId(), new LobbyState(this));
 		setState(new LobbyState(this));

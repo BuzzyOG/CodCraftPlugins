@@ -20,6 +20,7 @@ import com.codcraft.cac.Cac;
 import com.codcraft.ffa.CodCraftFFA;
 import com.codcraft.infected.CodCraftInfected;
 import com.codcraft.tdm.CodCraftTDM;
+import com.codcraft.weapons.killstreaks.KillStreakManager;
 
 
 public class Weapons extends JavaPlugin {
@@ -43,6 +44,7 @@ public class Weapons extends JavaPlugin {
 		}
 		api = (CCAPI) ccapi;
 		api.registerModule(WeaponModule.class, new WeaponModule(this, api));
+		api.registerModule(KillStreakManager.class, new KillStreakManager(this, api));
 		final Plugin cccac = Bukkit.getPluginManager().getPlugin("Cac");
 		if(cccac == null) {
 			getServer().getPluginManager().disablePlugin(this);
@@ -81,7 +83,7 @@ public class Weapons extends JavaPlugin {
 			Weapon weap = new Weapon(WeaponName);
 			String s = config.getString("weapons."+WeaponName+".CaC");
 			if(s.equalsIgnoreCase("Weapon")) {
-				cac.weapons.add(weap.getName());
+				cac.weapons.put(weap.getName(), weap.getPermission());
 			}
 			weap.setMat(Material.valueOf(config.getString("weapons."+WeaponName+".Mat")));
 			weap.setAction(Action.valueOf(config.getString("weapons."+WeaponName+".Action")));

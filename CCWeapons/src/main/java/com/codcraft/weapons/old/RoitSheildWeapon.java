@@ -18,7 +18,7 @@ public class RoitSheildWeapon implements Listener {
 	private Weapons plugin;
 	public RoitSheildWeapon(Weapons plugin) {
 		this.plugin = plugin;
-		plugin.cac.weapons.add("Roit");
+		plugin.cac.weapons.put("Roit", "");
 	}
 	
 	

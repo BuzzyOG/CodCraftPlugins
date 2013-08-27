@@ -20,7 +20,7 @@ public class LightWeightListener implements Listener {
 	private GameManager gm;
 	public LightWeightListener(Perks plugin) {
 		this.plugin = plugin;
-		plugin.api.getModuleForClass(CaCModule.class).addweapon("LightWeight", "Perk2");
+		plugin.api.getModuleForClass(CaCModule.class).addweapon("LightWeight", "Perk2", null);
 		gm = plugin.api.getModuleForClass(GameManager.class);
 	}
 	

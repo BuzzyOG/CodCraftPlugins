@@ -23,7 +23,7 @@ public class ScavengerListener implements Listener {
 
 	public ScavengerListener(Perks plugin) {
 		this.plugin = plugin;
-		plugin.api.getModuleForClass(CaCModule.class).addweapon("Scavenger", "Perk1");
+		plugin.api.getModuleForClass(CaCModule.class).addweapon("Scavenger", "Perk1", null);
 	}
 	
 	@EventHandler (priority = EventPriority.MONITOR)

@@ -22,7 +22,7 @@ public class ShotGunWeapon implements Listener {
 	private Weapons plugin;
 	public ShotGunWeapon(Weapons plugin) {
 		this.plugin = plugin;
-		plugin.cac.weapons.add("ShotGun");
+		plugin.cac.weapons.put("ShotGun", "");
 	}
 	
 	

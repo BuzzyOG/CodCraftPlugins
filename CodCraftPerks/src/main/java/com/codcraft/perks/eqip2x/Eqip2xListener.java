@@ -18,7 +18,7 @@ public class Eqip2xListener implements Listener {
 	
 	public Eqip2xListener(Perks plugin2) {
 		this.plugin = plugin2;
-		plugin.api.getModuleForClass(CaCModule.class).addweapon("Eqip2X", "Perk3");
+		plugin.api.getModuleForClass(CaCModule.class).addweapon("Eqip2X", "Perk3", null);
 	}
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void ongetClass(PlayerGetClassEvent e) {

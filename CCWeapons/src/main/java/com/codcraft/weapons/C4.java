@@ -33,7 +33,7 @@ public class C4 implements Listener {
 	private Weapons plugin;
 	public C4(Weapons plugin) {
 		this.plugin = plugin;
-		plugin.api.getModuleForClass(CaCModule.class).addweapon("C4", "equipment");
+		plugin.api.getModuleForClass(CaCModule.class).addweapon("C4", "equipment", null);
 	}
 	
 	private Map<Location, String> c4spots = new HashMap<Location, String>();

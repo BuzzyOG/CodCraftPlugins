@@ -26,7 +26,7 @@ public class SMGWeapon implements Listener {
 	
 	public SMGWeapon(Weapons plugin) {
 		this.plugin = plugin;
-		plugin.cac.weapons.add("SMG");
+		plugin.cac.weapons.put("SMG", "");
 	}
 	
 	
