@@ -3,6 +3,7 @@ package com.codcraft.ccommands;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
@@ -36,9 +37,7 @@ public class AdminCommand implements CommandExecutor {
 			
 			if(args[0].equalsIgnoreCase("showplugins")) {
 				Player p = (Player) sender;
-				for(Plugin plug : Bukkit.getPluginManager().getPlugins()) {
-					p.sendMessage(plug.getName() + " version: " + plug.getDescription().getVersion());
-				}
+				p.sendMessage(getPluginList());
 				return true;
 			}
 			
@@ -192,5 +191,24 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("setTeam");
 		
 	}
+	
+    private String getPluginList() {
+        StringBuilder pluginList = new StringBuilder();
+        Plugin[] plugins = Bukkit.getPluginManager().getPlugins();
+
+        for (Plugin plugin : plugins) {
+            if (pluginList.length() > 0) {
+                pluginList.append(ChatColor.WHITE);
+                pluginList.append(", ");
+            }
+
+            pluginList.append(plugin.isEnabled() ? ChatColor.GREEN : ChatColor.RED);
+            pluginList.append(plugin.getDescription().getName());
+            pluginList.append(" ");
+            pluginList.append(plugin.getDescription().getVersion());
+        }
+
+        return "(" + plugins.length + "): " + pluginList.toString();
+    }
 
 }
