@@ -82,8 +82,9 @@ public class Weapons extends JavaPlugin {
 		for(String WeaponName : config.getConfigurationSection("weapons").getKeys(false)) {
 			Weapon weap = new Weapon(WeaponName);
 			String s = config.getString("weapons."+WeaponName+".CaC");
+			String permisison = config.getString("weapons." + WeaponName + "permission");
 			if(s.equalsIgnoreCase("Weapon")) {
-				cac.weapons.put(weap.getName(), weap.getPermission());
+				cac.weapons.put(weap.getName(), permisison);
 			}
 			weap.setMat(Material.valueOf(config.getString("weapons."+WeaponName+".Mat")));
 			weap.setAction(Action.valueOf(config.getString("weapons."+WeaponName+".Action")));

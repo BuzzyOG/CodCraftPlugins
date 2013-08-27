@@ -1,19 +1,10 @@
 package com.codcraft.weapons.killstreaks;
 
-import com.CodCraft.api.CCAPI;
-import com.CodCraft.api.event.team.TeamPlayerLostEvent;
-import com.CodCraft.api.model.Game;
-import com.CodCraft.api.model.TeamPlayer;
-import com.CodCraft.api.modules.GameManager;
-import com.CodCraft.api.services.CCModule;
-import com.codcraft.codcraftplayer.CCClass;
-import com.codcraft.codcraftplayer.CCPlayer;
-import com.codcraft.codcraftplayer.CCPlayerModule;
-import com.codcraft.weapons.Weapons;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,10 +13,15 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.PluginManager;
+
+import com.CodCraft.api.CCAPI;
+import com.CodCraft.api.event.team.TeamPlayerLostEvent;
+import com.CodCraft.api.model.Game;
+import com.CodCraft.api.modules.GameManager;
+import com.CodCraft.api.services.CCModule;
+import com.codcraft.codcraftplayer.CCPlayerModule;
+import com.codcraft.weapons.Weapons;
 
 public class KillStreakManager extends CCModule implements Listener {
 	

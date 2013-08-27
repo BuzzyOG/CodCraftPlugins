@@ -158,7 +158,9 @@ public class WeaponsListener implements Listener {
 							if(weap.getName().equalsIgnoreCase(meta.getDisplayName())) {
 								if(e.getPlayer().getInventory().contains(Material.SNOW_BALL)) {
 									if(!plugin.firing.containsKey(e.getPlayer().getName())) {
-										plugin.firing.put(e.getPlayer().getName(), Bukkit.getScheduler().runTaskTimer(plugin, new FiringRunable(e.getPlayer().getName()), 0, weap.getRpm()));
+										PlayerStartFiringEvent event = new PlayerStartFiringEvent(e.getPlayer(), weap.getRpm());
+								        Bukkit.getPluginManager().callEvent(event);
+										this.plugin.firing.put(e.getPlayer().getName(), Bukkit.getScheduler().runTaskTimer(this.plugin, new FiringRunable(e.getPlayer().getName(), weap.getBulletlife(), this.plugin), 0L, event.getRpm()));
 										e.getPlayer().getInventory().removeItem(new ItemStack(Material.SNOW_BALL, 1));
 									} else {
 										plugin.firing.get(e.getPlayer().getName()).cancel();
