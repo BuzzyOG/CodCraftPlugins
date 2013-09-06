@@ -16,12 +16,28 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.CodCraft.api.CCAPI;
-
+/**
+ * Class for the Plugin. 
+ */
 public class CCShop extends JavaPlugin {
+	
+	/**
+	 * List of all ShopItems.
+	 */
 	public List<CCShopItem> items = new ArrayList<>();
+	/**
+	 * The CodCraftAPI instance.
+	 */
 	public CCAPI api;
+	/**
+	 * Permission instance from vault. 
+	 */
 	private Permission perms;
-
+	/**
+	 * Enable function for the plugin.
+	 * 	- Sets the API instance
+	 * 	- Registers the Listener
+	 */
 	public void onEnable() {
 		final Plugin ccapi = Bukkit.getPluginManager().getPlugin("CodCraftAPI");
 		if(ccapi == null) {
@@ -36,15 +52,20 @@ public class CCShop extends JavaPlugin {
 		setSigns();
 		setupPermissions();
 	}
-	
+	/**
+	 * Enum for CCShops for wether
+	 * to run a event or to give a permision.
+	 */
 	public enum Type {
 		
 		PERMISSION,
 		COMMAND
 		
 	}
-	
-    private void setSigns() {
+	/**
+	 * Adds the SignLoc default from the config. 
+	 */
+        private void setSigns() {
 		File f = new File("./plugins/CCShop/shoplocs.yml");
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(f);
 		List<SignLoc> signs = new ArrayList<>();
@@ -148,11 +169,17 @@ public class CCShop extends JavaPlugin {
 		}
 		
 	}
+	/**
+	 * Registers the instance for permission from vault. 
+	 */
 	private boolean setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return perms != null;
-    }
+        	RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        	perms = rsp.getProvider();
+        	return perms != null;
+    	}
+    	/**
+    	 * Loads the config for the CCShopItems. 
+    	 */
 	private boolean loadConfig() {
 		File f = new File("./plugins/CCShop/shops.yml");
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(f);
