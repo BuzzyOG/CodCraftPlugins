@@ -3,7 +3,6 @@ package com.codcraft.ffa;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
-import org.bukkit.scoreboard.Scoreboard;
 
 import com.CodCraft.api.event.GameWinEvent;
 import com.CodCraft.api.model.Game;

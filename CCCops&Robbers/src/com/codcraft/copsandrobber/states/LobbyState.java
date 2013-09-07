@@ -92,12 +92,14 @@ public class LobbyState implements GameState<CopsARobber> {
 								Player p = Bukkit.getPlayer(s);
 								if(p != null){
 									int size = getGame().findTeamWithName("cops").getPlayers().size() * 3;
-										getGame().findTeamWithName("robbers").addPlayer(p);
-										p.teleport(new Location(getGame().lobbyspawn.getWorld(), 2, 2, 2));
-									if(size > getGame().findTeamWithName("robbers").getPlayers().size()) {
+
+									if(size >= getGame().findTeamWithName("robbers").getPlayers().size()) {
 										getGame().findTeamWithName("cops").addPlayer(p);
 										p.teleport(new Location(getGame().lobbyspawn.getWorld(), 2, 2, -1));
 										p.getInventory().addItem(new ItemStack(Material.COMPASS));
+									} else {
+										getGame().findTeamWithName("robbers").addPlayer(p);
+										p.teleport(new Location(getGame().lobbyspawn.getWorld(), 2, 2, 2));
 									}
 									p.sendMessage("You are on " + getGame().findTeamWithPlayer(p).getName());
 									TagAPI.refreshPlayer(p);
@@ -106,7 +108,7 @@ public class LobbyState implements GameState<CopsARobber> {
 							getGame().inlobby.clear();
 						} else {
 							Broadcast b = getGame().getPlugin().api.getModuleForClass(Broadcast.class);
-							b.BroadCastMessage(getGame().injail, "You must have atleast 3 people in the game to start!");
+							b.BroadCastMessage(getGame().inlobby, "You must have atleast 3 people in the game to start!");
 							duration = 30;
 						}
 					}

@@ -42,6 +42,7 @@ public class SpawnCommand implements CommandExecutor {
 				p.setExp(0);
 				PlayerDoSpawnEvent event = new PlayerDoSpawnEvent(p, g);
 				Bukkit.getPluginManager().callEvent(event);
+
 				return true;
 			}
 		}

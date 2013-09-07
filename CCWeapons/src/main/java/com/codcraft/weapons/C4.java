@@ -173,7 +173,7 @@ public class C4 implements Listener {
 		   }
 		   Team p1 = game.findTeamWithPlayer(p);
 		   Team k1 = game.findTeamWithPlayer(k);
-		   if (p== k){
+		   if (p == k){
 			   p.damage(20D);
 			   return true;
 		   } else if( p1.getId().equalsIgnoreCase(k1.getId()))  {
