@@ -18,6 +18,9 @@ public class BanCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(label.equalsIgnoreCase("ban")) {
+			if(!sender.hasPermission("codcraft.ban")) {
+				return false;
+			}
 			if(args.length == 1) {
 				OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
 				player.setBanned(true);
