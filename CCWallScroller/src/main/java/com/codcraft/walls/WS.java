@@ -8,7 +8,12 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +24,10 @@ public class WS extends JavaPlugin implements Listener {
 	
 	public CCAPI api;
 	public List<Strip> Strips = new ArrayList<>();
-	public Map<String, Letter> letters = new HashMap<String, Letter>();
+	//private Location[][] locs = new Location[51][12];
+ 	public Map<String, Letter> letters = new HashMap<String, Letter>();
+	@SuppressWarnings("unused")
+	private boolean locked;
 	
 	public void onEnable() {
 		final Plugin ccapi = Bukkit.getPluginManager().getPlugin("CodCraftAPI");
@@ -27,9 +35,49 @@ public class WS extends JavaPlugin implements Listener {
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
 		api =(CCAPI) ccapi;
+		api.registerModule(WallFrame.class, new WallFrame(api, this, 65, 19));
+		Location loc1 = new Location(Bukkit.getWorld("world"), -454, 225, 492);
+		Location loc2 = new Location(Bukkit.getWorld("world"), -454, 207, 428);
+		final Board board = new Board(this, 65, 19, loc1, loc2);
+		/*int x1 = 0;
+		for(int x = loc1.getBlockX(); x >= loc2.getBlockX(); x--) {
+			int y1 = 0;
+			for(int y = loc1.getBlockY(); y >= loc2.getBlockY(); y--) {
+				System.out.println(y + " " + y1);
+				locs[x1][y1] = new Location(Bukkit.getWorld("world"), x, y, 96);
+				y1++;
+			}
+			x1++;
+		}*/
+		getCommand("write").setExecutor(new CommandExecutor() {
+			
+			@Override
+			public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+				if(sender instanceof Player) {
+					if(label.equalsIgnoreCase("write")) {
+						String color = args[0];
+						if(color == null) {
+							color = "0";
+						}
+						WallFrame wf = api.getModuleForClass(WallFrame.class);
+						MaterialType[][] pixels = new MaterialType[65][19];
+						for(int x = 0; x < 65; x++) {
+							for(int y = 0; y < 19; y++) {
+
+							pixels[x][y] = new MaterialType(Material.WOOL, (byte) Integer.parseInt(color));
+							}
+						}
+						Bukkit.broadcastMessage("TEST"+pixels);
+						wf.setPixels(pixels, board);
+						
+					}
+				}
+				return true;
+			}
+		});
 		//getServer().getPluginManager().registerEvents(new WSListener(this), this);
-		LoadConfig();
-		LetterT();
+		//LoadConfig();
+		//LetterT();
 	}
 
 	
@@ -111,5 +159,27 @@ public class WS extends JavaPlugin implements Listener {
 	    	 Strips.add(stri);
 	     }
 	}
+
+
+
+	/*protected boolean setPixels(MaterialType[][] pixels) {
+		if(!locked) {
+			locked = true;
+			for(int b = 0; b < locs.length; b++) {
+				for(int c = 0; c < pixels[b].length; c++) {
+					
+					System.out.println("Location: " + b + "  " + c);
+					System.out.println("Length: " + locs[b].length);
+					System.out.println("Null?: " + locs[b][c]);
+					locs[b][c].getBlock().setType(pixels[b][c].mat);
+					locs[b][c].getBlock().setData(pixels[b][c].data);	
+				}
+			}
+			locked = false;
+			return true;
+		}
+
+		return true;
+	}*/
 
 }

@@ -1,4 +1,6 @@
 name: CCWAll
 main: com.codcraft.walls.WS
 version: 0.0.001
-depend: [WorldGuard]
+depend: [CodCraftAPI]
+commands: 
+    write:
