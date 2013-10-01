@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 
@@ -44,7 +45,7 @@ public class C4Test extends Weapon {
 	public void giveWeapon(Player p, Material mat, Action action) {}
 
 	@Override
-	public void useWeapon(Player p, Material mat, Action action) {
+	public void useWeapon(Player p, Material mat, Action action, Event event) {
 		if(mat == Material.STICK) {
 			for(Entry<Location, String> en : C4spots.entrySet()) {
 				if(en.getValue().equalsIgnoreCase(p.getName())) {
@@ -103,5 +104,11 @@ public class C4Test extends Weapon {
 			k.damage(20D, p);
 			return true;
 		}
+	}
+
+	@Override
+	public void onDamage(Player p, Material mar, Action action, Event event) {
+		// TODO Auto-generated method stub
+		
 	}
 }
