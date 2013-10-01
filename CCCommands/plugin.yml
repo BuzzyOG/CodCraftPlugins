@@ -3,9 +3,9 @@ main: com.codcraft.ccommands.CCCommands
 version: 0.0.003
 depend: [CodCraftAPI]
 commands:
-   spawn:
-      description: Got to spawn
-      usage: /spawn
+   lobby:
+      description: Got to lobby
+      usage: /lobby
    gameinfo:
       description: Got to spawn
       usage: /gameinfo

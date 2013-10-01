@@ -23,7 +23,7 @@ public class Advertisment implements Runnable {
 			List<String> lines = new ArrayList<>();
 			for(String line : config.getConfigurationSection("Ads."+name).getKeys(false)) {
 				String s = config.getString("Ads."+name+"."+line);
-				lines.add(ChatColor.BLUE+"[CodCraft Ad] "+ChatColor.WHITE+ ChatColor.translateAlternateColorCodes('&', s));
+				lines.add(ChatColor.BLUE+"[Cylum Ad] "+ChatColor.WHITE+ ChatColor.translateAlternateColorCodes('&', s));
 			}
 			ads.put(name, (ArrayList<String>) lines);
 		}

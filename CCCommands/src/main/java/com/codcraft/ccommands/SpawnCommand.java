@@ -14,14 +14,19 @@ import com.CodCraft.api.modules.GameManager;
 
 public class SpawnCommand implements CommandExecutor {
 	private CCCommands plugin;
-	
-	public SpawnCommand(CCCommands plugin) {
+	private double x = 37.5;
+	private double y = 209.5;
+	private double z = 210.4;
+	public SpawnCommand(CCCommands plugin, double x, double y, double z) {
 		this.plugin = plugin;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 
 	@Override
 	 public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(label.equalsIgnoreCase("spawn")) {
+		if(label.equalsIgnoreCase("lobby")) {
 			if(sender instanceof Player) {
 				Player p = (Player) sender;
 				GameManager gm = plugin.api.getModuleForClass(GameManager.class);
@@ -29,7 +34,7 @@ public class SpawnCommand implements CommandExecutor {
 				if(g != null) {
 					g.findTeamWithPlayer(p).removePlayer(p);
 				}
-				p.teleport(new Location(Bukkit.getWorld("world"), -102.5, 138.5, 60.4, 90, 0));
+				p.teleport(new Location(Bukkit.getWorld("world"), x, y, z, 180, 0));
 				p.getInventory().clear();
 				for(PotionEffect pe : p.getActivePotionEffects()) {
 					p.removePotionEffect(pe.getType());

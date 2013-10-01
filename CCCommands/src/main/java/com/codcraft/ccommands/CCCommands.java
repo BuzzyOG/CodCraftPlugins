@@ -1,11 +1,13 @@
 package com.codcraft.ccommands;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,7 +35,12 @@ public class CCCommands extends JavaPlugin {
 		   }
 	    getServer().getScheduler().runTaskTimer(this, new Advertisment(), 0, 18000);
 	    getServer().getPluginManager().registerEvents(new CCListener(this), this);  
-		getCommand("spawn").setExecutor(new SpawnCommand(this));
+	    YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("./plugins/CCCommands/ads.yml"));
+		double x = config.getDouble("x");
+		double y = config.getDouble("y");
+		double z = config.getDouble("z");
+		System.out.println("X: " + x + " Y: " + y + " Z: " + z);
+		getCommand("lobby").setExecutor(new SpawnCommand(this, x, y, z));
 		getCommand("a").setExecutor(new AdminCommand(this));
 		getCommand("gameinfo").setExecutor(new GameInfoCommand(this));
 		getCommand("CSP").setExecutor(new CSPCommand(this));

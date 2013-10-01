@@ -40,6 +40,7 @@ public class AdminCommand implements CommandExecutor {
 				p.sendMessage(getPluginList());
 				return true;
 			}
+		
 			
 			if(args[0].equalsIgnoreCase("setteam")) {
 				Player p = (Player) sender;
