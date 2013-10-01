@@ -438,6 +438,8 @@ public class NewListener implements Listener {
 				Return = ""+player.getSSBKills();
 			} else if (lobby.equalsIgnoreCase("uhc")) {
 				Return = ""+player.getUHCKills();
+			} else if (lobby.equalsIgnoreCase("BR")) {
+				Return = ""+player.getUnfreezes();
 			}
 			break;
 		case "deaths":
@@ -449,6 +451,8 @@ public class NewListener implements Listener {
 				Return = ""+player.getSSBDeaths();
 			} else if (lobby.equalsIgnoreCase("uhc")) {
 				Return = ""+player.getUHCDeaths();
+			} else if (lobby.equalsIgnoreCase("BR")) {
+				Return = ""+player.getFreezes();
 			}
 			break;
 		case "wins":
@@ -460,6 +464,8 @@ public class NewListener implements Listener {
 				Return = ""+player.getSSBWins();
 			} else if (lobby.equalsIgnoreCase("uhc")) {
 				Return = ""+player.getUHCWins();
+			} else if (lobby.equalsIgnoreCase("BR")) {
+				Return = ""+player.getBGwins();
 			}
 			break;
 		case "losses":
@@ -471,6 +477,8 @@ public class NewListener implements Listener {
 				Return = ""+player.getSSBLosses();
 			} else if (lobby.equalsIgnoreCase("uhc")) {
 				Return = ""+player.getUHCLosses();
+			} else if (lobby.equalsIgnoreCase("BR")) {
+				Return = ""+player.getCredits();
 			}
 			break;
 		case "point":
