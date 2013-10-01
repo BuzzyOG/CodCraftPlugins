@@ -17,6 +17,7 @@ public class Main extends Plugin implements Listener {
 		BungeeCord.getInstance().getPluginManager().registerListener(this, new PluginMessageListener(this));
 		utils = new Utilities(this);
 		timer = new Timer();
+		getProxy().getPluginManager().registerCommand(this, new HubCommand("hub"));
 	}
 	
 
