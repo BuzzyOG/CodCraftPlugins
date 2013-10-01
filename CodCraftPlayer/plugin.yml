@@ -2,3 +2,6 @@ name: CodCraftPlayer
 main: com.codcraft.codcraftplayer.CCPlayerMain
 version: 0.0.001
 depend: [CodCraftAPI]
+commands:
+    CCAP:
+    

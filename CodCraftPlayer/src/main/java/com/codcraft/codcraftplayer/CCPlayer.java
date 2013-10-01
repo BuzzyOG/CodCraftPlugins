@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import com.google.common.collect.ImmutableMap;
 
 
@@ -19,6 +22,8 @@ public class CCPlayer {
 	 * List of current Classes
 	 */
 	protected Map<Integer, CCClass> classes = new HashMap<Integer, CCClass>();
+	
+	private String name;
 	
 	
 	public Integer mysqlid = 0;
@@ -68,6 +73,55 @@ public class CCPlayer {
 	protected Integer Losses = 0;
 
 	protected Integer currentclass = 1;
+	
+	protected Integer freezes = 0;
+	
+	protected Integer unfreezes = 0;
+	
+	protected Integer BGwins = 0;
+	protected Integer BGlosses = 0;
+	
+	protected Integer credits = 0;
+	protected Integer rawCredits = 0;
+	
+	public CCPlayer(String name) {
+		this.name = name;
+	}
+	
+	
+	public void incrementCredit(int i) {
+		Player p = Bukkit.getPlayer(name);
+		int finish = i;
+		if(p.hasPermission("battleroom.credit25")){
+			finish = (int) (i * 2.5);
+		} else if(p.hasPermission("battleroom.credit20")) {
+			finish = i * 2;
+		} else if(p.hasPermission("battleroom.credit15")) {
+			finish = (int) (i * 1.5);
+		}
+		credits += finish;
+		rawCredits += i;
+	}
+	
+	public int getRawCredits() {
+		return rawCredits;
+	}
+	
+	public void setRawCredits(int i) {
+		rawCredits = i;
+	}
+	 
+	public void removeCredits(int i) {
+		credits -= i;
+	}
+	
+	public int getCredits() {
+		return credits;
+	}
+	
+	public void setCredits(int i) {
+		credits = i;
+	}
 	
 	public Map<Integer, CCClass> getMapClasses() {
 		return ImmutableMap.copyOf(classes);
@@ -156,6 +210,12 @@ public class CCPlayer {
 	}
 	public Integer getFFAWins() {
 		return FFAWins;
+	}
+	public Integer getFreezes() {
+		return freezes;
+	}
+	public void setFreezes(Integer freezes) {
+		this.freezes = freezes;
 	}
 	public Integer getFFALosses() {
 		return FFALosses;
@@ -257,6 +317,24 @@ public class CCPlayer {
 	}
 	public void setCaCint(Integer caCint) {
 		CaCint = caCint;
+	}
+	public Integer getUnfreezes() {
+		return unfreezes;
+	}
+	public void setUnfreezes(Integer unfreezes) {
+		this.unfreezes = unfreezes;
+	}
+	public Integer getBGwins() {
+		return BGwins;
+	}
+	public void setBGwins(Integer bGwins) {
+		BGwins = bGwins;
+	}
+	public Integer getBGlosses() {
+		return BGlosses;
+	}
+	public void setBGlosses(Integer bGlosses) {
+		BGlosses = bGlosses;
 	}
 
 	

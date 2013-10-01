@@ -33,6 +33,8 @@ public class CCdatabase {
 						"', FFAKills = '"+player.getFFAKills()+"', FFADeaths = '"+player.getFFADeaths()+"', FFAWins = '"+player.getFFAWins()+"', FFALosses = '"+player.getFFALosses()+
 						"', SSBKills = '"+player.getSSBKills()+"', SSBDeaths = '"+player.getSSBDeaths()+"', SSBWins = '"+player.getSSBWins()+"', SSBLosses = '"+player.getSSBLosses()+
 						"', UHCKills = '"+player.getUHCKills()+"', UHCDeaths = '"+player.getUHCDeaths()+"', UHCWins = '"+player.getUHCWins()+"', UHCLosses = '"+player.getUHCLosses()+
+						"', Freezes = '"+player.getFreezes()+"', Unfreezes = '"+player.getUnfreezes()+"', BGWins = '"+player.getBGwins()+"', BGLosses = '"+player.getBGlosses()+
+						"', credits = '"+player.getCredits()+"', rawcredits = '"+player.getRawCredits()+
 						"' WHERE id = "+player.mysqlid+"";
 				statement5.executeUpdate(SQL2);
 			} catch (SQLException e) {
@@ -89,7 +91,7 @@ public class CCdatabase {
 			statement1 = plugin.con.createStatement();
 			String SQL = "SELECT * FROM `players` WHERE `playername` = '" + p + "'";
 			ResultSet rs = statement1.executeQuery(SQL);
-			CCPlayer plasyers = new CCPlayer();
+			CCPlayer plasyers = new CCPlayer(p);
 			int id = 0;
 			while(rs.next()) {
 				id = rs.getInt(1);
@@ -119,6 +121,10 @@ public class CCdatabase {
 				plasyers.setUHCKills(0);
 				plasyers.setUHCLosses(0);
 				plasyers.setUHCWins(0);
+				plasyers.setFreezes(0);
+				plasyers.setUnfreezes(0);
+				plasyers.setBGwins(0);
+				plasyers.setBGlosses(0);
 				
 			} else {
 				Statement statement11 = plugin.con.createStatement();
@@ -149,7 +155,12 @@ public class CCdatabase {
 					plasyers.setUHCDeaths(rs1.getInt(23));
 					plasyers.setUHCLosses(rs1.getInt(24));
 					plasyers.setUHCWins(rs1.getInt(25));
-					
+					plasyers.setFreezes(rs1.getInt(26));
+					plasyers.setUnfreezes(rs1.getInt(27));
+					plasyers.setBGwins(rs1.getInt(28));
+					plasyers.setBGlosses(rs1.getInt(29));
+					plasyers.setCredits(rs1.getInt(30));
+					plasyers.setRawCredits(rs1.getInt(31));
 				}
 			}
 			if(plugin.players.containsKey(p)) {
@@ -181,7 +192,7 @@ public class CCdatabase {
 					CCPlayer ccplayer = null;
 					while(result2.next()) {
 						if(plugin.players.get(p) == null) {
-							ccplayer = new CCPlayer();
+							ccplayer = new CCPlayer(p);
 						} else {
 							ccplayer = plugin.players.get(p);
 						}
@@ -226,6 +237,8 @@ public class CCdatabase {
 							"', FFAKills = '"+player.getFFAKills()+"', FFADeaths = '"+player.getFFADeaths()+"', FFAWins = '"+player.getFFAWins()+"', FFALosses = '"+player.getFFALosses()+
 							"', SSBKills = '"+player.getSSBKills()+"', SSBDeaths = '"+player.getSSBDeaths()+"', SSBWins = '"+player.getSSBWins()+"', SSBLosses = '"+player.getSSBLosses()+
 							"', UHCKills = '"+player.getUHCKills()+"', UHCDeaths = '"+player.getUHCDeaths()+"', UHCWins = '"+player.getUHCWins()+"', UHCLosses = '"+player.getUHCLosses()+
+							"', Freezes = '"+player.getFreezes()+"', Unfreezes = '"+player.getUnfreezes()+"', BGWins = '"+player.getBGwins()+"', BGLosses = '"+player.getBGlosses()+
+							"', credits = '"+player.getCredits()+"', rawcredits = '"+player.getRawCredits()+
 							"' WHERE id = "+player.mysqlid+"";
 					statement5.executeUpdate(SQL2);
 				} catch (SQLException e) {
@@ -275,7 +288,7 @@ public class CCdatabase {
 		statement1 = plugin.con.createStatement();
 		String SQL = "SELECT * FROM `players` WHERE `playername` = '" + p.getName() + "'";
 		ResultSet rs = statement1.executeQuery(SQL);
-		CCPlayer plasyers = new CCPlayer();
+		CCPlayer plasyers = new CCPlayer(p.getName());
 		int id = 0;
 		while(rs.next()) {
 			id = rs.getInt(1);
@@ -305,6 +318,10 @@ public class CCdatabase {
 			plasyers.setUHCKills(0);
 			plasyers.setUHCLosses(0);
 			plasyers.setUHCWins(0);
+			plasyers.setFreezes(0);
+			plasyers.setUnfreezes(0);
+			plasyers.setBGwins(0);
+			plasyers.setBGlosses(0);
 		} else {
 			Statement statement11 = plugin.con.createStatement();
 			String SQL1 = "SELECT * FROM `players` WHERE `playername` = '" + p.getName() + "'";
@@ -334,7 +351,12 @@ public class CCdatabase {
 				plasyers.setUHCDeaths(rs1.getInt(23));
 				plasyers.setUHCLosses(rs1.getInt(24));
 				plasyers.setUHCWins(rs1.getInt(25));
-				
+				plasyers.setFreezes(rs1.getInt(26));
+				plasyers.setUnfreezes(rs1.getInt(27));
+				plasyers.setBGwins(rs1.getInt(28));
+				plasyers.setBGlosses(rs1.getInt(29));
+				plasyers.setCredits(rs1.getInt(30));
+				plasyers.setRawCredits(rs1.getInt(31));
 			}
 		}
 		if(plugin.players.containsKey(p.getName())) {
@@ -366,7 +388,7 @@ public class CCdatabase {
 				CCPlayer ccplayer = null;
 				while(result2.next()) {
 					if(plugin.players.get(p.getName()) == null) {
-						ccplayer = new CCPlayer();
+						ccplayer = new CCPlayer(p.getName());
 					} else {
 						ccplayer = plugin.players.get(p.getName());
 					}
@@ -416,8 +438,8 @@ private void adddefaultclass(String p) {
 
 private void addefaults(String p) {
 	PreparedStatement pst;
-	String SQL = "INSERT INTO players(playername, kills, deaths, wins, losses, Levels, Points, classes, TDMKills, TDMDeaths, TDMWins, TDMLosses, FFAKills, FFADeaths, FFAWins, FFALosses, SSBKills, SSBDeaths, SSBWins, SSBLosses, UHCKills, UHCDeaths, UHCWins, UHCLosses )" +
-			" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	String SQL = "INSERT INTO players(playername, kills, deaths, wins, losses, Levels, Points, classes, TDMKills, TDMDeaths, TDMWins, TDMLosses, FFAKills, FFADeaths, FFAWins, FFALosses, SSBKills, SSBDeaths, SSBWins, SSBLosses, UHCKills, UHCDeaths, UHCWins, UHCLosses, Freezes, Unfreezes, BGWins, BGLosses, credits, rawcredits )" +
+			" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	try {
 		pst = plugin.con.prepareStatement(SQL);
 		pst.setString(1, p);
@@ -444,6 +466,12 @@ private void addefaults(String p) {
 		pst.setInt(22, 0);
 		pst.setInt(23, 0);
 		pst.setInt(24, 0);
+		pst.setInt(25, 0);
+		pst.setInt(26, 0);
+		pst.setInt(27, 0);
+		pst.setInt(28, 0);
+		pst.setInt(29, 0);
+		pst.setInt(30, 0);
 		pst.executeUpdate();
 	} catch (SQLException e) {
 		e.printStackTrace();

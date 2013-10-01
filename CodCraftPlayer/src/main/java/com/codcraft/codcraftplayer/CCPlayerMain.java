@@ -34,6 +34,7 @@ public class CCPlayerMain extends JavaPlugin {
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			getCCDatabase.getp(p.getName());
 		}
+		getCommand("CCAP").setExecutor(new CCAPCommand(this));
 
 	}
 	
