@@ -26,8 +26,6 @@ public class Utilities {
 					if(player != null) {
 						p.sendMessage(message);
 					}
-				} else if (en.getValue() == ChatType.ALL) {
-					p.sendMessage(message);
 				} else if(en.getValue() == ChatType.BUDDIES) {
 					Buddy bud = plugin.api.getModuleForClass(Buddy.class);
 					if(bud.isBuddy(p.getName(), Player)) {

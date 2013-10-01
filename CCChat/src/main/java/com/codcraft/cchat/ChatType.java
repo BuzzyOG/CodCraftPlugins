@@ -5,6 +5,5 @@ public enum ChatType {
 	NONE,
 	SERVER,
 	BUDDIES,
-	ALL,
 
 }

@@ -82,7 +82,7 @@ public class AntiAd extends JavaPlugin {
 
         for(Player p : Bukkit.getOnlinePlayers()) {
         	if(!players.containsKey(p.getName())) {
-        		players.put(p.getName(), ChatType.ALL);
+        		players.put(p.getName(), ChatType.SERVER);
         	}
         }
 
