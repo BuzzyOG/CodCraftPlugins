@@ -176,10 +176,10 @@ public class CCShop extends JavaPlugin {
         	RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         	perms = rsp.getProvider();
         	return perms != null;
-    	}
-    	/**
-    	 * Loads the config for the CCShopItems. 
-    	 */
+    }
+    /**
+     * Loads the config for the CCShopItems. 
+     */
 	private boolean loadConfig() {
 		File f = new File("./plugins/CCShop/shops.yml");
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(f);
