@@ -1,4 +1,4 @@
 name: CAR
 main: com.codcraft.copsandrobber.CopsARobber
-version: 0.0.001
+version: 0.0.002
 depend: [CodCraftAPI]
