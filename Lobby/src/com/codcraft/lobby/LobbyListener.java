@@ -8,11 +8,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.CodCraft.api.event.RequestJoinGameEvent;
+import com.CodCraft.api.event.team.TeamPlayerLostEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
@@ -33,15 +34,19 @@ public class LobbyListener implements Listener {
 		Bukkit.getPluginManager().callEvent(event);
 	}
 	
-	
+	@EventHandler
+	public void onLeave(TeamPlayerLostEvent e) {
+		PlayerToLobbyEvent event = new PlayerToLobbyEvent(e.getPlayer());
+		Bukkit.getPluginManager().callEvent(event);
+	}
 
 	
 	
 	@EventHandler (priority = EventPriority.LOWEST)
-	public void onMove(PlayerInteractEvent e) {
+	public void onMove(PlayerMoveEvent e) {
 		GameManager gamemanger = plugin.CCAPI.getModuleForClass(GameManager.class);
 
-		for(Entry<String, Lobby> lobby : plugin.configmap.entrySet()) {
+		for(Entry<Integer, Lobby> lobby : plugin.configmap.entrySet()) {
 			if(isInside(e.getPlayer(),lobby.getValue().getBlock1().getX(),lobby.getValue().getBlock1().getY(),lobby.getValue().getBlock1().getZ(),lobby.getValue().getBlock2().getX(),lobby.getValue().getBlock2().getY(),lobby.getValue().getBlock2().getZ())){
 				@SuppressWarnings("unused")
 				Team teama = null;
@@ -68,8 +73,10 @@ public class LobbyListener implements Listener {
 				
 				RequestJoinGameEvent revent = new RequestJoinGameEvent(p, game, null);
 				Bukkit.getPluginManager().callEvent(revent);
-				plugin.sign.updateSign(plugin.CCAPI.getModuleForClass(LobbyModule.class).getLobby(game.getName()));
-				if(revent.getTeam() == null) {
+		        LobbyModule lm = (LobbyModule)this.plugin.CCAPI.getModuleForClass(LobbyModule.class);
+		        
+		        lm.UpdateSign(lm.getLobby(game.getName()));				
+		        if(revent.getTeam() == null) {
 					return;
 				}
 				Team t = revent.getTeam();
@@ -88,13 +95,13 @@ public class LobbyListener implements Listener {
 		if(e.getGame() == null) {
 			return;
 		}
-		plugin.sign.updateSign(plugin.CCAPI.getModuleForClass(LobbyModule.class).getLobby(e.getGame().getName()));
+	    LobbyModule lm = (LobbyModule)this.plugin.CCAPI.getModuleForClass(LobbyModule.class);
+	    lm.UpdateSign(lm.getLobby(e.getGame().getName()));
 	}
 	
 
 	@EventHandler
 	public void playerquit(PlayerQuitEvent e) {
-		plugin.sign.UpdateSigns();
 	}
 	
 	   private boolean isInside(Player p, double maxX, double maxY, double maxZ, double minX, double minY, double minZ) {

@@ -12,12 +12,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.CodCraft.api.CCAPI;
+import com.codcraft.lobby.signs.LobbySign;
+import com.codcraft.lobby.signs.LobbyUpdate;
 
 public class CCLobby extends JavaPlugin {
 	
 	public CCAPI CCAPI;
-	public Map<String, Lobby> configmap = new HashMap<String, Lobby>();
-	public LobbySign sign;
+	public Map<Integer, Lobby> configmap = new HashMap<>();
+	public Map<Integer, LobbyUpdate> updates = new HashMap<>();
+	
 	
 	
 	public void onEnable() {
@@ -36,8 +39,6 @@ public class CCLobby extends JavaPlugin {
 		
 		//register events
 		getServer().getPluginManager().registerEvents(new LobbyListener(this), this);
-		this.sign = new LobbySign(this);
-		sign.UpdateSigns();
 	}
 
 
@@ -79,7 +80,11 @@ public class CCLobby extends JavaPlugin {
 				mapLobby.setName(name);
 				mapLobby.setSignBlock(SignBlock);
 				mapLobby.setLampblock(lampblock);
-				configmap.put(name, mapLobby);
+		        this.configmap.put(Integer.valueOf(this.configmap.size() + 1), mapLobby);
+		        this.updates.put(Integer.valueOf(this.configmap.size()), new LobbySign(this, this.configmap.size()));
+		        getLogger().info("Lobby Created: " + name + " Game: " + game);
+		        getLogger().info("Location1: " + " X: " + locblock1.getBlockX() + " Y: " + locblock1.getBlockY() + " Z: " + locblock1.getBlockZ());
+		        getLogger().info("Location2: " + " X: " + locblock2.getBlockX() + " Y: " + locblock2.getBlockY() + " Z: " + locblock2.getBlockZ());
 			}
 		}
 		
