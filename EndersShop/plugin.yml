@@ -1,0 +1,4 @@
+name: EndersShop
+main: com.codcraft.endersshop.EndersShop
+version: 0.0.001
+depend: [CodCraftAPI, CCLobby, CodCraftPlayer]

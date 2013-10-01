@@ -1,62 +1,59 @@
 package com.codcraft.lobby.event;
 
-import java.util.Map.Entry;
-
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
-
 import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.services.CCEvent;
 import com.codcraft.lobby.Lobby;
+import java.util.Map.Entry;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.HandlerList;
 
-public class PlayerEnterLobbyEvent extends CCEvent implements Cancellable {
+public class PlayerEnterLobbyEvent extends CCEvent
+  implements Cancellable
+{
+  private boolean canceled = false;
+  private TeamPlayer player;
+  private Entry<Integer, Lobby> lobby;
+  private static final HandlerList handlers = new HandlerList();
 
-	private boolean canceled = false;
-	private TeamPlayer player;
-	private Entry<String, Lobby> lobby;
-	public PlayerEnterLobbyEvent(TeamPlayer p, Entry<String, Lobby> lobby) {
-		this.player = p;
-		this.lobby = lobby;
-	}
-	
-	private static final HandlerList handlers = new HandlerList();
+  public PlayerEnterLobbyEvent(TeamPlayer p, Entry<Integer, Lobby> lobby2)
+  {
+    this.player = p;
+    this.lobby = lobby2;
+  }
 
-	public TeamPlayer getPlayer() {
-		return player;
-	}
+  public TeamPlayer getPlayer()
+  {
+    return this.player;
+  }
 
-	public void setPlayer(TeamPlayer player) {
-		this.player = player;
-	}
+  public void setPlayer(TeamPlayer player) {
+    this.player = player;
+  }
 
-	public Entry<String, Lobby> getLobby() {
-		return lobby;
-	}
+  public Entry<Integer, Lobby> getLobby() {
+    return this.lobby;
+  }
 
-	public void setLobby(Entry<String, Lobby> lobby) {
-		this.lobby = lobby;
-	}
+  public void setLobby(Entry<Integer, Lobby> lobby) {
+    this.lobby = lobby;
+  }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-	   
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+  public static HandlerList getHandlerList() {
+    return handlers;
+  }
 
-	@Override
-	public boolean isCancelled() {
-		return canceled;
-	}
+  public HandlerList getHandlers()
+  {
+    return handlers;
+  }
 
-	@Override
-	public void setCancelled(boolean arg0) {
-		this.canceled = arg0;
-		
-	}
-	
-	
+  public boolean isCancelled()
+  {
+    return this.canceled;
+  }
 
+  public void setCancelled(boolean arg0)
+  {
+    this.canceled = arg0;
+  }
 }
