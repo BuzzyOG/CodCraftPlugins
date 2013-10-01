@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.codcraft.lobby.ping.PingManager;
@@ -27,7 +28,6 @@ public class CCLobby extends JavaPlugin {
 	}
 	
 	public void onEnable() {
-		
 		
 		//Load Config
 		LoadConfig();
@@ -52,8 +52,27 @@ public class CCLobby extends JavaPlugin {
 		pingManager.setUp(configmap);
 		
 		startTimer();
+		Timer();
 
 
+	}
+
+	private void Timer() {
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				for(Player p : Bukkit.getOnlinePlayers()) {
+					Location loc1 = new Location(Bukkit.getWorld("world"), -584, 20, 450);
+					Location loc2 = new Location(Bukkit.getWorld("world"), -347, 255, 203);
+					if(!isInside(p, loc1, loc2)) {
+						p.teleport(new Location(Bukkit.getWorld("world"), -465, 52, 327, (float) 180, (float) 0.6));
+					}
+				}
+				
+			}
+		}, 0, 60);
+		
 	}
 
 	private void startTimer() {
@@ -67,6 +86,45 @@ public class CCLobby extends JavaPlugin {
 		}, 0, 600);
 		
 	}
+	
+	private boolean isInside(Player p, Location loc1, Location loc2) {
+		Location loc = p.getLocation();
+		double minX;
+		double maxX;
+		double maxZ;
+		double minZ;
+		double maxY;
+		double minY;
+		if(loc1.getX() > loc2.getX()) {
+			maxX = loc1.getX();
+			minX = loc2.getX();
+		} else {
+			maxX = loc2.getX();
+			minX = loc1.getX();
+		}
+		if(loc1.getY() > loc2.getY()) {
+			maxY = loc1.getY();
+			minY = loc2.getY();
+		} else {
+			maxY = loc2.getY();
+			minY = loc1.getY();
+		}
+		if(loc1.getZ() > loc2.getZ()) {
+			maxZ = loc1.getZ();
+			minZ = loc2.getZ();
+		} else {
+			maxZ = loc2.getZ();
+			minZ = loc1.getZ();
+		}
+		
+		if(loc.getX() < minX || loc.getX() > maxX)
+			   return false;  
+		if(loc.getZ() < minZ || loc.getZ() > maxZ)
+			   return false;
+		if(loc.getY() < minY || loc.getY() > maxY)
+			   return false;   
+		return true;		
+	}
 
 	private void AlwaysDay() {
 		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
@@ -75,7 +133,7 @@ public class CCLobby extends JavaPlugin {
 			public void run() {
 				World world = Bukkit.getWorld("world");
 				if(world != null) {
-					world.setTime(6000);
+					world.setTime(14000);
 				}	
 			}
 		}, 0, 200);
