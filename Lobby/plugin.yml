@@ -2,6 +2,6 @@ name: CCLobby
 author: Joby
 description: Lobby system to join CodCraftAPI Games
 main: com.codcraft.lobby.CCLobby
-version: 0.0.001
+version: 0.1.001
 depend: [CodCraftAPI]
 softdepend: [FFA]
