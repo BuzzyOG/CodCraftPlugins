@@ -1,6 +1,6 @@
 name: CCCommands
 main: com.codcraft.ccommands.CCCommands
-version: 0.0.003
+version: 0.1.001
 depend: [CodCraftAPI]
 commands:
    lobby:
