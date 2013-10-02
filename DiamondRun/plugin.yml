@@ -1,6 +1,6 @@
 name: DiamondRun
 main: com.codcraft.diamondrun.DiamondRun
-version: 1
+version: 0.0.001
 depend: [CodCraftAPI]
 commands: 
     DR:
