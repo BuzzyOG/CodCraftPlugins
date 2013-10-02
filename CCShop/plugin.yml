@@ -1,4 +1,4 @@
 name: CCShop
-version: 0.0.002
+version: 0.0.003
 main: com.codcraft.shop.CCShop
 depend: [Vault]
