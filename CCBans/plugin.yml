@@ -1,6 +1,6 @@
 name: CCBans
 main: com.codcraft.ccbans.CCBans
-version: 0.0.002
+version: 0.1.001
 commands:
     Ban:
     
