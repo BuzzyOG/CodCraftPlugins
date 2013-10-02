@@ -1,6 +1,6 @@
 name: CCWeapon
 main: com.codcraft.weapons.Weapons
-version: 0.0.001
+version: 0.1.001
 depend: [CodCraftAPI, FFA]
 commands: 
     vote:
