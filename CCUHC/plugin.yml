@@ -1,6 +1,6 @@
 name: CCUHC
 main: com.codcraft.ccuhc.UHC
-version: 0.0.002
+version: 0.1.001
 depend: [CodCraftAPI]
 commands:
    uhc:
