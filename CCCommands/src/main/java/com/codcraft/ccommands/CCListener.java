@@ -44,12 +44,12 @@ public class CCListener implements Listener {
 	private int y1;
 	private int z1;
 	
-	private int x2;
+	/*private int x2;
 	private int y2;
 	private int z2;
 	private int x3;
 	private int y3;
-	private int z3;
+	private int z3;*/
 	
 	public CCListener(CCCommands plugin) {
 		this.plugin = plugin;
@@ -61,17 +61,17 @@ public class CCListener implements Listener {
 		this.y1 = config.getInt("y2");
 		this.z1 = config.getInt("z2");
 		
-		this.x2 = config.getInt("x3");
+		/*this.x2 = config.getInt("x3");
 		this.y2 = config.getInt("y3");
 		this.z2 = config.getInt("z3");
 		this.x3 = config.getInt("x4");
 		this.y3 = config.getInt("y4");
-		this.z3 = config.getInt("z4");
+		this.z3 = config.getInt("z4");*/
 	}
 	
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
-		if(isInside(e.getPlayer(), x, y, z, x1, y1, z1) || isInside(e.getPlayer(), x2, y2, z2, x3, y3, z3)) {
+		if(isInside(e.getPlayer(), x, y, z, x1, y1, z1)/* || isInside(e.getPlayer(), x2, y2, z2, x3, y3, z3)*/) {
 			ByteArrayOutputStream b = new ByteArrayOutputStream();
 		    DataOutputStream out = new DataOutputStream(b);
 		    try {
@@ -214,6 +214,7 @@ public class CCListener implements Listener {
 			public void run() {
 				ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
 				BookMeta book1 = (BookMeta) book.getItemMeta();
+				book1.setDisplayName("Guide");
 				book1.addPage("Welcome to Cylum    please follow these"+ChatColor.BOLD+" rules."+ChatColor.BLACK+"" +
 						"             Respect all Staff marked in "+ChatColor.DARK_RED+" red!"+ ChatColor.BLACK + "           No Hacking!" +
 								"               No Advertising." +
