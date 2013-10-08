@@ -27,6 +27,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -197,7 +198,19 @@ public class CCListener implements Listener {
 
 	}
 	
+	
+	@EventHandler
+	public void onChange(WeatherChangeEvent e) {
+	    GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+	    boolean cancel = true;
+	    for (Game<?> g : gm.getAllGames()) {
+	    	if ((g.getName().equalsIgnoreCase(e.getWorld().getName())) && (e.toWeatherState())) {
+	    		cancel = false;
+	    	}
+	    }
+	    e.setCancelled(cancel);
 
+	  }
 		
 	@EventHandler
 	public void onSpawn(final PlayerDoSpawnEvent e) {

@@ -27,6 +27,7 @@ public class SpawnCommand implements CommandExecutor {
 	@Override
 	 public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(label.equalsIgnoreCase("lobby")) {
+			plugin.getLogger().info(sender.getName() + " dispatched lobby command!");
 			if(sender instanceof Player) {
 				Player p = (Player) sender;
 				GameManager gm = plugin.api.getModuleForClass(GameManager.class);

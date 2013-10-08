@@ -12,8 +12,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.CodCraft.api.event.RequestJoinGameEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
+import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCGamePlugin;
 import com.codcraft.codcraftplayer.CCPlayer;
@@ -34,6 +36,16 @@ public class AdminCommand implements CommandExecutor {
 				return true;
 			}
 			final GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+			if(args[0].equalsIgnoreCase("joingame")) {
+				String g = args[1];
+				for(Game<?> game : gm.getAllGames()) {
+					if(game.getName().equalsIgnoreCase(g)) {
+						RequestJoinGameEvent event = new RequestJoinGameEvent(new TeamPlayer(sender.getName()), game, game.getTeams().get(0));
+						Bukkit.getPluginManager().callEvent(event);
+					}
+				}
+			}
+			
 			
 			if(args[0].equalsIgnoreCase("showplugins")) {
 				Player p = (Player) sender;
