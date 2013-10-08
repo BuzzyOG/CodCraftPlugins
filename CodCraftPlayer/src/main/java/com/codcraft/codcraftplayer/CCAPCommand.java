@@ -14,12 +14,25 @@ public class CCAPCommand implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String label, final String[] args) {
 		if(label.equalsIgnoreCase("CCAP")) {
 			if(sender.hasPermission("CCAP.ADDCredits")) {
 				if(args[0].equalsIgnoreCase("add")) {
 					CCPlayer player = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(Bukkit.getPlayer(args[1]));
+					if(player == null) {
+						plugin.api.getModuleForClass(CCPlayerModule.class).loadPlayer(args[1]);
+						player = plugin.api.getModuleForClass(CCPlayerModule.class).getPlayer(Bukkit.getPlayer(args[1]));
+					}
 					player.setCredits(player.getCredits() + 1000);
+					Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+						
+						@Override
+						public void run() {
+							plugin.getCCDatabase.savep(Bukkit.getPlayer(args[1]));
+							
+						}
+					}, 30);
+					
 				}
 			}
 		}

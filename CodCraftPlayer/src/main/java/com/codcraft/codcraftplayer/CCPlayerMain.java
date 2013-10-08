@@ -41,7 +41,7 @@ public class CCPlayerMain extends JavaPlugin {
 	public boolean connect() {
 		con = null;
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://" + "localhost/" + "minecraft", "root", "YDsD9Cz3");
+			con = DriverManager.getConnection("jdbc:mysql://" + "localhost/" + "minecraft", "root", "YDsD9Cz3" /*+ "/confluence?autoReconnect=true"*/);
 			getLogger().info("Got connection!");
 		} catch (SQLException e) {
 			getLogger().log(Level.WARNING, "Connection not found");

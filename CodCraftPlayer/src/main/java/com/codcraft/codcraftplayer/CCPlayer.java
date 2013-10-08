@@ -89,7 +89,7 @@ public class CCPlayer {
 	}
 	
 	
-	public void incrementCredit(int i) {
+	public int incrementCredit(int i) {
 		Player p = Bukkit.getPlayer(name);
 		int finish = i;
 		if(p.hasPermission("battleroom.credit25")){
@@ -101,6 +101,7 @@ public class CCPlayer {
 		}
 		credits += finish;
 		rawCredits += i;
+		return finish;
 	}
 	
 	public int getRawCredits() {
