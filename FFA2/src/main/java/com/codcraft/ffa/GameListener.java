@@ -12,14 +12,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -226,6 +230,17 @@ public class GameListener extends CCGameListener {
 	}
 	
 	@EventHandler
+	public void onQui(PlayerQuitEvent e) {
+		GameManager gm = (GameManager)this.plugin.api.getModuleForClass(GameManager.class);
+	    Game<?> g = gm.getGameWithPlayer(e.getPlayer());
+	    if ((g != null) && (g.getPlugin() == this.plugin)) {
+	      ScoreBoard SB = (ScoreBoard)this.plugin.api.getModuleForClass(ScoreBoard.class);
+	      SB.removePlayerFromScoreBoard(e.getPlayer());
+	    }
+	}
+
+	
+	@EventHandler
 	public void onExspotion(EntityExplodeEvent e) {
 		if(e.getEntity() == null) {
 			return;
@@ -385,6 +400,44 @@ public class GameListener extends CCGameListener {
 
 
 	}
+	
+	  @EventHandler
+	  public void interact(PlayerInteractEvent e)
+	  {
+	    GameManager gm = (GameManager)this.plugin.api.getModuleForClass(GameManager.class);
+	    Game<?> game = gm.getGameWithPlayer(e.getPlayer());
+	    if (game == null) {
+	      return;
+	    }
+	    if (game.getPlugin() != this.plugin) {
+	      return;
+	    }
+	    FFAGame g = (FFAGame)game;
+	    if ((e.getAction() == Action.LEFT_CLICK_BLOCK) || (e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+	      Block clickedblock = e.getClickedBlock();
+	      if ((clickedblock != null) && 
+	        ((clickedblock.getState() instanceof Sign))) {
+	        Sign sign = (Sign)clickedblock.getState();
+	        String MAP = null;
+	        if ((clickedblock.getLocation().getX() == 58.0D) && (clickedblock.getLocation().getY() == 41.0D) && (clickedblock.getLocation().getZ() == 195.0D)) {
+	          if (sign.getLine(1).equalsIgnoreCase(g.Map1))
+	            MAP = g.Map1;
+	          else if (sign.getLine(1).equalsIgnoreCase(g.Map2))
+	            MAP = g.Map2;
+	        }
+	        else if ((clickedblock.getLocation().getX() == 58.0D) && (clickedblock.getLocation().getY() == 42.0D) && (clickedblock.getLocation().getZ() == 195.0D)) {
+	          if (sign.getLine(1).equalsIgnoreCase(g.Map1))
+	            MAP = g.Map1;
+	          else if (sign.getLine(1).equalsIgnoreCase(g.Map2)) {
+	            MAP = g.Map2;
+	          }
+	        }
+	        if (MAP != null)
+	          e.getPlayer().performCommand("vote " + MAP);
+	      }
+	    }
+	  }
+	
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onRespawn(PlayerRespawnEvent e) {
 		  GameManager gm = plugin.api.getModuleForClass(GameManager.class);

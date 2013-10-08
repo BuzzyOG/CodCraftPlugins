@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -20,6 +21,8 @@ import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCGamePlugin;
+import com.codcraft.lobby.Lobby;
+import com.codcraft.lobby.LobbyModule;
 
 public class CodCraftFFA extends CCGamePlugin {
 	
@@ -30,20 +33,44 @@ public class CodCraftFFA extends CCGamePlugin {
 
 	public void onEnable() {
 
-	      final Plugin api = this.getServer().getPluginManager().getPlugin("CodCraftAPI");
-	      if(api != null || !(api instanceof CCAPI)) {
-	         this.api = (CCAPI) api;
-	      } else {
-	         // Disable if we cannot get the api.
-	         getLogger().warning("Could not find API. Disabling...");
-	         getServer().getPluginManager().disablePlugin(this);
-	         return;
-	      }
-	     
-	      spawnLoad();
-	      Bukkit.getPluginManager().registerEvents(new GameListener(this), this);
-	      alwaysDay();
+		final Plugin api = this.getServer().getPluginManager().getPlugin("CodCraftAPI");
+	    if(api != null || !(api instanceof CCAPI)) {
+	    	this.api = (CCAPI) api;
+	    } else {
+	    	// Disable if we cannot get the api.
+	        getLogger().warning("Could not find API. Disabling...");
+	        getServer().getPluginManager().disablePlugin(this);
+	        return;
 	    }
+	     
+	    spawnLoad();
+	    Bukkit.getPluginManager().registerEvents(new GameListener(this), this);
+	    alwaysDay();
+	    setupLobbyUpdate();
+	}
+	
+	private void setupLobbyUpdate() {
+		final CodCraftFFA plugin = this;
+		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+			
+			public void run() {
+				
+				GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		        List<Game<?>> games = gm.getGamesForPlugin(plugin);
+		        LobbyModule lm = (LobbyModule)CodCraftFFA.this.api.getModuleForClass(LobbyModule.class);
+		        
+		        for(Entry<Integer, Lobby> en : lm.getLobbys().entrySet()) {
+		        	for(Game<?> g : games) {
+				          if (g.getName().equalsIgnoreCase(en.getValue().getGame())) {
+					            lm.setUpdateCode(en.getKey(), new FFALobbyUpdate(plugin, en.getKey()));
+				          }
+
+		        	}
+		        }
+		      }
+		    }
+		    , 80L);
+		  }
 	
 	   private void alwaysDay() {
 		   final CodCraftFFA ffa = this;
