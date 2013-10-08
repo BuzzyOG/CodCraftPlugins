@@ -80,6 +80,7 @@ public class CarListener implements Listener {
 	 * @param e
 	 * 		- GameWinEvent that is called.
 	 */
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onWin(GameWinEvent e) {
 		if(e.getGame().getPlugin() == plugin) { 
@@ -196,6 +197,7 @@ public class CarListener implements Listener {
 	 * @param e
 	 * 		- PlayerReceivedNameTagEvent that is called.
 	 */
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onrepresh(PlayerReceiveNameTagEvent e) {
 		Player p = e.getNamedPlayer();

@@ -60,6 +60,7 @@ public class CARGame extends Game<CopsARobber> {
 	/**
 	 * initializes the game. Sets the 2 teams, makes the world, sets the location
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void initialize() {
 		Bukkit.createWorld(new WorldCreator(getName()));
@@ -82,6 +83,7 @@ public class CARGame extends Game<CopsARobber> {
 	/**
 	 * deinitialize the game.
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void deinitialize() {
 		Location loc1 = new Location(jail.getWorld(), 135, 8, -262);
