@@ -1,5 +1,5 @@
 name: BattleGame
-version: 0.0.001
+version: 0.1.001
 main: com.admixhosting.battleroom.BattleRoom
 depend: [CodCraftAPI]
 commands:
