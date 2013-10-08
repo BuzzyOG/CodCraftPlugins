@@ -18,6 +18,7 @@ import com.CodCraft.api.modules.ScoreBoard;
 import com.admixhosting.battleroom.BattleRoom;
 import com.admixhosting.battleroom.game.BattleGame;
 import com.admixhosting.battleroom.game.BattlePlayer;
+import com.admixhosting.battleroom.game.BattleTeam;
 import com.codcraft.lobby.Lobby;
 import com.codcraft.lobby.LobbyModule;
 
@@ -57,6 +58,25 @@ public class LobbyState implements GameState<BattleRoom> {
 				//ScoreBoard SB = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
 				LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
 				Lobby l = lm.getLobby(game.getName());
+				for(String s : game.getInLobby()) {
+					Player p = Bukkit.getPlayer(s);
+					if(p != null) {
+						if(game.isFreezeTag()) {
+							if(game.requestedTeams.get(s).getName().equalsIgnoreCase("Blue")) {
+								if(!game.getPlugin().checkBlueFreeze(p)) {
+									p.teleport(((BattleTeam)game.requestedTeams.get(s)).getSpawn());
+								}
+							} else {
+								if(!game.getPlugin().checkRedFreeze(p)) {
+									p.teleport(((BattleTeam)game.requestedTeams.get(s)).getSpawn());
+								}
+							}
+						}
+					}
+
+
+				}
+
 				if(l == null) {
 					return;
 				} else {
@@ -179,5 +199,6 @@ public class LobbyState implements GameState<BattleRoom> {
 			task.cancel();
 		}
 	}
+	
 
 }

@@ -1,6 +1,8 @@
 package com.admixhosting.battleroom.game;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.CodCraft.api.model.TeamPlayer;
@@ -53,6 +55,13 @@ public class BattlePlayer extends TeamPlayer {
 	}
 
 	public void setFrozen(Boolean frozen) {
+		if(frozen == false) {
+			Player p = Bukkit.getPlayer(name);
+			if(p != null) {
+				p.setAllowFlight(false);
+				p.setFlying(false);
+			}
+		}
 		this.frozen = frozen;
 	}
 
@@ -69,6 +78,13 @@ public class BattlePlayer extends TeamPlayer {
 	}
 
 	public void setPermfrozen(boolean permfrozen) {
+		if(permfrozen == false) {
+			Player p = Bukkit.getPlayer(name);
+			if(p != null) {
+				p.setAllowFlight(false);
+				p.setFlying(false);
+			}
+		}
 		this.permfrozen = permfrozen;
 	}
 

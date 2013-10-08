@@ -21,6 +21,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -58,12 +59,14 @@ public class GameListener implements Listener {
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onRequest(RequestJoinGameEvent e) {
 		Game<?> g = e.getGame();
 		
 		if(g != null) {
 			if(g.getPlugin() == plugin) {
+				BattleGame game = (BattleGame) g;
 				Player p = Bukkit.getPlayer(e.getPlayer().getName());
 				if(p != null) {
 
@@ -127,15 +130,18 @@ public class GameListener implements Listener {
 						}
 					}
 					((BattleGame)g).requestedTeams.put(p.getName(), team);
+					p.sendMessage("You are on the " + team.getColor() + team.getName());
 					p.teleport(((BattleTeam)team).getSpawn());
 					if(team.getName().equalsIgnoreCase("Blue")) {
 						p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
 					} else {
 						p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 14));
 					}
+					for(String s : game.getInLobby()) {
+						Player p1 = Bukkit.getPlayer(s);
+						p1.sendMessage(p.getName() + " has joined the game ["+ game.getInLobby().size() +"/16]");
+					}
 				}
-
-				
 			}
 		}
 	}
@@ -156,8 +162,14 @@ public class GameListener implements Listener {
 		if(g != null) {
 			if(g.getPlugin() == plugin) {
 				final Player p = Bukkit.getPlayer(e.getPlayer().getName());
-				p.setAllowFlight(true);
-				p.setFlying(true);
+				if(((BattleGame) g).isFreezeTag()) {
+					p.setAllowFlight(false);
+					p.setFlying(false);
+				} else {
+					p.setAllowFlight(true);
+					p.setFlying(true);
+				}
+
 
 				Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 					
@@ -169,14 +181,16 @@ public class GameListener implements Listener {
 						BattlePlayer bp = (BattlePlayer) e.getPlayer();
 						if(!bp.medic) {
 							list.add("permafrost");
+							list.add("CallMedic");
 							
 						} else {
 							list.add("DragonsBreath");
 							list.add("hook");
-
 						}
+						
 
 						plugin.api.getModuleForClass(Weapons.class).requestWeapons(p, list);
+						p.setFlying(false);
 						
 					}
 				}, 1);
@@ -251,12 +265,21 @@ public class GameListener implements Listener {
 								if(bp.medic) {
 									BattlePlayer bpp = (BattlePlayer) g.findTeamWithPlayer(p).findPlayer(p);
 									if(!bpp.getFrozen()) {
-										broadcast = true;
-										normal = false;
-										player1 = true;
 										if(!g.findTeamWithPlayer(p).getName().equalsIgnoreCase(g.findTeamWithPlayer(d).getName())) {
+											broadcast = true;
+											normal = false;
+											player1 = true;
 											bpp.setFrozenpoint(p.getLocation());
 											bpp.setFrozen(true);
+											if(bpp.medic) {
+												for(Team t : g.getTeams()) {
+													for(TeamPlayer tp : t.getPlayers()) {
+														Player p11 = Bukkit.getPlayer(tp.getName());
+														p11.sendMessage(g.findTeamWithPlayer(bpp).getColor() + g.findTeamWithPlayer(bpp).getName() + " defroster " + ChatColor.WHITE+
+																"has been " + g.findTeamWithPlayer(bpp).getColor() + "frozen!");
+													}
+												}
+											}
 											CCPlayerModule ccpm = plugin.api.getModuleForClass(CCPlayerModule.class);
 											CCPlayer player = ccpm.getPlayer(d);
 											player.setFreezes(player.getFreezes() + 1);
@@ -387,11 +410,12 @@ public class GameListener implements Listener {
 						if(frozen >= size) {
 							GameWinEvent event1 = new GameWinEvent(t1.getName() + " has won the game!", t1, g);
 							Bukkit.getPluginManager().callEvent(event1);
-							Bukkit.broadcastMessage(event1.getWinMessage());
+							
+							Bukkit.broadcastMessage(g.getName() + "has finished!");
 						}
-						e.setCancelled(true);
+						
 					}
-
+					e.setCancelled(true);
 				}
 			}
 		}
@@ -419,6 +443,13 @@ public class GameListener implements Listener {
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		for(Game<?> g1 : gm.getGamesForPlugin(plugin)) {
+			BattleGame game = (BattleGame) g1;
+			if(game.getInLobby().contains(e.getPlayer().getName())) {
+				e.setCancelled(true);
+				return;
+			}
+		}
 		Game<?> g = gm.getGameWithPlayer(e.getPlayer());
 		if(g != null) {
 			if(g.getPlugin() == plugin) {
@@ -473,9 +504,25 @@ public class GameListener implements Listener {
 	}
 	
 	@EventHandler
+	public void onHunger(FoodLevelChangeEvent e) {
+		if(e.getEntity() instanceof Player) {
+			GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+			Game<?> g = gm.getGameWithPlayer((Player) e.getEntity());
+			if(g != null) {
+				if(g.getPlugin() == plugin) {
+					e.setFoodLevel(20);
+				}
+			}
+		}
+	}
+	
+	@EventHandler
 	public void onWin(GameWinEvent e) {
 		if(e.getGame() != null) {
 			if(e.getGame().getPlugin() == plugin){
+				int top = 0;
+				TeamPlayer tp1 = null;
+
 				for(final Team t : e.getGame().getTeams()) {
 					if(e.getTeam() != null) {
 						if(t.getId().equalsIgnoreCase(e.getTeam().getId())) {
@@ -484,7 +531,7 @@ public class GameListener implements Listener {
 								CCPlayerModule ccpm = plugin.api.getModuleForClass(CCPlayerModule.class);
 								CCPlayer player = ccpm.getPlayer(tp.getName());
 								player.setBGwins(player.getBGwins() + 1);
-								player.incrementCredit(10);
+								player.incrementCredit(25);
 								player.incrementCredit(bp.getFrozens() + bp.getUnfrozen());
 							}
 						} else {
@@ -493,15 +540,35 @@ public class GameListener implements Listener {
 								CCPlayerModule ccpm = plugin.api.getModuleForClass(CCPlayerModule.class);
 								CCPlayer player = ccpm.getPlayer(tp.getName());
 								player.setBGlosses(player.getBGlosses() + 1);
-								player.incrementCredit(bp.getFrozens() + bp.getUnfrozen());
+								player.incrementCredit((bp.getFrozens() + bp.getUnfrozen()) * 5 );
 							}
 						}
 					}
-					
+					for(TeamPlayer tp : t.getPlayers()) {
+						System.out.println(tp.getName());
+						System.out.println(top);
+						System.out.println(tp1);
+						BattlePlayer bp = (BattlePlayer) tp;
+						int i = bp.getUnfrozen() + bp.getFrozens();
+						System.out.println(i);
+						if(tp1 == null) {
+							tp1 = tp;
+							top = i;
+						} else {
+							System.out.println(top < i);
+							if(top < i) {
+								top = i;
+								tp1 = tp;
+							}
+						}
+					}
+
 					for(final TeamPlayer tp : t.getPlayers()) {
 						final BattlePlayer bp = (BattlePlayer) tp;
 						final Player p = Bukkit.getPlayer(bp.getName());
+						p.sendMessage(tp1.getName() + " is the "+ChatColor.GOLD+"[MVP]");
 						p.getInventory().clear();
+						p.sendMessage(e.getWinMessage());
 						Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 							
 							@Override
@@ -519,6 +586,8 @@ public class GameListener implements Listener {
 						}, 200);
 					}
 				}
+				CCPlayerModule ccpm = plugin.api.getModuleForClass(CCPlayerModule.class);
+				ccpm.getPlayer(tp1.getName()).incrementCredit(20);
 				e.getGame().deinitialize();
 				e.getGame().initialize();
 				e.getGame().setState(new LobbyState(e.getGame()));

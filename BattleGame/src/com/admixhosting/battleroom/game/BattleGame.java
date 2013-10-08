@@ -30,6 +30,7 @@ public class BattleGame extends Game<BattleRoom> {
 	private final int xCenter = -394;
 	private final int yCenter = 127;
 	private final int zCenter = 460;
+	private boolean freezeTag;
 
 	public BattleGame(BattleRoom instance) {
 		super(instance);
@@ -41,14 +42,27 @@ public class BattleGame extends Game<BattleRoom> {
 		WorldCreator creator = new WorldCreator(getName());
 
 		Bukkit.createWorld(creator);
-		BattleTeam Blue = new BattleTeam("Blue", new Location(
-				Bukkit.getWorld(getName()), -393, 125, 520));
+		BattleTeam Blue;
+		if(isFreezeTag()) {
+			Blue = new BattleTeam("Blue", new Location(
+					Bukkit.getWorld(getName()), -357, 57, -400));
+		} else {
+			Blue = new BattleTeam("Blue", new Location(
+					Bukkit.getWorld(getName()), -393, 125, 520));
+		}
+		
 		Blue.setMaxPlayers(16);
 		Blue.setColorNew(Color.BLUE);
 		Blue.setColor(ChatColor.BLUE);
 		addTeam(Blue);
-		BattleTeam Red = new BattleTeam("Red", new Location(
-				Bukkit.getWorld(getName()), -394, 125, 400));
+		BattleTeam Red;
+		if(isFreezeTag()) {
+			Red = new BattleTeam("Red", new Location(
+					Bukkit.getWorld(getName()), -357, 57, -276));
+		} else {
+			Red = new BattleTeam("Red", new Location(
+					Bukkit.getWorld(getName()), -394, 125, 400));
+		}
 		Red.setColorNew(Color.RED);
 		Red.setColor(ChatColor.RED);
 		Red.setMaxPlayers(16);
@@ -63,7 +77,10 @@ public class BattleGame extends Game<BattleRoom> {
 		scoreboard.addStringToBoard("Red_Frozen", 0, this);
 		scoreboard.addStringToBoard("Blue", 0, this);
 		scoreboard.addStringToBoard("Blue_Frozen", 0, this);
-		genStars();
+		if(!isFreezeTag()) {
+			genStars();
+		}
+
 	}
 	
 	public List<String> getInLobby() {
@@ -107,41 +124,45 @@ public class BattleGame extends Game<BattleRoom> {
 
 	@Override
 	public void deinitialize() {
-		new Location(Bukkit.getWorld(this.getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -392, 126, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -392, 127, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -392, 128, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -393, 126, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -393, 127, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -394, 125, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -394, 126, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -394, 127, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -394, 128, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -395, 126, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -395, 127, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -396, 125, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -396, 126, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -396, 127, 511).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -396, 128, 511).getBlock().setType(Material.GLASS);
+		if(!isFreezeTag()) {
+			new Location(Bukkit.getWorld(this.getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -392, 126, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -392, 127, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -392, 128, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -393, 126, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -393, 127, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -394, 125, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -394, 126, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -394, 127, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -394, 128, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -395, 126, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -395, 127, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -396, 125, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -396, 126, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -396, 127, 511).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -396, 128, 511).getBlock().setType(Material.GLASS);
+			
+			new Location(Bukkit.getWorld(this.getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -392, 126, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -392, 127, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -392, 128, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -393, 126, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -393, 127, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -394, 125, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -394, 126, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -394, 127, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -394, 128, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -395, 126, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -395, 127, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -396, 125, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -396, 126, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -396, 127, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -396, 128, 409).getBlock().setType(Material.GLASS);
+			clearStars();
+		}
 		
-		new Location(Bukkit.getWorld(this.getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -392, 126, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -392, 127, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -392, 128, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -393, 126, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -393, 127, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -394, 125, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -394, 126, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -394, 127, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -394, 128, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -395, 126, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -395, 127, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -396, 125, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -396, 126, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -396, 127, 409).getBlock().setType(Material.GLASS);
-		new Location(Bukkit.getWorld(this.getName()), -396, 128, 409).getBlock().setType(Material.GLASS);
 		teams.clear();
-		clearStars();
+
 	}
 
 	private void clearStars() {
@@ -217,6 +238,14 @@ public class BattleGame extends Game<BattleRoom> {
 			
 			
 		}
+	}
+
+	public boolean isFreezeTag() {
+		return freezeTag;
+	}
+
+	public void setFreezeTag(boolean freezeTag) {
+		this.freezeTag = freezeTag;
 	}
 
 

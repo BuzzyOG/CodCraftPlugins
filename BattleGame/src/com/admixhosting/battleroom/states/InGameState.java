@@ -56,39 +56,42 @@ public class InGameState implements GameState<BattleRoom> {
 				if(duration == time) {
 					game.requestedTeams.clear();
 					game.getInLobby().clear();
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 511).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.AIR);
-					
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 409).getBlock().setType(Material.AIR);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.AIR);
+					if(!game.isFreezeTag()) {
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 511).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.AIR);
+						
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.AIR);
+					}
+
 					
 					for(Team t : getGame().getTeams()) {
 						for(TeamPlayer tp : t.getPlayers()) {
@@ -145,76 +148,90 @@ public class InGameState implements GameState<BattleRoom> {
 							Player p = Bukkit.getPlayer(tp.getName());
 							if(p != null) {
 								p.setLevel(duration);
-							}
-							if(t.getName().equalsIgnoreCase("Blue")) {
-								p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
-							} else {
-								p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 14));
-							}
-							p.getInventory().remove(Material.WOOL);
-							if(t.getName().equalsIgnoreCase("Blue")) {
-								p.getInventory().setItem(8, new ItemStack(Material.WOOL, 1, (short) 11));
-								p.updateInventory();
-							} else {
-								p.getInventory().setItem(8, new ItemStack(Material.WOOL, 1, (short) 14));
-								p.updateInventory();
-							}
-							if(t.getName().equalsIgnoreCase("Blue")) {
-								if(getGame().getPlugin().checkBlue(p)) {
-									inHoldB = true;
+								if(t.getName().equalsIgnoreCase("Blue")) {
+									if(bp.getFrozen() || bp.isPermfrozen()) {
+										p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 3));
+									} else {
+										p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
+									}
+								} else {
+									if(bp.getFrozen() || bp.isPermfrozen()) {
+										p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 6));
+									} else {
+										p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 14));
+									}
+
 								}
-								if(bp.getFrozen() || bp.isPermfrozen()) {
-									blueF++;
+								p.getInventory().remove(Material.WOOL);
+								if(t.getName().equalsIgnoreCase("Blue")) {
+									p.getInventory().setItem(8, new ItemStack(Material.WOOL, 1, (short) 11));
+									p.updateInventory();
+								} else {
+									p.getInventory().setItem(8, new ItemStack(Material.WOOL, 1, (short) 14));
+									p.updateInventory();
 								}
-								blue++;
-							} else {
-								if(getGame().getPlugin().checkRed(p)) {
-									inHoldR = true;
+								if(t.getName().equalsIgnoreCase("Blue")) {
+									if(getGame().getPlugin().checkBlue(p)) {
+										inHoldB = true;
+									}
+									if(bp.getFrozen() || bp.isPermfrozen()) {
+										blueF++;
+									}
+									blue++;
+								} else {
+									if(getGame().getPlugin().checkRed(p)) {
+										inHoldR = true;
+									}
+									if(bp.getFrozen() || bp.isPermfrozen()) {
+										redF++;
+									}
+									red++;
 								}
-								if(bp.getFrozen() || bp.isPermfrozen()) {
-									redF++;
-								}
-								red++;
 							}
+							
 							
 						}
 					}
 					if(!inHoldB) {
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.GLASS);
+						if(!game.isFreezeTag()) {
+							new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.GLASS);
+						}
+
 					}
 					if(!inHoldR) {
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 409).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.GLASS);
-
+						if(!game.isFreezeTag()) {
+							new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.GLASS);
+						}
 					}
 					ScoreBoard sb = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
 					sb.getObjectiveForGame(getGame()).setDisplayName(getId() + ": " + duration);
@@ -257,39 +274,42 @@ public class InGameState implements GameState<BattleRoom> {
 					Bukkit.getPluginManager().callEvent(event1);
 					Bukkit.broadcastMessage(event1.getWinMessage());
 					getGame().setState(new LobbyState(getGame()));
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 409).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.GLASS);
-					
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 511).getBlock().setType(Material.GLASS);
-					new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.GLASS);
+					if(!game.isFreezeTag()) {
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 409).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.GLASS);
+						
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -393, 126, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -393, 127, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 125, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 126, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 127, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -394, 128, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -395, 126, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -395, 127, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.GLASS);
+					}
+
 				}
 			}
 		};
