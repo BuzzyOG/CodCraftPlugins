@@ -135,7 +135,7 @@ public class Lazer extends Gun {
 		if(event instanceof PlayerInteractEvent) {
 			
 				GameManager gm = plugin2.api.getModuleForClass(GameManager.class);
-				Game<?> g = gm.getGameWithPlayer(p);
+				final Game<?> g = gm.getGameWithPlayer(p);
 				if(g != null) {
 					if(g.getPlugin() == plugin2) {
 						BattlePlayer bp = (BattlePlayer) g.findTeamWithPlayer(p).findPlayer(p);
@@ -149,7 +149,7 @@ public class Lazer extends Gun {
 								bp.setToMove(p.getEyeLocation().getDirection().multiply(1));
 							}
 						} else {
-							Entity proj;
+							Entity proj = null;
 							if(!bp.medic) {
 								if(!reloads.containsKey(p.getName())) {
 									if(p.hasPermission("battleroom.diamond")) {
@@ -161,6 +161,7 @@ public class Lazer extends Gun {
 												Vector vec = p.getEyeLocation().getDirection();
 												plugin2.firework.put(proj1.getUniqueId(), vec.multiply(2));
 												proj1.setVelocity(vec.multiply(2));
+												lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj1, Sound.BLAZE_HIT);
 											}
 										}, 6);
 										p.setExp((float) .9);
@@ -177,7 +178,7 @@ public class Lazer extends Gun {
 									Vector vec = p.getEyeLocation().getDirection();
 									plugin2.firework.put(proj.getUniqueId(), vec.multiply(2));
 									proj.setVelocity(vec.multiply(2));
-									lazerEffects(p, Color.BLUE, proj, Sound.GHAST_FIREBALL);  // I think this is the blue team?
+									lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj, Sound.GHAST_FIREBALL);  // I think this is the blue team?
 								} 
 
 							} else {
@@ -193,6 +194,7 @@ public class Lazer extends Gun {
 												Vector vec = p.getEyeLocation().getDirection();
 												plugin2.firework.put(proj1.getUniqueId(), vec.multiply(2));
 												proj1.setVelocity(vec.multiply(2));
+												lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj1, Sound.BLAZE_HIT);
 											}
 										}, 6);
 									} else if(p.hasPermission("battleroom.repeater")) {
@@ -205,7 +207,7 @@ public class Lazer extends Gun {
 									proj = (Snowball) p.launchProjectile(Snowball.class);
 									plugin2.firework.put(proj.getUniqueId(), p.getEyeLocation().getDirection().multiply(3));
 									proj.setVelocity(p.getEyeLocation().getDirection().multiply(3));
-									lazerEffects(p, Color.RED, proj, Sound.BLAZE_HIT); // I think this is the red team?
+									lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj, Sound.BLAZE_HIT); // I think this is the red team?
 								}
 
 
@@ -229,36 +231,34 @@ public class Lazer extends Gun {
 	
 	public void lazerEffects(final Player p, final Color color, final Entity e, Sound sound){
 		
-	      p.getWorld().playSound(p.getLocation(), sound, 3.0F, 0.5F);
+		p.getWorld().playSound(p.getLocation(), sound, 3.0F, 0.5F);
 	      
-	      		    int laserTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin2, new Runnable(){
-					public void run(){
-			  			   FireworkEffectPlayer fplayer = new FireworkEffectPlayer();
-			  			   try {
-			  				   fplayer.playFirework(p.getWorld(), e.getLocation(),
-			  						   FireworkEffect.builder().with(Type.BURST).withColor(color).build());
-			  			   } catch (IllegalArgumentException e) {
-			  				   e.printStackTrace();
-			  			   } catch (Exception e) {
-			  				   e.printStackTrace();
-				    	       } 
-					}
-			}, 2L, 0L);
+	    int laserTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin2, new Runnable(){
+	    	public void run(){
+						
+	    		FireworkEffectPlayer fplayer = new FireworkEffectPlayer();
+			  	try {
+			  		fplayer.playFirework(p.getWorld(), e.getLocation(), FireworkEffect.builder().with(Type.BURST).withColor(color).build());
+			  	} catch (IllegalArgumentException e) {
+			  		e.printStackTrace();
+			  	} catch (Exception e) {
+			  	  e.printStackTrace();
+				} 
+	    	}
+		}, 2L, 1L);
  
-	      laserFwTasks.add(laserTask);
+	    laserFwTasks.add(laserTask);
 	      
-			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin2, new Runnable() {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin2, new Runnable() {
 				 
-		  		   public void run() 
-		  		   {
-		  			if (laserFwTasks.size() > 0){
-			  			Bukkit.getServer().getScheduler().cancelTask(laserFwTasks.get(laserFwTasks.size()-1));
-			  			laserFwTasks.remove(laserFwTasks.get(laserFwTasks.size()-1));
-		  			}                                                                 
+			public void run() {
+				if (laserFwTasks.size() > 0){
+					Bukkit.getServer().getScheduler().cancelTask(laserFwTasks.get(laserFwTasks.size()-1));
+			  		laserFwTasks.remove(laserFwTasks.get(laserFwTasks.size()-1));
+		  		}                                                                 
 		                                                                         
-		  		   }
-			 }
-		     , 20L);
+			}
+		}, 20L);
 	}
 
 	@Override

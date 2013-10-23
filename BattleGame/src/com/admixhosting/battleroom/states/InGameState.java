@@ -270,7 +270,7 @@ public class InGameState implements GameState {
 					}
 					
 					Bukkit.getPluginManager().callEvent(event1);
-					Bukkit.broadcastMessage(event1.getWinMessage());
+					Bukkit.broadcastMessage(game.getName() + "has finished!");
 					game.setState(new LobbyState(getGame()));
 					if(!game.isFreezeTag()) {
 						/*new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
