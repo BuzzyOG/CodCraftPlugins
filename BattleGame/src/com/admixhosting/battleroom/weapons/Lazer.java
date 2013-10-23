@@ -1,11 +1,17 @@
 package com.admixhosting.battleroom.weapons;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -23,12 +29,14 @@ import com.CodCraft.api.model.weapon.MethodType;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.modules.Weapons;
 import com.admixhosting.battleroom.BattleRoom;
+import com.admixhosting.battleroom.FireworkEffectPlayer;
 import com.admixhosting.battleroom.game.BattlePlayer;
 
 public class Lazer extends Gun {
 
 	private BattleRoom plugin2;
 	public Map<String, BukkitTask> reloads = new HashMap<String, BukkitTask>();
+	List <Integer> laserFwTasks = new ArrayList<Integer>();
 
 	public Lazer(String name, Weapons plugin, BattleRoom plugin2) {
 		super(name, plugin);
@@ -169,7 +177,8 @@ public class Lazer extends Gun {
 									Vector vec = p.getEyeLocation().getDirection();
 									plugin2.firework.put(proj.getUniqueId(), vec.multiply(2));
 									proj.setVelocity(vec.multiply(2));
-								}
+									lazerEffects(p, Color.BLUE, proj, Sound.GHAST_FIREBALL);  // I think this is the blue team?
+								} 
 
 							} else {
 								if(!reloads.containsKey(p.getName())) {
@@ -196,6 +205,7 @@ public class Lazer extends Gun {
 									proj = (Snowball) p.launchProjectile(Snowball.class);
 									plugin2.firework.put(proj.getUniqueId(), p.getEyeLocation().getDirection().multiply(3));
 									proj.setVelocity(p.getEyeLocation().getDirection().multiply(3));
+									lazerEffects(p, Color.RED, proj, Sound.BLAZE_HIT); // I think this is the red team?
 								}
 
 
@@ -215,6 +225,40 @@ public class Lazer extends Gun {
 
 		}
 
+	}
+	
+	public void lazerEffects(final Player p, final Color color, final Entity e, Sound sound){
+		
+	      p.getWorld().playSound(p.getLocation(), sound, 3.0F, 0.5F);
+	      
+	      		    int laserTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin2, new Runnable(){
+					public void run(){
+			  			   FireworkEffectPlayer fplayer = new FireworkEffectPlayer();
+			  			   try {
+			  				   fplayer.playFirework(p.getWorld(), e.getLocation(),
+			  						   FireworkEffect.builder().with(Type.BURST).withColor(color).build());
+			  			   } catch (IllegalArgumentException e) {
+			  				   e.printStackTrace();
+			  			   } catch (Exception e) {
+			  				   e.printStackTrace();
+				    	       } 
+					}
+			}, 2L, 0L);
+ 
+	      laserFwTasks.add(laserTask);
+	      
+			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin2, new Runnable() {
+				 
+		  		   public void run() 
+		  		   {
+		  			if (laserFwTasks.size() > 0){
+			  			Bukkit.getServer().getScheduler().cancelTask(laserFwTasks.get(laserFwTasks.size()-1));
+			  			laserFwTasks.remove(laserFwTasks.get(laserFwTasks.size()-1));
+		  			}                                                                 
+		                                                                         
+		  		   }
+			 }
+		     , 20L);
 	}
 
 	@Override
