@@ -508,6 +508,7 @@ public class NewListener implements Listener {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void updatesegment(Player p, Segment seg, Letter let) {
 		p.sendBlockChange(seg.loc1, 35, let.block1);
 		p.sendBlockChange(seg.loc2, 35, let.block2);

@@ -28,9 +28,9 @@ public class C4Test extends Weapon {
 	public C4Test(String name, Weapons plugin) {
 		super(name);
 		this.plugin = plugin;
-		addGame(plugin.ffa);
-		addGame(plugin.TDM);
-		addGame(plugin.Infected);
+		///addGame(plugin.ffa);
+		//addGame(plugin.TDM);
+		//addGame(plugin.Infected);
 		putAction(Material.STICK, Action.LEFT_CLICK_AIR, MethodType.USE_WEAPON);
 		putAction(Material.STICK, Action.LEFT_CLICK_BLOCK, MethodType.USE_WEAPON);
 		putAction(Material.STICK, Action.RIGHT_CLICK_BLOCK, MethodType.ON_PLACE);
@@ -107,7 +107,7 @@ public class C4Test extends Weapon {
 	}
 
 	@Override
-	public void onDamage(Player p, Material mar, Action action, Event event) {
+	public void onDamage(Player hurt, Player hurter, Material mar, Action action, Event event) {
 		// TODO Auto-generated method stub
 		
 	}

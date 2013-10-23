@@ -14,7 +14,7 @@ import com.codcraft.lobby.LobbyModule;
 import com.codcraft.tdm.CodCraftTDM;
 import com.codcraft.tdm.TDMGame;
 
-public class InGameState implements GameState<CodCraftTDM> {
+public class InGameState implements GameState {
 
 	private TDMGame game;
 	private int duration;
@@ -48,8 +48,8 @@ public class InGameState implements GameState<CodCraftTDM> {
 			public void run() {
 				if(duration >= 1) {
 					duration--;
-					LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
-			          ScoreBoard SB = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
+					LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
+			          ScoreBoard SB = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
 			          lm.UpdateSign(lm.getLobby(InGameState.this.getGame().getName()));
 			          int seconds = InGameState.this.getGame().getCurrentState().getTimeLeft() % 60;
 			          String seconds1 = "";
@@ -81,13 +81,13 @@ public class InGameState implements GameState<CodCraftTDM> {
 	}
 
 	@Override
-	public void setGame(Game<CodCraftTDM> game) {
+	public void setGame(Game<?> game) {
 		this.game = (TDMGame) game;
 		
 	}
 
 	@Override
-	public Game<CodCraftTDM> getGame() {
+	public Game<?> getGame() {
 		return game;
 	}
 

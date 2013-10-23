@@ -15,7 +15,6 @@ import com.CodCraft.api.model.Team;
 import com.CodCraft.api.modules.GameManager;
 import com.admixhosting.battleroom.BattleRoom;
 import com.admixhosting.battleroom.game.BattleGame;
-import com.admixhosting.battleroom.game.BattleTeam;
 import com.admixhosting.battleroom.states.LobbyState;
 
 public class TeamCommand implements CommandExecutor {
@@ -84,7 +83,7 @@ public class TeamCommand implements CommandExecutor {
 							} else {
 								p.sendMessage("Team switched!");
 								game.requestedTeams.put(p.getName(), Team1);
-								p.teleport(((BattleTeam)Team1).getSpawn());
+								p.teleport(Team1.getSpawn());
 								if(Team1.getName().equalsIgnoreCase("Blue")) {
 									p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
 								} else {

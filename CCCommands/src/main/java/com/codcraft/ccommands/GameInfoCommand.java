@@ -2,6 +2,7 @@ package com.codcraft.ccommands;
 
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
+import com.CodCraft.api.model.hook.Hook;
 import com.CodCraft.api.modules.GameManager;
 
 public class GameInfoCommand implements CommandExecutor {
@@ -63,6 +65,17 @@ public class GameInfoCommand implements CommandExecutor {
 						sender.sendMessage("Current State: "+g.getCurrentState().getId()+ " Time Left: "+ g.getCurrentState().getTimeLeft());
 					}
 					sender.sendMessage("Round: " + g.getRound());
+					String hooks = "Hooks: ";
+					for(Hook hook : g.getHooks()) {
+						if(hook.isEnabled()) {
+							hooks = hooks + ChatColor.GREEN + hook.getName();
+						} else {
+							hooks = hooks + ChatColor.RED + hook.getName();
+						}
+						hooks = hooks + ChatColor.WHITE + ", ";
+					}
+					sender.sendMessage(hooks);
+					sender.sendMessage("Current Map: " + g.getCurrentmap());
 					return true;
 				}
 			}

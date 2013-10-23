@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.codcraft</groupId>
+  <artifactId>CodCraftGame</artifactId>
+  <version>0.0.001</version>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source/>
+          <target/>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <parent>
+  	<groupId>com.CodCraft</groupId>
+  	<artifactId>CodCraftPlugins</artifactId>
+  	<version>${codcraft.plugin.version}</version>
+  </parent>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.codcraft</groupId>
+  		<artifactId>CodCraftPlayer</artifactId>
+  		<version>0.0.001</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.codcraft</groupId>
+  		<artifactId>Lobby</artifactId>
+  		<version>0.0.001</version>
+  	</dependency>
+  </dependencies>
+</project>

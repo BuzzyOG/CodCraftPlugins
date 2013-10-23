@@ -110,10 +110,10 @@ public class CodCraftInfected extends CCGamePlugin {
 	
 	
 	@Override
-	public void makegame(String name) {
+	public void makegame(String[] name) {
 		GameManager manger = this.api.getModuleForClass(GameManager.class);
 		InfectedGame game = new InfectedGame(this);
-	    game.setName(name);
+	    game.setName(name[0]);
 	    manger.registerGame(game);
 	    Bukkit.createWorld(new WorldCreator(game.getName()));
 	}

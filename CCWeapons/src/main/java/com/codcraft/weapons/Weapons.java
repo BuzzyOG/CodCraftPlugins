@@ -16,7 +16,11 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.CodCraft.api.CCAPI;
 import com.CodCraft.api.model.Game;
+import com.CodCraft.api.model.weapon.Mag;
+import com.CodCraft.api.modules.GameManager;
+import com.CodCraft.api.services.CCGamePlugin;
 import com.codcraft.cac.Cac;
+import com.codcraft.codcraft.game.CodCraftGame;
 import com.codcraft.ffa.CodCraftFFA;
 import com.codcraft.infected.CodCraftInfected;
 import com.codcraft.tdm.CodCraftTDM;
@@ -50,7 +54,7 @@ public class Weapons extends JavaPlugin {
 			getServer().getPluginManager().disablePlugin(this);
 		}
 		cac = (Cac) cccac;
-		Load();
+		
 		getServer().getPluginManager().registerEvents(new WeaponsListener(this), this);
 		getServer().getPluginManager().registerEvents(new SniperWeapon(this), this);
 		getServer().getPluginManager().registerEvents(new C4(this), this);
@@ -74,32 +78,56 @@ public class Weapons extends JavaPlugin {
 		} else {
 			this.TDM = (CodCraftTDM) TDM;
 		}
-		getCommand("vote").setExecutor(new VoteCommand(this));
+		Load();
 	}
 	
 	private void Load() {
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("./plugins/CCWeapon/config.yml"));
+		com.CodCraft.api.modules.Weapons weapons = api.getModuleForClass(com.CodCraft.api.modules.Weapons.class);
 		for(String WeaponName : config.getConfigurationSection("weapons").getKeys(false)) {
-			Weapon weap = new Weapon(WeaponName);
+			//Weapon weap = new Weapon(WeaponName);
+			
 			String s = config.getString("weapons."+WeaponName+".CaC");
 			String permisison = config.getString("weapons." + WeaponName + "permission");
+
+			Material mat = Material.valueOf(config.getString("weapons."+WeaponName+".Mat"));
+			Action act = Action.valueOf(config.getString("weapons."+WeaponName+".Action"));
+			Integer ammo = Integer.parseInt(config.getString("weapons."+WeaponName+".Ammo"));
+			Integer reloads = Integer.parseInt(config.getString("weapons."+WeaponName+".Reloads"));
+			Integer reloadtime = Integer.parseInt(config.getString("weapons."+WeaponName+".ReloadTime"));
+			Integer damage = Integer.parseInt(config.getString("weapons."+WeaponName+".Damage"));
+			Integer rpm = Integer.parseInt(config.getString("weapons."+WeaponName+".Rpm"));
+			Long blife = Long.parseLong(config.getString("weapons."+WeaponName+".Blife"));
+			DefaultWeapon weapon = new DefaultWeapon(WeaponName, weapons, mat, rpm, 3, damage, new Mag(Material.SNOW_BALL, ammo ), blife, getGames(), reloadtime, reloads);
+			System.out.println(weapon.getReloadtime());
+			System.out.println(weapon.getReloads());
 			if(s.equalsIgnoreCase("Weapon")) {
-				cac.weapons.put(weap.getName(), permisison);
+				cac.weapons.put(weapon.getName(), permisison);
 			}
-			weap.setMat(Material.valueOf(config.getString("weapons."+WeaponName+".Mat")));
-			weap.setAction(Action.valueOf(config.getString("weapons."+WeaponName+".Action")));
-			weap.setAmmo(Integer.parseInt(config.getString("weapons."+WeaponName+".Ammo")));
-			weap.setReloads(Integer.parseInt(config.getString("weapons."+WeaponName+".Reloads")));
-			weap.setReloadTime(Integer.parseInt(config.getString("weapons."+WeaponName+".ReloadTime")));
-			weap.setDamage(Integer.parseInt(config.getString("weapons."+WeaponName+".Damage")));
-			weap.setRpm(Integer.parseInt(config.getString("weapons."+WeaponName+".Rpm")));
-			getLogger().info(weap.getName());
-			getLogger().info(""+weap.getMat());
-			getLogger().info(""+weap.getAction());
-			getLogger().info(""+weap.getAmmo());
-			getLogger().info(""+weap.getDamage());
-			weapons.add(weap);
+			weapons.addWeapon(weapon);
+			//weapons.add(weap);
 		}
+	}
+	
+	private List<CCGamePlugin> getGames() {
+		List<CCGamePlugin> games = new ArrayList<>();
+		/*for(Game<?> g : api.getModuleForClass(GameManager.class).getAllGames()) {
+			if(g instanceof CodCraftGame<?>) {
+				games.add(g.getPlugin());
+			}
+		}*/
+		if(ffa != null) {
+			games.add(ffa);
+		}
+		if(TDM != null){
+			games.add(TDM);
+		}
+		if(Infected != null){
+			games.add(Infected);
+		}
+
+
+		return games;
 	}
 
 	public boolean checkIfGameIsInstanceOfPlugin(Game<?> g) {

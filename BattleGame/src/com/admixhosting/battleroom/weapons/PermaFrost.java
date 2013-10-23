@@ -57,7 +57,7 @@ public class PermaFrost extends Weapon {
 	@Override
 	public void onPlace(Player p, Material mat, Action action, Location loc) {}
 	@Override
-	public void onDamage(Player p, Material mar, Action action, Event event) {}
+	public void onDamage(Player hurt, Player hurter, Material mar, Action action, Event event) {}
 
 	@Override
 	public void useWeapon(Player p, Material mat, Action action, Event event) {
@@ -82,7 +82,7 @@ public class PermaFrost extends Weapon {
 							Snowball proj = (Snowball) p.launchProjectile(Snowball.class);
 							Vector vec = p.getEyeLocation().getDirection();
 							plugin.firework.put(proj.getUniqueId(), vec.multiply(2));
-							proj.setVelocity(vec.multiply(2));
+							proj.setVelocity(vec.multiply(4));
 							shots.put(proj, p.getName());
 						}
 					}

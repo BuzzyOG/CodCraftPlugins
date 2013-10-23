@@ -90,13 +90,13 @@ public class UHCGame extends Game<UHC> {
 	}
 
 	@Override
-	public void preStateSwitch(GameState<UHC> state) {
+	public void preStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void postStateSwitch(GameState<UHC> state) {
+	public void postStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}

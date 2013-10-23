@@ -101,13 +101,13 @@ public class CARGame extends Game<CopsARobber> {
 	 * Unused
 	 */
 	@Override
-	public void preStateSwitch(GameState<CopsARobber> state) {
+	public void preStateSwitch(GameState state) {
 	}
 	/**
 	 * Unused
 	 */
 	@Override
-	public void postStateSwitch(GameState<CopsARobber> state) {
+	public void postStateSwitch(GameState state) {
 	}
 	/**
 	 * Detects which team won the game

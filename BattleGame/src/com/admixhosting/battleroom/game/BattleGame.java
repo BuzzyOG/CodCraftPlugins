@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.WorldCreator;
@@ -17,6 +15,9 @@ import org.bukkit.entity.Player;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
 import com.CodCraft.api.model.Team;
+import com.CodCraft.api.model.hook.Hook;
+import com.CodCraft.api.model.hook.Rotation;
+import com.CodCraft.api.model.hook.TeamHook;
 import com.CodCraft.api.modules.ScoreBoard;
 import com.admixhosting.battleroom.BattleRoom;
 import com.admixhosting.battleroom.states.InGameState;
@@ -26,47 +27,43 @@ public class BattleGame extends Game<BattleRoom> {
 	
 	private List<String> inLobby = new ArrayList<>();
 	public Map<String, Team> requestedTeams = new HashMap<String, Team>();
+	/*public Map<String, Location> bluespawn = new HashMap<>();
+	public Map<String, Location> redspawn = new HashMap<>();*/
 	private List<Location> stars = new ArrayList<>();
-	private final int xCenter = -394;
-	private final int yCenter = 127;
-	private final int zCenter = 460;
+	private final int xCenter = 578;
+	private final int yCenter = 122;
+	private final int zCenter = -369;
 	private boolean freezeTag;
 
 	public BattleGame(BattleRoom instance) {
 		super(instance);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void initialize() {
+		
 		WorldCreator creator = new WorldCreator(getName());
+		setCurrentmap("Battle");
+		addHook(new TeamHook(this));
+		if(isFreezeTag()) {
+			
+			addHook(new Rotation(this));
+		}
 
 		Bukkit.createWorld(creator);
-		BattleTeam Blue;
-		if(isFreezeTag()) {
-			Blue = new BattleTeam("Blue", new Location(
-					Bukkit.getWorld(getName()), -357, 57, -400));
-		} else {
-			Blue = new BattleTeam("Blue", new Location(
-					Bukkit.getWorld(getName()), -393, 125, 520));
+		/*YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("./plugins/FreezeTag/spawns.yml"));
+		for(String map : config.getConfigurationSection("blue").getKeys(false)) {
+			int x = Integer.parseInt(config.getString("blue."+map+".x"));
+			int y = Integer.parseInt(config.getString("blue."+map+".y"));
+			int z = Integer.parseInt(config.getString("blue."+map+".z"));
+			bluespawn.put(map, new Location(Bukkit.getWorld(getName()), x, y, z));
 		}
-		
-		Blue.setMaxPlayers(16);
-		Blue.setColorNew(Color.BLUE);
-		Blue.setColor(ChatColor.BLUE);
-		addTeam(Blue);
-		BattleTeam Red;
-		if(isFreezeTag()) {
-			Red = new BattleTeam("Red", new Location(
-					Bukkit.getWorld(getName()), -357, 57, -276));
-		} else {
-			Red = new BattleTeam("Red", new Location(
-					Bukkit.getWorld(getName()), -394, 125, 400));
-		}
-		Red.setColorNew(Color.RED);
-		Red.setColor(ChatColor.RED);
-		Red.setMaxPlayers(16);
-		addTeam(Red);
+		for(String map : config.getConfigurationSection("red").getKeys(false)) {
+			int x = Integer.parseInt(config.getString("red."+map+".x"));
+			int y = Integer.parseInt(config.getString("red."+map+".y"));
+			int z = Integer.parseInt(config.getString("red."+map+".z"));
+			redspawn.put(map, new Location(Bukkit.getWorld(getName()), x, y, z));
+		*/
 		knownStates.put(new LobbyState(this).getId(), new LobbyState(this));
 		knownStates.put(new InGameState(this).getId(), new InGameState(this));
 		setState(new LobbyState(this));
@@ -96,26 +93,26 @@ public class BattleGame extends Game<BattleRoom> {
 	}
 
 	public Location getRedSpawn() {
-		return ((BattleTeam) getTeams().get(1)).getSpawn();
+		return getTeams().get(1).getSpawn();
 	}
 
 	public Location getBlueSpawn() {
-		return ((BattleTeam) getTeams().get(0)).getSpawn();
+		return getTeams().get(0).getSpawn();
 	}
 
 	@Override
-	public void preStateSwitch(GameState<BattleRoom> state) {
+	public void preStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void postStateSwitch(GameState<BattleRoom> state) {
+	public void postStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}
 	
-	public boolean checkState(GameState<BattleRoom> state) {
+	public boolean checkState(GameState state) {
 		if(getCurrentState().getId().equalsIgnoreCase(state.getId())) {
 			return true;
 		}
@@ -124,8 +121,13 @@ public class BattleGame extends Game<BattleRoom> {
 
 	@Override
 	public void deinitialize() {
+		for(Hook hook : getHooks()) {
+			hook.deinitialize();
+			
+		}
+		getHooks().clear();
 		if(!isFreezeTag()) {
-			new Location(Bukkit.getWorld(this.getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
+			/*new Location(Bukkit.getWorld(this.getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
 			new Location(Bukkit.getWorld(this.getName()), -392, 126, 511).getBlock().setType(Material.GLASS);
 			new Location(Bukkit.getWorld(this.getName()), -392, 127, 511).getBlock().setType(Material.GLASS);
 			new Location(Bukkit.getWorld(this.getName()), -392, 128, 511).getBlock().setType(Material.GLASS);
@@ -157,7 +159,7 @@ public class BattleGame extends Game<BattleRoom> {
 			new Location(Bukkit.getWorld(this.getName()), -396, 125, 409).getBlock().setType(Material.GLASS);
 			new Location(Bukkit.getWorld(this.getName()), -396, 126, 409).getBlock().setType(Material.GLASS);
 			new Location(Bukkit.getWorld(this.getName()), -396, 127, 409).getBlock().setType(Material.GLASS);
-			new Location(Bukkit.getWorld(this.getName()), -396, 128, 409).getBlock().setType(Material.GLASS);
+			new Location(Bukkit.getWorld(this.getName()), -396, 128, 409).getBlock().setType(Material.GLASS);*/
 			clearStars();
 		}
 		

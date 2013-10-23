@@ -1,7 +1,7 @@
 package com.admixhosting.battleroom.states;
 
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,19 +15,17 @@ import com.CodCraft.api.model.GameState;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.ScoreBoard;
-import com.admixhosting.battleroom.BattleRoom;
 import com.admixhosting.battleroom.game.BattleGame;
 import com.admixhosting.battleroom.game.BattlePlayer;
-import com.admixhosting.battleroom.game.BattleTeam;
 import com.codcraft.lobby.Lobby;
 import com.codcraft.lobby.LobbyModule;
 
-public class LobbyState implements GameState<BattleRoom> {
+public class LobbyState implements GameState {
 
 	private int duration;
 	private BattleGame game;
 	private BukkitTask task;
-	private final int min_players = 3;
+	private final int min_players = 0;
 
 	public LobbyState(Game<?> g) {
 		this.game = (BattleGame) g;
@@ -56,12 +54,12 @@ public class LobbyState implements GameState<BattleRoom> {
 			@Override
 			public void run() {
 				//ScoreBoard SB = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
-				LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+				LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
 				Lobby l = lm.getLobby(game.getName());
 				for(String s : game.getInLobby()) {
 					Player p = Bukkit.getPlayer(s);
 					if(p != null) {
-						if(game.isFreezeTag()) {
+						/*if(game.isFreezeTag()) {
 							if(game.requestedTeams.get(s).getName().equalsIgnoreCase("Blue")) {
 								if(!game.getPlugin().checkBlueFreeze(p)) {
 									p.teleport(((BattleTeam)game.requestedTeams.get(s)).getSpawn());
@@ -71,7 +69,7 @@ public class LobbyState implements GameState<BattleRoom> {
 									p.teleport(((BattleTeam)game.requestedTeams.get(s)).getSpawn());
 								}
 							}
-						}
+						}*/
 					}
 
 
@@ -86,7 +84,7 @@ public class LobbyState implements GameState<BattleRoom> {
 				if(players > min_players) {
 					duration--;
 					
-					ScoreBoard sb = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
+					ScoreBoard sb = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
 					int red = 0;
 					int blue = 0;
 					for(Entry<String, Team> en : game.requestedTeams.entrySet()) {
@@ -119,6 +117,17 @@ public class LobbyState implements GameState<BattleRoom> {
 					sb.setStringScoreForBoard("Blue", blue, getGame());
 					sb.setStringScoreForBoard("Blue_Frozen", 0, getGame());
 					if(duration == 0) {
+						if(game.getCurrentmap() == null) {
+							game.setCurrentmap("LoadingBay");
+						}
+						/*for(Team t : game.getTeams()) {
+							BattleTeam team = (BattleTeam) t; 
+							if(team.getName().equalsIgnoreCase("Blue")) {
+								team.setSpawn(game.bluespawn.get(game.getCurrentmap()));
+							} else {
+								team.setSpawn(game.redspawn.get(game.getCurrentmap()));
+							}
+						}*/
 						for(String s : game.getInLobby()) {
 							Player p = Bukkit.getPlayer(s);
 							if(p != null) {
@@ -177,13 +186,13 @@ public class LobbyState implements GameState<BattleRoom> {
 	}
 
 	@Override
-	public void setGame(Game<BattleRoom> game) {
+	public void setGame(Game<?> game) {
 		this.game = (BattleGame) game;
 		
 	}
 
 	@Override
-	public Game<BattleRoom> getGame() {
+	public Game<?> getGame() {
 		return game;
 	}
 

@@ -33,10 +33,10 @@ public class UHC extends CCGamePlugin {
 		//timer();
 	}
 	
-	public void makegame(String name) {
+	public void makegame(String[] name) {
 		GameManager gm = api.getModuleForClass(GameManager.class);
 		Game<?> game = new UHCGame(this);
-		game.setName(name);
+		game.setName(name[0]);
 		gm.registerGame(game);
 	}
 	@Override

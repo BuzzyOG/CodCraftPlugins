@@ -18,7 +18,6 @@ import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.GameManager;
-import com.codcraft.ccommands.PlayerDoSpawnEvent;
 import com.codcraft.lobby.event.PlayerEnterLobbyEvent;
 import com.codcraft.lobby.event.PlayerToLobbyEvent;
 
@@ -88,16 +87,7 @@ public class LobbyListener implements Listener {
 		
 	}
 	
-	@EventHandler
-	public void onDisbatch(PlayerDoSpawnEvent e) {
-		PlayerToLobbyEvent event = new PlayerToLobbyEvent(e.getPlayer());
-		Bukkit.getPluginManager().callEvent(event);
-		if(e.getGame() == null) {
-			return;
-		}
-	    LobbyModule lm = (LobbyModule)this.plugin.CCAPI.getModuleForClass(LobbyModule.class);
-	    lm.UpdateSign(lm.getLobby(e.getGame().getName()));
-	}
+
 	
 
 	@EventHandler

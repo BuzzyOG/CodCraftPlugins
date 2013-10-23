@@ -33,5 +33,10 @@
   		<artifactId>Lobby</artifactId>
   		<version>${codcraft.plugins.version}</version>
   	</dependency>
+  	<dependency>
+  		<groupId>com.codcraft</groupId>
+  		<artifactId>CodCraftGame</artifactId>
+  		<version>0.0.001</version>
+  	</dependency>
   </dependencies>
 </project>

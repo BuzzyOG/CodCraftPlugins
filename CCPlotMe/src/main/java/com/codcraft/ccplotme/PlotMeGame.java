@@ -36,13 +36,13 @@ public class PlotMeGame extends Game<PlotMe> {
 	}
 
 	@Override
-	public void preStateSwitch(GameState<PlotMe> state) {
+	public void preStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void postStateSwitch(GameState<PlotMe> state) {
+	public void postStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}

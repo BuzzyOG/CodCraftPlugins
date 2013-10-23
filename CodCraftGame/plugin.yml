@@ -1,0 +1,6 @@
+name: CodCraftGame
+main: com.codcraft.codcraft.CodCraftPlugin
+version: 0.0.001
+depend: [CodCraftAPI]
+commands:
+    vote: 

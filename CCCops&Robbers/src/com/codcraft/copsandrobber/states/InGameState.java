@@ -16,7 +16,7 @@ import com.codcraft.copsandrobber.CARGame;
 import com.codcraft.copsandrobber.CopsARobber;
 import com.codcraft.lobby.LobbyModule;
 
-public class InGameState implements GameState<CopsARobber> {
+public class InGameState implements GameState {
 	/**
 	 * Durration of how long the state runs for.
 	 */
@@ -132,7 +132,7 @@ public class InGameState implements GameState<CopsARobber> {
 	 * Sets the game
 	 */
 	@Override
-	public void setGame(Game<CopsARobber> game) {
+	public void setGame(Game<?> game) {
 		this.g = (CARGame) game;
 		
 	}

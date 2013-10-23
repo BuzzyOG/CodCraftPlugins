@@ -63,7 +63,7 @@ public class Hook extends Weapon {
 	}
 
 	@Override
-	public void onDamage(Player p, Material mar, Action action, Event event) {
+	public void onDamage(Player hurt, Player hurter, Material mar, Action action, Event event) {
 		// TODO Auto-generated method stub
 
 	}

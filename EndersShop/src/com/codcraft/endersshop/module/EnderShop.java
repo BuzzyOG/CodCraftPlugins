@@ -64,8 +64,8 @@ public class EnderShop extends CCModule {
 		items.remove(item);
 	}
 	
-	public boolean makeItem(String name, String itemName, int price, String permisison, Material mat, String boughtmessage, int position) {
-		DefaultItem item = new DefaultItem(name, itemName, price, mat , permisison, plugin);
+	public boolean makeItem(String name, String itemName, int price, String permisison, Material mat, String boughtmessage, int position, List<String> lore) {
+		DefaultItem item = new DefaultItem(name, itemName, price, mat , permisison, plugin, lore);
 		item.setBoughtm(boughtmessage);
 		item.setPosition(position);
 		return addItem(item);

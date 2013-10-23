@@ -21,13 +21,14 @@ public class DefaultItem extends Item {
 	private List<String> lore;
 	private EndersShop plugin;
 	
-	public DefaultItem(String name, String itemName, int price, Material mat, String permission, EndersShop plugin) {
+	public DefaultItem(String name, String itemName, int price, Material mat, String permission, EndersShop plugin, List<String> lore) {
 		super(name);
 		this.ItemName = itemName;
 		this.price = price;
 		this.permission = permission;
 		this.mat = mat;
 		this.plugin = plugin;
+		this.lore = lore;
 	}
 
 	public String getItemName(Player p) {
@@ -94,7 +95,6 @@ public class DefaultItem extends Item {
 		CCPlayerModule ccpm = plugin.api.getModuleForClass(CCPlayerModule.class);
 		CCPlayer ccp = ccpm.getPlayer(p);
 		if(!p.hasPermission(this.getPermision(p))) {
-			Bukkit.broadcastMessage(""+ccp.getCredits());
 			if(ccp.getCredits() >= this.getPrice(p)) {
 				ccp.removeCredits(getPrice(p));
 				this.onBought(p);

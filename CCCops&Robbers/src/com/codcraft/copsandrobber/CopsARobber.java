@@ -42,9 +42,9 @@ public class CopsARobber extends CCGamePlugin {
 	 * Method to make the game.
 	 */
 	@Override
-	public void makegame(String name) {
+	public void makegame(String[] args) {
 		CARGame game = new CARGame(this);
-		game.setName(name);
+		game.setName(args[0]);
 		api.getModuleForClass(GameManager.class).registerGame(game);
 	}
 

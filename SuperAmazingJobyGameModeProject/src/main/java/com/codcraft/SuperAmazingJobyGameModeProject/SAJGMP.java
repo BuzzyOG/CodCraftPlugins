@@ -83,9 +83,9 @@ public class SAJGMP extends CCGamePlugin {
 		}
 	}
 	@Override
-	public void makegame(String name) {
+	public void makegame(String[] name) {
 		GameModel game = new  GameModel(this);
-		game.setName(name);
+		game.setName(name[0]);
 		api.getModuleForClass(GameManager.class).registerGame(game);
 	}
 

@@ -7,7 +7,7 @@ import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
 import com.codcraft.lobby.LobbyModule;
 
-public class OnState implements GameState<CCMM> {
+public class OnState implements GameState {
 
 	private MapMaker game;
 	private BukkitTask task;
@@ -37,7 +37,7 @@ public class OnState implements GameState<CCMM> {
 			
 			@Override
 			public void run() {
-				LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+				LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
 				lm.UpdateSign(lm.getLobby(getGame().getName()));
 			}
 		};
@@ -45,12 +45,12 @@ public class OnState implements GameState<CCMM> {
 	}
 
 	@Override
-	public void setGame(Game<CCMM> game) {
+	public void setGame(Game<?> game) {
 		this.game = (MapMaker) game;
 	}
 
 	@Override
-	public Game<CCMM> getGame() {
+	public Game<?> getGame() {
 		return game;
 	}
 

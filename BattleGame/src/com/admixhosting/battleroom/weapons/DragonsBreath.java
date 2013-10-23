@@ -109,6 +109,6 @@ public class DragonsBreath extends Weapon {
 	public void onPlace(Player p, Material mat, Action action, Location loc) {}
 
 	@Override
-	public void onDamage(Player p, Material mar, Action action, Event event) {}
+	public void onDamage(Player hurt, Player hurter, Material mar, Action action, Event event) {}
 
 }

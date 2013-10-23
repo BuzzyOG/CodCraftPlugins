@@ -7,7 +7,7 @@ import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
 import com.codcraft.lobby.LobbyModule;
 
-public class PreGameState implements GameState<CCSSBB> {
+public class PreGameState implements GameState {
 	
 	public PreGameState(Game<?> g) {
 		this.game = (SSBB) g;
@@ -39,7 +39,7 @@ public class PreGameState implements GameState<CCSSBB> {
 			
 			@Override
 			public void run() {
-				LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+				LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
 				lm.UpdateSign(lm.getLobby(getGame().getName()));
 				
 			}
@@ -48,13 +48,13 @@ public class PreGameState implements GameState<CCSSBB> {
 	}
 
 	@Override
-	public void setGame(Game<CCSSBB> game) {
+	public void setGame(Game<?> game) {
 		this.game = (SSBB) game;
 		
 	}
 
 	@Override
-	public Game<CCSSBB> getGame() {
+	public Game<?> getGame() {
 		return game;
 	}
 

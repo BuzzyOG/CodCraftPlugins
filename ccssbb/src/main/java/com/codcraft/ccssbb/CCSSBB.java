@@ -52,9 +52,9 @@ public class CCSSBB extends CCGamePlugin {
 		return "[CCSSBB]";
 	}
 	
-	public void makegame(String name) {
+	public void makegame(String[] name) {
 		SSBB game = new SSBB(this);
-		game.setName(name);
+		game.setName(name[0]);
 		api.getModuleForClass(GameManager.class).registerGame(game);
 	}
 	private void loadmap() {

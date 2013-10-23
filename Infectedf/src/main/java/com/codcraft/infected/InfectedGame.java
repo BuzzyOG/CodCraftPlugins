@@ -32,13 +32,13 @@ public class InfectedGame extends Game<CodCraftInfected> {
 	
 
 	@Override
-	public void preStateSwitch(GameState<CodCraftInfected> state) {
+	public void preStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void postStateSwitch(GameState<CodCraftInfected> state) {
+	public void postStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}

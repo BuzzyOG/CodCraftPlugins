@@ -78,13 +78,13 @@ public class GameModel extends Game<SAJGMP> {
 	}
 
 	@Override
-	public void preStateSwitch(GameState<SAJGMP> state) {
+	public void preStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void postStateSwitch(GameState<SAJGMP> state) {
+	public void postStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}

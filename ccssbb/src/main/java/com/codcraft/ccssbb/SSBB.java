@@ -49,13 +49,13 @@ public class SSBB extends Game<CCSSBB> {
 	
 
 	@Override
-	public void preStateSwitch(GameState<CCSSBB> state) {
+	public void preStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void postStateSwitch(GameState<CCSSBB> state) {
+	public void postStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}

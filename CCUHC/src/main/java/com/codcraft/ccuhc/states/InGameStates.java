@@ -10,13 +10,13 @@ import com.codcraft.ccuhc.UHC;
 import com.codcraft.ccuhc.UHCGame;
 import com.codcraft.lobby.LobbyModule;
 
-public class InGameStates implements GameState<UHC> {
+public class InGameStates implements GameState {
 	
 	public InGameStates(Game<?> g) {
 		this.g = (UHCGame) g;
 	}
 
-	private Game<UHC> g;
+	private UHCGame g;
 	private String id = "Game";
 	private BukkitTask task;
 	
@@ -32,7 +32,7 @@ public class InGameStates implements GameState<UHC> {
 			
 			@Override
 			public void run() {
-				LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+				LobbyModule lm = g.getPlugin().api.getModuleForClass(LobbyModule.class);
 				lm.UpdateSign(lm.getLobby(getGame().getName()));
 				
 			}
@@ -41,13 +41,13 @@ public class InGameStates implements GameState<UHC> {
 	}
 
 	@Override
-	public void setGame(Game<UHC> game) {
-		this.g = game;
+	public void setGame(Game<?> game) {
+		this.g = (UHCGame) game;
 		
 	}
 
 	@Override
-	public Game<UHC> getGame() {
+	public Game<?> getGame() {
 		return g;
 	}
 

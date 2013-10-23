@@ -50,12 +50,12 @@ public class MapMaker extends Game<CCMM> {
 	}
 
 	@Override
-	public void preStateSwitch(GameState<CCMM> state) {
+	public void preStateSwitch(GameState state) {
 		
 	}
 
 	@Override
-	public void postStateSwitch(GameState<CCMM> state) {
+	public void postStateSwitch(GameState state) {
 		
 	}
 

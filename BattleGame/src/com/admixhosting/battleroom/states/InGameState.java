@@ -1,7 +1,6 @@
 package com.admixhosting.battleroom.states;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,13 +12,12 @@ import com.CodCraft.api.model.GameState;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.ScoreBoard;
-import com.admixhosting.battleroom.BattleRoom;
 import com.admixhosting.battleroom.game.BattleGame;
 import com.admixhosting.battleroom.game.BattlePlayer;
 import com.codcraft.lobby.Lobby;
 import com.codcraft.lobby.LobbyModule;
 
-public class InGameState implements GameState<BattleRoom> {
+public class InGameState implements GameState {
 
 	private int duration;
 	private BukkitTask task;
@@ -57,7 +55,7 @@ public class InGameState implements GameState<BattleRoom> {
 					game.requestedTeams.clear();
 					game.getInLobby().clear();
 					if(!game.isFreezeTag()) {
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.AIR);
+						/*new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.AIR);
 						new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 511).getBlock().setType(Material.AIR);
 						new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 511).getBlock().setType(Material.AIR);
 						new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 511).getBlock().setType(Material.AIR);
@@ -89,7 +87,7 @@ public class InGameState implements GameState<BattleRoom> {
 						new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 409).getBlock().setType(Material.AIR);
 						new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 409).getBlock().setType(Material.AIR);
 						new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 409).getBlock().setType(Material.AIR);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.AIR);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.AIR);*/
 					}
 
 					
@@ -118,7 +116,7 @@ public class InGameState implements GameState<BattleRoom> {
 										((BattlePlayer) tp).setFrozen(false);
 										((BattlePlayer) tp).setOnWall(false);
 										((BattlePlayer) tp).setOldLoc(null);
-										getGame().getPlugin().api.getModuleForClass(ScoreBoard.class).removePlayerFromScoreBoard(Bukkit.getPlayer(tp.getName()));
+										game.getPlugin().api.getModuleForClass(ScoreBoard.class).removePlayerFromScoreBoard(Bukkit.getPlayer(tp.getName()));
 										Bukkit.getPlayer(tp.getName()).getInventory().setHelmet(null);
 										p.performCommand("lobby");
 										p.getInventory().clear();
@@ -127,7 +125,7 @@ public class InGameState implements GameState<BattleRoom> {
 							}
 						}
 					}
-					LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+					LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
 					Lobby l = lm.getLobby(game.getName());
 
 					if(l == null) {
@@ -171,7 +169,7 @@ public class InGameState implements GameState<BattleRoom> {
 									p.updateInventory();
 								}
 								if(t.getName().equalsIgnoreCase("Blue")) {
-									if(getGame().getPlugin().checkBlue(p)) {
+									if(game.getPlugin().checkBlue(p)) {
 										inHoldB = true;
 									}
 									if(bp.getFrozen() || bp.isPermfrozen()) {
@@ -179,7 +177,7 @@ public class InGameState implements GameState<BattleRoom> {
 									}
 									blue++;
 								} else {
-									if(getGame().getPlugin().checkRed(p)) {
+									if(game.getPlugin().checkRed(p)) {
 										inHoldR = true;
 									}
 									if(bp.getFrozen() || bp.isPermfrozen()) {
@@ -194,7 +192,7 @@ public class InGameState implements GameState<BattleRoom> {
 					}
 					if(!inHoldB) {
 						if(!game.isFreezeTag()) {
-							new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
+							/*new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 511).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 511).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 511).getBlock().setType(Material.GLASS);
@@ -209,13 +207,13 @@ public class InGameState implements GameState<BattleRoom> {
 							new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 511).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 511).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 511).getBlock().setType(Material.GLASS);
-							new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.GLASS);*/
 						}
 
 					}
 					if(!inHoldR) {
 						if(!game.isFreezeTag()) {
-							new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
+							/*new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 409).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 409).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 409).getBlock().setType(Material.GLASS);
@@ -230,10 +228,10 @@ public class InGameState implements GameState<BattleRoom> {
 							new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 409).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 409).getBlock().setType(Material.GLASS);
 							new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 409).getBlock().setType(Material.GLASS);
-							new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.GLASS);
+							new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 409).getBlock().setType(Material.GLASS);*/
 						}
 					}
-					ScoreBoard sb = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
+					ScoreBoard sb = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
 					sb.getObjectiveForGame(getGame()).setDisplayName(getId() + ": " + duration);
 					sb.setStringScoreForBoard("Red", red, getGame());
 					sb.setStringScoreForBoard("Red_Frozen", redF, getGame());
@@ -273,9 +271,9 @@ public class InGameState implements GameState<BattleRoom> {
 					
 					Bukkit.getPluginManager().callEvent(event1);
 					Bukkit.broadcastMessage(event1.getWinMessage());
-					getGame().setState(new LobbyState(getGame()));
+					game.setState(new LobbyState(getGame()));
 					if(!game.isFreezeTag()) {
-						new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
+						/*new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);
 						new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 409).getBlock().setType(Material.GLASS);
 						new Location(Bukkit.getWorld(getGame().getName()), -392, 127, 409).getBlock().setType(Material.GLASS);
 						new Location(Bukkit.getWorld(getGame().getName()), -392, 128, 409).getBlock().setType(Material.GLASS);
@@ -307,7 +305,7 @@ public class InGameState implements GameState<BattleRoom> {
 						new Location(Bukkit.getWorld(getGame().getName()), -396, 125, 511).getBlock().setType(Material.GLASS);
 						new Location(Bukkit.getWorld(getGame().getName()), -396, 126, 511).getBlock().setType(Material.GLASS);
 						new Location(Bukkit.getWorld(getGame().getName()), -396, 127, 511).getBlock().setType(Material.GLASS);
-						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.GLASS);
+						new Location(Bukkit.getWorld(getGame().getName()), -396, 128, 511).getBlock().setType(Material.GLASS);*/
 					}
 
 				}
@@ -317,13 +315,13 @@ public class InGameState implements GameState<BattleRoom> {
 	}
 
 	@Override
-	public void setGame(Game<BattleRoom> game) {
+	public void setGame(Game<?> game) {
 		this.game = (BattleGame) game;
 		
 	}
 
 	@Override
-	public Game<BattleRoom> getGame() {
+	public Game<?> getGame() {
 		return game;
 	}
 

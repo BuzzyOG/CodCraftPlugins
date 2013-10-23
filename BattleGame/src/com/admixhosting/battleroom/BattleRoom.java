@@ -65,7 +65,6 @@ public class BattleRoom extends CCGamePlugin {
 		api.getModuleForClass(Weapons.class).addWeapon(new Lazer("Lazer", api.getModuleForClass(Weapons.class), this));
 		api.getModuleForClass(Weapons.class).addWeapon(new PermaFrost("PermaFrost", this));
 		api.getModuleForClass(Weapons.class).addWeapon(new DragonsBreath("DragonsBreath", this));
-		//System.out.println("TEST: "+api.getModuleForClass(Weapons.class).getWeapon("DragonsBreath").getActions(Material.FIRE));
 		api.getModuleForClass(Weapons.class).addWeapon(new Hook("Hook", this));
 		api.getModuleForClass(Weapons.class).addWeapon(new SaveYourSkin("SaveYourSkin", this));
 		api.getModuleForClass(Weapons.class).addWeapon(new CallMedic("CallMedic", this));
@@ -137,7 +136,7 @@ public class BattleRoom extends CCGamePlugin {
 									if(bp.getFrozen() == null) {
 										bp.setFrozen(true);
 									}
-									if(checkRed(p) || checkBlue(p)) {
+									if(checkBlueFreeze(p) || checkRedFreeze(p)) {
 										bp.setInBase(true);
 										bp.setToMove(null);
 										bp.setOnWall(false);
@@ -172,6 +171,7 @@ public class BattleRoom extends CCGamePlugin {
 									}*/
 									//Bukkit.broadcastMessage(bp.getName() + ": " + "Frozen: "+ bp.getFrozen() + " PermFrozen: " + bp.isPermfrozen());
 									if(bp.getFrozen() || bp.isPermfrozen()) {
+										p.setAllowFlight(true);
 										p.setFlying(true);
 										Location loc2 = bp.getFrozenpoint();
 										//Bukkit.broadcastMessage(bp.getName() + " is frozen");
@@ -302,8 +302,8 @@ public class BattleRoom extends CCGamePlugin {
 			return true;
 		}
 		//return isInside(p, -340, 70, -414, -416, 41, -388);
-		Location loc1 = new Location(p.getWorld(), -340, 70, -414);
-		Location loc2 = new Location(p.getWorld(), -416, 41, -388);
+		Location loc1 = new Location(p.getWorld(), 561, 116, -317);
+		Location loc2 = new Location(p.getWorld(), 594, 138, -283);
 		return isInside(p, loc1, loc2);
 	}
 
@@ -313,8 +313,8 @@ public class BattleRoom extends CCGamePlugin {
 		}
 
 		//return isInside(p, -372, 66, -288, -343, 53, -262);
-		Location loc1 = new Location(p.getWorld(), -372, 70, -288);
-		Location loc2 = new Location(p.getWorld(), -343, 53, -262);
+		Location loc1 = new Location(p.getWorld(), 557, 119, -419);
+		Location loc2 = new Location(p.getWorld(), 595, 138, -454);
 		return isInside(p, loc1, loc2);
 	}
 	
@@ -399,9 +399,9 @@ public class BattleRoom extends CCGamePlugin {
 	}
 
 	@Override
-	public void makegame(String name) {
+	public void makegame(String[] args) {
 		BattleGame game = new BattleGame(this);
-		game.setName(name);
+		game.setName(args[0]);
 		api.getModuleForClass(GameManager.class).registerGame(game);
 	}
 	

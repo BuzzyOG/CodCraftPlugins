@@ -11,6 +11,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.CodCraft.api.CCAPI;
+import com.CodCraft.api.model.inventory.Inv;
+import com.CodCraft.api.modules.InventoryManager;
 
 public class Cac extends JavaPlugin {
 
@@ -31,6 +33,13 @@ public class Cac extends JavaPlugin {
 			getServer().getPluginManager().disablePlugin(this);
 		}
 		api = (CCAPI) ccapi;
+		InventoryManager im = api.getModuleForClass(InventoryManager.class);
+		Inv Cac = im.createInventory("Create A Class");
+		if(Cac != null) {
+			
+		}
+		
+		//OLD Depricared
 		Bukkit.createWorld(new WorldCreator("CreateAClass"));
 		locations = new CaCLocations();
 		getCommand("cac").setExecutor(new CaCcommands(this));

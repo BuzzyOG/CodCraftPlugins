@@ -19,7 +19,7 @@ import com.codcraft.ccuhc.UHC;
 import com.codcraft.ccuhc.UHCGame;
 import com.codcraft.lobby.LobbyModule;
 
-public class LobbyState implements GameState<UHC> {
+public class LobbyState implements GameState {
 
 	private UHCGame g;
 	private int duration;
@@ -44,7 +44,7 @@ public class LobbyState implements GameState<UHC> {
 			public void run() {
 				if(duration > 0) {
 					duration--;
-					LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+					LobbyModule lm = g.getPlugin().api.getModuleForClass(LobbyModule.class);
 					lm.UpdateSign(lm.getLobby(getGame().getName()));
 					for(Team t : getGame().getTeams()) {
 						for(TeamPlayer tp : t.getPlayers()) {
@@ -55,7 +55,7 @@ public class LobbyState implements GameState<UHC> {
 						}
 					}
 					if(duration == 9) {
-						Broadcast bro = getGame().getPlugin().api.getModuleForClass(Broadcast.class);
+						Broadcast bro = g.getPlugin().api.getModuleForClass(Broadcast.class);
 						bro.BroadCastMessage(getGame(), "Starting making border!");
 						g.BuildBox(Bukkit.getWorld(getGame().getId()));
 						
@@ -68,7 +68,7 @@ public class LobbyState implements GameState<UHC> {
 								break;
 							}
 							
-							Location loc = getGame().getPlugin().scatterPlayerRandom(Bukkit.getPlayer(tp1.getName()), Bukkit.getWorld(g.getId()));
+							Location loc = g.getPlugin().scatterPlayerRandom(Bukkit.getPlayer(tp1.getName()), Bukkit.getWorld(g.getId()));
 							for(TeamPlayer tp : t.getPlayers()) {
 								Player p = Bukkit.getPlayer(tp.getName());
 								if(p != null) {
@@ -85,7 +85,7 @@ public class LobbyState implements GameState<UHC> {
 						}
 					}
 				} else {
-					getGame().setState(new InGameStates(getGame()));
+					g.setState(new InGameStates(getGame()));
 				}
 				
 			}
@@ -94,13 +94,13 @@ public class LobbyState implements GameState<UHC> {
 	}
 
 	@Override
-	public void setGame(Game<UHC> game) {
+	public void setGame(Game<?> game) {
 		this.g = (UHCGame) game;
 		
 	}
 
 	@Override
-	public Game<UHC> getGame() {
+	public Game<?> getGame() {
 		return g;
 	}
 

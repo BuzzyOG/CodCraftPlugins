@@ -39,13 +39,13 @@ public class DRGame extends Game<DiamondRun> {
 	}
 
 	@Override
-	public void preStateSwitch(GameState<DiamondRun> state) {
+	public void preStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void postStateSwitch(GameState<DiamondRun> state) {
+	public void postStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}

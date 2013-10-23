@@ -20,7 +20,7 @@ public class TDMGame extends Game<CodCraftTDM> {
 	
 	public String map;
 	
-	public GameState<?> state;
+	//public GameState state;
 
 	public int map1;
 	
@@ -83,13 +83,13 @@ public class TDMGame extends Game<CodCraftTDM> {
 	
 
 	@Override
-	public void preStateSwitch(GameState<CodCraftTDM> state) {
+	public void preStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void postStateSwitch(GameState<CodCraftTDM> state) {
+	public void postStateSwitch(GameState state) {
 		// TODO Auto-generated method stub
 		
 	}

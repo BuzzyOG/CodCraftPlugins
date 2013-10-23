@@ -1,5 +1,5 @@
 name: FFA
 main: com.codcraft.ffa.CodCraftFFA
-version: 0.0.001
-depend: [CodCraftAPI, TagAPI]
+version: 0.0.002
+depend: [CodCraftGame, TagAPI]
 description: First test of CodCraftAPI

@@ -1,38 +1,40 @@
-package com.codcraft.ffa.states;
+package com.codcraft.codcraft.game.states;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import com.CodCraft.api.event.GameWinEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.modules.ScoreBoard;
-import com.codcraft.ffa.CodCraftFFA;
-import com.codcraft.ffa.FFAGame;
+import com.codcraft.codcraft.game.CodCraftGame;
 import com.codcraft.lobby.LobbyModule;
 
-public class InGameState implements GameState<CodCraftFFA> {
-
-	private FFAGame game;
+public class InGameState implements GameState {
+	
+	private int defaul;
 	private int duration;
+	private CodCraftGame<?> game;
 	private BukkitTask task;
 
-	public InGameState(FFAGame game) {
-		this.game = game;
+	public InGameState(int defaul, CodCraftGame<?> game) {
+		this.defaul = defaul;
+		this.game = (CodCraftGame<?>) game;
 	}
+
 
 	@Override
 	public String getId() {
-		return "Game";
+		return "Inagme";
 	}
 
 	@Override
 	public void setTimeLeft(int duration) {
 		this.duration = duration;
-		
 	}
 
 	@Override
@@ -48,9 +50,9 @@ public class InGameState implements GameState<CodCraftFFA> {
 			public void run() {
 				if(duration >= 1) {
 					duration--;
-					LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+					LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
 					lm.UpdateSign(lm.getLobby(getGame().getName()));
-					ScoreBoard SB = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
+					ScoreBoard SB = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
 			        int seconds = InGameState.this.getGame().getCurrentState().getTimeLeft() % 60;
 			        String seconds1 = "";
 			        if (seconds < 10) {
@@ -70,7 +72,11 @@ public class InGameState implements GameState<CodCraftFFA> {
 						}
 					}
 				} else {
-					game.detectWin(game);
+					game.gameOver();
+					game.setState(new LobbyState(0, game));
+					GameWinEvent event = new GameWinEvent(game.getTeams().get(0).getName()+" has won!", game.getTeams().get(0), getGame());
+					Bukkit.getPluginManager().callEvent(event);
+					Bukkit.broadcastMessage(event.getWinMessage());	
 				}
 
 			}
@@ -80,20 +86,20 @@ public class InGameState implements GameState<CodCraftFFA> {
 	}
 
 	@Override
-	public void setGame(Game<CodCraftFFA> game) {
-		this.game = (FFAGame) game;
-		
+	public void setGame(Game<?> game) {
+		this.game = (CodCraftGame<?>) game;
 	}
 
 	@Override
-	public Game<CodCraftFFA> getGame() {
-		return game;
+	public Game<?> getGame() {
+		return (Game<?>) game;
 	}
 
 	@Override
 	public void Start() {
-		duration = 600;
+		duration = defaul;
 		task = Bukkit.getScheduler().runTaskTimer(game.getPlugin(), getTask(), 0, 20);
+		
 	}
 
 	@Override

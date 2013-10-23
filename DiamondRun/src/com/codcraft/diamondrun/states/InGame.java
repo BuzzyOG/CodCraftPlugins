@@ -17,7 +17,7 @@ import com.codcraft.diamondrun.DRGame;
 import com.codcraft.diamondrun.DiamondRun;
 import com.codcraft.lobby.LobbyModule;
 
-public class InGame implements GameState<DiamondRun> {
+public class InGame implements GameState {
 	
 	private DRGame game;
 	private int duration;
@@ -51,7 +51,7 @@ public class InGame implements GameState<DiamondRun> {
 			public void run() {
 				if(duration > 1) {
 					duration--;
-					LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+					LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
 					lm.UpdateSign(lm.getLobby(getGame().getName()));
 					for(Team t : getGame().getTeams()) {
 						for(TeamPlayer tp : t.getPlayers()) {
@@ -87,13 +87,13 @@ public class InGame implements GameState<DiamondRun> {
 	}
 
 	@Override
-	public void setGame(Game<DiamondRun> game) {
+	public void setGame(Game<?> game) {
 		this.game = (DRGame) game;
 		
 	}
 
 	@Override
-	public Game<DiamondRun> getGame() {
+	public Game<?> getGame() {
 		return game;
 	}
 

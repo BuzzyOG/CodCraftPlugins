@@ -21,7 +21,7 @@ import com.codcraft.lobby.LobbyModule;
 import com.codcraft.tdm.CodCraftTDM;
 import com.codcraft.tdm.TDMGame;
 
-public class LobbyState implements GameState<CodCraftTDM> {
+public class LobbyState implements GameState {
 
 	private int duration;
 	private TDMGame game;
@@ -71,7 +71,7 @@ public class LobbyState implements GameState<CodCraftTDM> {
 			public void run() {
 				if (duration >= 1) {
 					duration--;
-			        ScoreBoard SB = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
+			        ScoreBoard SB = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
 			        int seconds = LobbyState.this.getGame().getCurrentState().getTimeLeft() % 60;
 			        String seconds1 = "";
 			        if (seconds < 10) {
@@ -93,7 +93,7 @@ public class LobbyState implements GameState<CodCraftTDM> {
 					sign10 = (Sign) new Location(Bukkit.getWorld(game.getName()), 58, 40, 194).getBlock().getState();
 					sign11 = (Sign) new Location(Bukkit.getWorld(game.getName()), 58, 40, 195).getBlock().getState();
 					sign12 = (Sign) new Location(Bukkit.getWorld(game.getName()), 58, 40, 196).getBlock().getState();
-					LobbyModule lm = getGame().getPlugin().api.getModuleForClass(LobbyModule.class);
+					LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
 					Lobby l = lm.getLobby(game.getName());
 					if(l == null) {
 						return;
@@ -221,12 +221,12 @@ public class LobbyState implements GameState<CodCraftTDM> {
 	}
 
 	@Override
-	public void setGame(Game<CodCraftTDM> game) {
+	public void setGame(Game<?> game) {
 		this.game = (TDMGame) game;
 	}
 
 	@Override
-	public Game<CodCraftTDM> getGame() {
+	public Game<?> getGame() {
 		return game;
 	}
 

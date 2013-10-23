@@ -32,6 +32,11 @@ public class CCLobby extends JavaPlugin {
 			this.CCAPI = (CCAPI)  CCAPI;
 		}
 		this.CCAPI.registerModule(LobbyModule.class, new LobbyModule(this.CCAPI, this));
+		final Plugin commands = this.getServer().getPluginManager().getPlugin("CCCommands");
+		if(commands != null) {
+			getServer().getPluginManager().registerEvents(new Listener2(this), this);
+		}
+		
 		
 		//Load Config
 		LoadConfig();

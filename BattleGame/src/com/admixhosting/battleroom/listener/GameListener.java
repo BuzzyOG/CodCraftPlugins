@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -41,7 +42,6 @@ import com.admixhosting.battleroom.BattleRoom;
 import com.admixhosting.battleroom.FireworkEffectPlayer;
 import com.admixhosting.battleroom.game.BattleGame;
 import com.admixhosting.battleroom.game.BattlePlayer;
-import com.admixhosting.battleroom.game.BattleTeam;
 import com.admixhosting.battleroom.states.LobbyState;
 import com.admixhosting.battleroom.weapons.PermaFrost;
 import com.codcraft.codcraftplayer.CCPlayer;
@@ -131,7 +131,8 @@ public class GameListener implements Listener {
 					}
 					((BattleGame)g).requestedTeams.put(p.getName(), team);
 					p.sendMessage("You are on the " + team.getColor() + team.getName());
-					p.teleport(((BattleTeam)team).getSpawn());
+					p.teleport(new Location(Bukkit.getWorld(game.getName()), -826, 82, -463));
+					//p.teleport(((BattleTeam)team).getSpawn());
 					if(team.getName().equalsIgnoreCase("Blue")) {
 						p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
 					} else {
@@ -169,6 +170,7 @@ public class GameListener implements Listener {
 					p.setAllowFlight(true);
 					p.setFlying(true);
 				}
+				p.teleport(e.getTeam().getSpawn());
 
 
 				Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
@@ -381,7 +383,7 @@ public class GameListener implements Listener {
 									if(p1 != null) {
 										p1.sendMessage(message);
 										try {
-											fplayer.playFirework(effect.getWorld(), effect.getLocation(), FireworkEffect.builder().withColor(((BattleTeam)g.findTeamWithPlayer(effect)).getColorNew()).build());
+											fplayer.playFirework(effect.getWorld(), effect.getLocation(), FireworkEffect.builder().withColor(g.findTeamWithPlayer(effect).getColorNew()).build());
 										} catch (Exception e1) {
 											// TODO Auto-generated catch block
 											e1.printStackTrace();
@@ -545,17 +547,12 @@ public class GameListener implements Listener {
 						}
 					}
 					for(TeamPlayer tp : t.getPlayers()) {
-						System.out.println(tp.getName());
-						System.out.println(top);
-						System.out.println(tp1);
 						BattlePlayer bp = (BattlePlayer) tp;
 						int i = bp.getUnfrozen() + bp.getFrozens();
-						System.out.println(i);
 						if(tp1 == null) {
 							tp1 = tp;
 							top = i;
 						} else {
-							System.out.println(top < i);
 							if(top < i) {
 								top = i;
 								tp1 = tp;
@@ -569,6 +566,7 @@ public class GameListener implements Listener {
 						p.sendMessage(tp1.getName() + " is the "+ChatColor.GOLD+"[MVP]");
 						p.getInventory().clear();
 						p.sendMessage(e.getWinMessage());
+						p.getInventory().setHelmet(null);
 						Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 							
 							@Override
@@ -582,6 +580,7 @@ public class GameListener implements Listener {
 								Bukkit.getPlayer(bp.getName()).getInventory().setHelmet(null);
 								p.performCommand("lobby");
 								p.getInventory().clear();
+								p.getInventory().setHelmet(null);
 							}
 						}, 200);
 					}
@@ -589,11 +588,14 @@ public class GameListener implements Listener {
 				CCPlayerModule ccpm = plugin.api.getModuleForClass(CCPlayerModule.class);
 				ccpm.getPlayer(tp1.getName()).incrementCredit(20);
 				e.getGame().deinitialize();
+				e.getGame().setCurrentmap(null);
 				e.getGame().initialize();
 				e.getGame().setState(new LobbyState(e.getGame()));
+			
 			}
 		}
 	}
+	
 	
 	@EventHandler
 	public void onFade(BlockFadeEvent e) {
