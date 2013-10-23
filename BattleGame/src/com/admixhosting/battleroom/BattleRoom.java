@@ -15,7 +15,10 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -108,7 +111,8 @@ public class BattleRoom extends CCGamePlugin {
 			@Override
 			public void run() {
 				List<TeamPlayer> names = new ArrayList<TeamPlayer>();
-				for(Game<?> g : api.getModuleForClass(GameManager.class).getAllGames()) {
+				GameManager gm = api.getModuleForClass(GameManager.class);
+				for(Game<?> g : gm.getAllGames()) {
 					if(g.getPlugin() == pl) {
 						BattleGame game = (BattleGame) g;
 						if(!game.isFreezeTag()) {
@@ -235,6 +239,14 @@ public class BattleRoom extends CCGamePlugin {
 								}
 								if(entity.getTicksLived() <= 8) {
 									break;
+								}
+								for(Entity ent : entity.getNearbyEntities(4, 4, 4)) {
+									if(ent instanceof Player) {
+										Player p1 = (Player) ent;
+										System.out.println(p1.getName());
+										EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(((Projectile) entity).getShooter(), p1, DamageCause.PROJECTILE, 0D);
+										Bukkit.getPluginManager().callEvent(event);
+									}
 								}
 								if(entity.getLocation().getBlock() != null) {
 									if(entity.getLocation().getBlock().getRelative(BlockFace.EAST).getType() != Material.AIR){

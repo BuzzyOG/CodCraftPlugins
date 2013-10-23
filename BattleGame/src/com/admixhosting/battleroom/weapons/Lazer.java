@@ -167,8 +167,8 @@ public class Lazer extends Gun {
 									}
 									proj = (Snowball) p.launchProjectile(Snowball.class);
 									Vector vec = p.getEyeLocation().getDirection();
-									plugin2.firework.put(proj.getUniqueId(), vec.multiply(3));
-									proj.setVelocity(vec.multiply(3));
+									plugin2.firework.put(proj.getUniqueId(), vec.multiply(2));
+									proj.setVelocity(vec.multiply(2));
 								}
 
 							} else {
@@ -194,8 +194,8 @@ public class Lazer extends Gun {
 										reloads.put(p.getName(), Bukkit.getScheduler().runTaskTimer(plugin2, new ReloadTimer(this, p, .1F), 0, 5));
 									}
 									proj = (Snowball) p.launchProjectile(Snowball.class);
-									plugin2.firework.put(proj.getUniqueId(), p.getEyeLocation().getDirection().multiply(4));
-									proj.setVelocity(p.getEyeLocation().getDirection().multiply(4));
+									plugin2.firework.put(proj.getUniqueId(), p.getEyeLocation().getDirection().multiply(3));
+									proj.setVelocity(p.getEyeLocation().getDirection().multiply(3));
 								}
 
 
