@@ -2,8 +2,7 @@ package com.codcraft.lobby;
 
 import org.bukkit.Location;
 
-public abstract class Lobby
-{
+public abstract class Lobby {
   protected String name;
   protected Location block1;
   protected Location block2;

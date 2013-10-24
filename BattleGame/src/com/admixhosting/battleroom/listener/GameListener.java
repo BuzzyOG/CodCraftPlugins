@@ -573,8 +573,10 @@ public class GameListener implements Listener {
 								World w = Bukkit.getWorld(e.getGame().getName());
 								Firework fw = w.spawn(new Location(w, game.xCenter, game.yCenter, game.zCenter), Firework.class);
 								FireworkMeta meta = fw.getFireworkMeta();
-								FireworkEffect fe = FireworkEffect.builder().withColor(e.getTeam().getColorNew()).with(Type.BALL_LARGE).trail(true).withFade(Color.WHITE).flicker(true).build();
-								meta.addEffect(fe);
+								if(e.getTeam() != null && e.getTeam().getColorNew() != null) {
+									FireworkEffect fe = FireworkEffect.builder().withColor(e.getTeam().getColorNew()).with(Type.BALL_LARGE).trail(true).withFade(Color.WHITE).flicker(true).build();
+									meta.addEffect(fe);
+								}
 								fw.setFireworkMeta(meta);
 								
 							}

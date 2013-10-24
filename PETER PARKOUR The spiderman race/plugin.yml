@@ -1,0 +1,4 @@
+name: PP
+main: com.codcraft.PP.Parcore
+version: 0.0.001
+depend: [CodCraftAPI]
