@@ -30,9 +30,9 @@ public class BattleGame extends Game<BattleRoom> {
 	/*public Map<String, Location> bluespawn = new HashMap<>();
 	public Map<String, Location> redspawn = new HashMap<>();*/
 	private List<Location> stars = new ArrayList<>();
-	private final int xCenter = 578;
-	private final int yCenter = 122;
-	private final int zCenter = -369;
+	public final int xCenter = 578;
+	public final int yCenter = 122;
+	public final int zCenter = -369;
 	private boolean freezeTag;
 
 	public BattleGame(BattleRoom instance) {

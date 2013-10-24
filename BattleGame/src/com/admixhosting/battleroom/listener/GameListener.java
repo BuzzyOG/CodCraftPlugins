@@ -8,10 +8,14 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -27,6 +31,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 import com.CodCraft.api.event.GameWinEvent;
 import com.CodCraft.api.event.RequestJoinGameEvent;
@@ -519,7 +524,7 @@ public class GameListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onWin(GameWinEvent e) {
+	public void onWin(final GameWinEvent e) {
 		if(e.getGame() != null) {
 			if(e.getGame().getPlugin() == plugin){
 				int top = 0;
@@ -559,7 +564,22 @@ public class GameListener implements Listener {
 							}
 						}
 					}
-
+					for(int i = 1; i < 9; i++) {
+						Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+							
+							@Override
+							public void run() {
+								BattleGame game = (BattleGame) e.getGame();
+								World w = Bukkit.getWorld(e.getGame().getName());
+								Firework fw = w.spawn(new Location(w, game.xCenter, game.yCenter, game.zCenter), Firework.class);
+								FireworkMeta meta = fw.getFireworkMeta();
+								FireworkEffect fe = FireworkEffect.builder().withColor(e.getTeam().getColorNew()).with(Type.BALL_LARGE).trail(true).withFade(Color.WHITE).flicker(true).build();
+								meta.addEffect(fe);
+								fw.setFireworkMeta(meta);
+								
+							}
+						}, i * 20);
+					}
 					for(final TeamPlayer tp : t.getPlayers()) {
 						final BattlePlayer bp = (BattlePlayer) tp;
 						final Player p = Bukkit.getPlayer(bp.getName());
@@ -567,6 +587,7 @@ public class GameListener implements Listener {
 						p.getInventory().clear();
 						p.sendMessage(e.getWinMessage());
 						p.getInventory().setHelmet(null);
+
 						Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 							
 							@Override
@@ -578,9 +599,11 @@ public class GameListener implements Listener {
 								bp.setOldLoc(null);
 								plugin.api.getModuleForClass(ScoreBoard.class).removePlayerFromScoreBoard(Bukkit.getPlayer(bp.getName()));
 								Bukkit.getPlayer(bp.getName()).getInventory().setHelmet(null);
-								p.performCommand("lobby");
+								//p.performCommand("lobby");
 								p.getInventory().clear();
 								p.getInventory().setHelmet(null);
+								RequestJoinGameEvent event = new RequestJoinGameEvent(bp, e.getGame(), t);
+								Bukkit.getPluginManager().callEvent(event);
 							}
 						}, 200);
 					}
