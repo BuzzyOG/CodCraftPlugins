@@ -27,10 +27,23 @@
   		<artifactId>CodCraftPlayer</artifactId>
   		<version>0.0.001</version>
   	</dependency>
+  	  	<dependency>
+            <groupId>org.kitteh</groupId>
+            <artifactId>tagapi</artifactId>
+            <version>1.9.3</version>
+            <!-- Use 1.9.3 for upper cb -->
+        </dependency>
   	<dependency>
   		<groupId>com.codcraft</groupId>
   		<artifactId>Lobby</artifactId>
   		<version>0.0.001</version>
   	</dependency>
   </dependencies>
+  <repositories>
+       <repository>
+            <id>kitteh-repo</id>
+            <url>http://repo.kitteh.org/content/groups/public</url>
+        </repository>
+  </repositories>
+  
 </project>

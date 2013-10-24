@@ -32,6 +32,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.kitteh.tag.PlayerReceiveNameTagEvent;
+import org.kitteh.tag.TagAPI;
 
 import com.CodCraft.api.event.GameWinEvent;
 import com.CodCraft.api.event.RequestJoinGameEvent;
@@ -162,6 +164,18 @@ public class GameListener implements Listener {
 	
 	@SuppressWarnings("deprecation")
 	@EventHandler
+	public void onRe(PlayerReceiveNameTagEvent e) {
+		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		final Game<?> g = gm.getGameWithPlayer(e.getNamedPlayer());
+		if(g != null) {
+			if(g.getPlugin() == plugin) {
+				e.setTag(g.findTeamWithPlayer(e.getNamedPlayer()).getColor() + e.getNamedPlayer().getName());
+			}
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	@EventHandler
 	public void onJoin(final TeamPlayerGainedEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		final Game<?> g = gm.getGameWithTeam(e.getTeam());
@@ -176,8 +190,7 @@ public class GameListener implements Listener {
 					p.setFlying(true);
 				}
 				p.teleport(e.getTeam().getSpawn());
-
-
+				p.getInventory().clear();
 				Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 					
 					@Override
@@ -208,6 +221,13 @@ public class GameListener implements Listener {
 					p.getInventory().setItem(8, new ItemStack(Material.WOOL, 1, (short) 14));
 					p.updateInventory();
 				}
+				Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+					
+					@Override
+					public void run() {
+						TagAPI.refreshPlayer(p);
+					}
+				}, 1);
 
 			}
 		}
@@ -488,7 +508,7 @@ public class GameListener implements Listener {
 				Bukkit.getPlayer(bp.getName()).getInventory().setHelmet(null);
 				Player p = Bukkit.getPlayer(bp.getName());
 				if(p != null) {
-					p.performCommand("spawn");
+					//p.performCommand("spawn");
 					BattleGame bg = (BattleGame) g;
 					bg.requestedTeams.remove(p.getName());
 					bg.removeInLobby(p);
@@ -603,8 +623,11 @@ public class GameListener implements Listener {
 								//p.performCommand("lobby");
 								p.getInventory().clear();
 								p.getInventory().setHelmet(null);
-								RequestJoinGameEvent event = new RequestJoinGameEvent(bp, e.getGame(), t);
-								Bukkit.getPluginManager().callEvent(event);
+								if(p.getWorld().getName().equalsIgnoreCase(e.getGame().getName())) {
+									RequestJoinGameEvent event = new RequestJoinGameEvent(bp, e.getGame(), t);
+									Bukkit.getPluginManager().callEvent(event);
+								}
+
 							}
 						}, 200);
 					}

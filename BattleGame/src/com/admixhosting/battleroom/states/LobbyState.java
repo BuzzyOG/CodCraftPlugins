@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
+import org.kitteh.tag.TagAPI;
 
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
@@ -83,13 +84,14 @@ public class LobbyState implements GameState {
 				int players = game.getInLobby().size();
 				if(players > min_players) {
 					duration--;
-					
+
 					ScoreBoard sb = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
 					int red = 0;
 					int blue = 0;
 					for(Entry<String, Team> en : game.requestedTeams.entrySet()) {
 						Player p = Bukkit.getPlayer(en.getKey());
 						if(p != null) {
+							
 							if(en.getValue().getName().equalsIgnoreCase("Blue")) {
 								p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
 							} else {
@@ -159,6 +161,7 @@ public class LobbyState implements GameState {
 									for(TeamPlayer tp1 : t.getPlayers()) {
 										Player p = Bukkit.getPlayer(tp1.getName());
 										if(p != null) {
+											
 											p.sendMessage(t.getColor() + tp.getName() + ChatColor.WHITE + " is a defroster");
 										}
 									}
@@ -166,6 +169,15 @@ public class LobbyState implements GameState {
 							}
 						}
 						getGame().setState(new InGameState(getGame()));
+						for(Team t : getGame().getTeams()) {
+							for(TeamPlayer tp : t.getPlayers()) {
+								Player p = Bukkit.getPlayer(tp.getName());
+								if(p != null) {
+									TagAPI.refreshPlayer(p);
+								}
+							}
+						}
+						
 						game.requestedTeams.clear();
 						game.getInLobby().clear();
 					}

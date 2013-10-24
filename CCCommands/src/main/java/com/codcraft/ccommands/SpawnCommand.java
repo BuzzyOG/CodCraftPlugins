@@ -35,7 +35,7 @@ public class SpawnCommand implements CommandExecutor {
 				if(g != null) {
 					g.findTeamWithPlayer(p).removePlayer(p);
 				}
-				p.teleport(new Location(Bukkit.getWorld("world"), x, y, z, 180, 0));
+				p.teleport(new Location(Bukkit.getWorld("world"), x, y, z, 0, 0));
 				p.getInventory().clear();
 				for(PotionEffect pe : p.getActivePotionEffects()) {
 					p.removePotionEffect(pe.getType());

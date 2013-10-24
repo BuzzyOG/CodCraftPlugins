@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
+import org.kitteh.tag.TagAPI;
 
 import com.CodCraft.api.event.GameWinEvent;
 import com.CodCraft.api.model.Game;
@@ -54,6 +55,7 @@ public class InGameState implements GameState {
 				if(duration == time) {
 					game.requestedTeams.clear();
 					game.getInLobby().clear();
+					
 					if(!game.isFreezeTag()) {
 						/*new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 511).getBlock().setType(Material.AIR);
 						new Location(Bukkit.getWorld(getGame().getName()), -392, 126, 511).getBlock().setType(Material.AIR);
@@ -106,6 +108,7 @@ public class InGameState implements GameState {
 				}
 				if(duration > 0) {
 					duration--;
+					
 					if(duration == time - 15) {
 						for(Team t : game.getTeams()) {
 							for(TeamPlayer tp : t.getPlayers()) {
@@ -145,6 +148,7 @@ public class InGameState implements GameState {
 							BattlePlayer bp = (BattlePlayer) tp;
 							Player p = Bukkit.getPlayer(tp.getName());
 							if(p != null) {
+								
 								p.setLevel(duration);
 								if(t.getName().equalsIgnoreCase("Blue")) {
 									if(bp.getFrozen() || bp.isPermfrozen()) {
