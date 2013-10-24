@@ -429,7 +429,6 @@ public class GameListener implements Listener {
 
 	}
 
-	
 	@EventHandler
 	public void onInt(PlayerInteractEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);

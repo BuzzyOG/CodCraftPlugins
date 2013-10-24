@@ -119,7 +119,12 @@ public class CCListener implements Listener {
 					e.setCancelled(true);
 				}
 			}
-
+			
+			if (e.getAction() == Action.PHYSICAL && e.getPlayer().getLocation().getBlock().getType().equals(Material.STONE_PLATE)){
+			    Vector vec = e.getPlayer().getEyeLocation().getDirection();
+			    e.getPlayer().setVelocity(vec.multiply(4));
+			    e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.GHAST_FIREBALL, 3.0F, 0.5F);
+			}
 		}
 
 	}
