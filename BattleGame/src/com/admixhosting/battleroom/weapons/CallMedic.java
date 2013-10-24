@@ -9,6 +9,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
@@ -67,6 +68,7 @@ public class CallMedic extends Weapon {
 								Player p11 = Bukkit.getPlayer(bp1.getName());
 								if(p11 != null) {
 									p11.sendMessage(p.getName() + " needs help!");
+									p.getWorld().playSound(p.getLocation(), Sound.NOTE_PLING, 3.0F, 0.5F);
 								}
 							}
 						}

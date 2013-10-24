@@ -2,6 +2,7 @@ package com.admixhosting.battleroom.weapons;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
@@ -50,6 +51,7 @@ public class Hook extends Weapon {
 					plugin.reset(p);
 					bp.setOnWall(false);
 					bp.setToMove(p.getEyeLocation().getDirection().multiply(1));
+					p.playSound(p.getLocation(), Sound.STEP_GRASS, 100.0F, 0.5F);
 				}
 			}
 		}

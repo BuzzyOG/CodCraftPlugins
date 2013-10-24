@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
@@ -80,6 +81,7 @@ public class DragonsBreath extends Weapon {
 								Player p1 = Bukkit.getPlayer(tp.getName());
 								if(p1 != null) {
 									p1.sendMessage(g.findTeamWithPlayer(p).getColor() + p.getName() + ChatColor.WHITE +" has activated Dragons' Breath");
+									p.getWorld().playSound(p.getLocation(), Sound.FIRE, 100.0F, 0.5F);
 								}
 							}
 						}
@@ -93,6 +95,7 @@ public class DragonsBreath extends Weapon {
 										Player p1 = Bukkit.getPlayer(tp1.getName());
 										if(p1 != null) {
 											p1.sendMessage(t.getColor() + p.getName() + ChatColor.WHITE +" has unfrozen " + t.getColor() + tp.getName());
+											p.getWorld().playSound(p.getLocation(), Sound.FIRE, 100.0F, 0.5F);
 										}
 									}
 								}
