@@ -610,17 +610,6 @@ public class GameListener implements Listener {
 		}
 	}
 	
-	@EventHandler
-	public void onMove(PlayerMoveEvent e){ // Checks for not in game, I dunno if you wanted to use PME or not though.
-		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
-		Game<?> g = gm.getGameWithPlayer(e.getPlayer());
-			if (g == null){
-				if (e.getPlayer().getLocation().getBlock().getType().equals(Material.STONE_PLATE)){ // Flinger!
-					Vector vec = e.getPlayer().getEyeLocation().getDirection();
-			    	e.getPlayer().setVelocity(vec.multiply(4));
-				}
-			}
-	}
 	
 
 }

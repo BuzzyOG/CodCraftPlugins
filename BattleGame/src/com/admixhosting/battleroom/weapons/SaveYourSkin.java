@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
@@ -63,6 +64,7 @@ public class SaveYourSkin extends Weapon {
 								Player p1 = Bukkit.getPlayer(tp1.getName());
 								if(p1 != null) {
 									p1.sendMessage(g.findTeamWithPlayer(p).getColor() + p.getName() + ChatColor.WHITE +" has unfrozen " + g.findTeamWithPlayer(p).getColor() + bp.getName());
+									p.playSound(p.getLocation(), Sound.ZOMBIE_INFECT, 3.0F, 0.5F);
 								}
 							}
 						}

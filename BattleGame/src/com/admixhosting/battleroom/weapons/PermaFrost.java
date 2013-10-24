@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -84,6 +85,7 @@ public class PermaFrost extends Weapon {
 							plugin.firework.put(proj.getUniqueId(), vec.multiply(2));
 							proj.setVelocity(vec.multiply(4));
 							shots.put(proj, p.getName());
+							p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 3.0F, 0.5F);
 						}
 					}
 				}
