@@ -162,7 +162,7 @@ public class Lazer extends Gun {
                                                                                                 plugin2.firework.put(proj1.getUniqueId(), vec.multiply(2));
                                                                                                 proj1.setVelocity(vec.multiply(2));
                                                                                                 lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj1, Sound.HORSE_BREATHE);
-                                                                                                qSound(p, Sound.ZOMBIE_IDLE);
+                                                                                                
                                                                                                 
                                                                                         }
                                                                                 }, 6);
@@ -181,7 +181,7 @@ public class Lazer extends Gun {
                                                                         plugin2.firework.put(proj.getUniqueId(), vec.multiply(2));
                                                                         proj.setVelocity(vec.multiply(2));
                                                                         lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj, Sound.HORSE_BREATHE);
-                                                                        qSound(p, Sound.ZOMBIE_IDLE);
+                                                                        
                                                                 } 
 
                                                         } else {
@@ -263,10 +263,7 @@ public class Lazer extends Gun {
                         }
                 }, 20L);
         }
-        
-        public void qSound(Player p, Sound s){
-        	p.getWorld().playSound(p.getLocation(), s, 100.0F, 0.5F);
-        }
+
 
         @Override
         public void onDamage(Player hurt, Player hurter, Material mar, Action action, Event event) {
