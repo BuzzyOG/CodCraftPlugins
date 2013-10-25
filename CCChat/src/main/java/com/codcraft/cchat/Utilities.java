@@ -20,7 +20,7 @@ public class Utilities {
 		for(Entry<String, ChatType> en : plugin.players.entrySet()) {
 			Player p = Bukkit.getPlayer(en.getKey());
 			if(p != null) {
-				if (message.toLowerCase().contains(p.getName().toLowerCase())){
+				if (message.toLowerCase().contains(p.getName().toLowerCase()) && !p.getName().equals(Bukkit.getPlayer(Player).getName())){
 					message.replace(p.getName(), "§b" + p.getName() + "§r");
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 3F, 0.5F);
 					continueChat(message, p, Player, en);
