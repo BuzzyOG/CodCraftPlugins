@@ -435,7 +435,7 @@ public class GameListener implements Listener {
 							}
 						}
 						if(frozen >= size) {
-							GameWinEvent event1 = new GameWinEvent(t1.getName() + " has won the game!", t1, g);
+							GameWinEvent event1 = new GameWinEvent(t1.getColor() + t1.getName() + " has won the game!", t1, g);
 							Bukkit.getPluginManager().callEvent(event1);
 							
 							Bukkit.broadcastMessage(g.getName() + "has finished!");
@@ -588,15 +588,19 @@ public class GameListener implements Listener {
 							
 							@Override
 							public void run() {
-								BattleGame game = (BattleGame) e.getGame();
-								World w = Bukkit.getWorld(e.getGame().getName());
-								Firework fw = w.spawn(new Location(w, game.xCenter, game.yCenter, game.zCenter), Firework.class);
-								FireworkMeta meta = fw.getFireworkMeta();
-								if(e.getTeam() != null && e.getTeam().getColorNew() != null) {
-									FireworkEffect fe = FireworkEffect.builder().withColor(e.getTeam().getColorNew()).with(Type.BALL_LARGE).trail(true).withFade(Color.WHITE).flicker(true).build();
-									meta.addEffect(fe);
+								for(TeamPlayer tp : e.getTeam().getPlayers()) {
+									Player p1 = Bukkit.getPlayer(tp.getName());
+									World w = Bukkit.getWorld(e.getGame().getName());
+									Firework fw = w.spawn(new Location(w, p1.getLocation().getX(), p1.getLocation().getY(), p1.getLocation().getZ()), Firework.class);
+									FireworkMeta meta = fw.getFireworkMeta();
+									if(e.getTeam() != null && e.getTeam().getColorNew() != null) {
+										FireworkEffect fe = FireworkEffect.builder().withColor(e.getTeam().getColorNew()).with(Type.BALL_LARGE).trail(true).withFade(Color.WHITE).flicker(true).build();
+										meta.addEffect(fe);
+									}
+									fw.setFireworkMeta(meta);
 								}
-								fw.setFireworkMeta(meta);
+								BattleGame game = (BattleGame) e.getGame();
+								
 								
 							}
 						}, i * 20);

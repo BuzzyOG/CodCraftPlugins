@@ -267,9 +267,9 @@ public class InGameState implements GameState {
 					}
 					GameWinEvent event1 = null;
 					if(redS > blueS) {
-						event1 = new GameWinEvent(blue.getName() + " team won the game", blue, getGame());
+						event1 = new GameWinEvent(blue.getColor() + blue.getName() + " team won the game", blue, getGame());
 					} else if(blueS > redS) {
-						event1 = new GameWinEvent(red.getName() + " team won the game", red, getGame());
+						event1 = new GameWinEvent(red.getColor() + red.getName() + " team won the game", red, getGame());
 					} else {
 						event1 = new GameWinEvent("Tie no team has won", null, getGame());
 					}

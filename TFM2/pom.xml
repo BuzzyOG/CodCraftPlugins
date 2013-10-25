@@ -14,7 +14,6 @@
   <build>
     <finalName>${project.artifactId}</finalName>
         <defaultGoal>compile package</defaultGoal>
-        <sourceDirectory>${basedir}/src/</sourceDirectory>
         <resources>
             <resource>
                 <includes>

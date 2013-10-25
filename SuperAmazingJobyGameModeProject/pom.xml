@@ -22,4 +22,11 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.codcraft</groupId>
+  		<artifactId>CodCraftPlayer</artifactId>
+  		<version>0.0.001</version>
+  	</dependency>
+  </dependencies>
 </project>

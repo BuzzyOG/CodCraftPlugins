@@ -44,6 +44,9 @@ public class BattleGame extends Game<BattleRoom> {
 	public void initialize() {
 		
 		WorldCreator creator = new WorldCreator(getName());
+		if(!isFreezeTag()) {
+			setCurrentmap("Battle");
+		}
 		setCurrentmap("Battle");
 		addHook(new TeamHook(this));
 		if(isFreezeTag()) {
