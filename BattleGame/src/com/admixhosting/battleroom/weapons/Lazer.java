@@ -234,7 +234,7 @@ public class Lazer extends Gun {
         
         public void lazerEffects(final Player p, final Color color, final Entity e, Sound sound){
                 
-                p.getWorld().playSound(p.getLocation(), sound, 3.0F, 0.5F);
+                p.getWorld().playSound(p.getLocation(), sound, 3.0F, 0.3F);
               
             int laserTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin2, new Runnable(){
                     public void run(){

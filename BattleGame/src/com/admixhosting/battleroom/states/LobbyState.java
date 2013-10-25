@@ -6,6 +6,7 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
@@ -113,11 +114,19 @@ public class LobbyState implements GameState {
 							red++;
 						}
 					}
-					sb.getObjectiveForGame(getGame()).setDisplayName(getId() + ": " + duration);
-					sb.setStringScoreForBoard("Red", red, getGame());
-					sb.setStringScoreForBoard("Red_Frozen", 0, getGame());
-					sb.setStringScoreForBoard("Blue", blue, getGame());
-					sb.setStringScoreForBoard("Blue_Frozen", 0, getGame());
+					sb.getObjectiveForGame(getGame()).setDisplayName("Game starts in " + duration);
+					sb.setStringScoreForBoard(ChatColor.DARK_RED+"Red", red, getGame());
+					sb.setStringScoreForBoard(ChatColor.RED+"Red_Frozen", 0, getGame());
+					sb.setStringScoreForBoard(ChatColor.DARK_BLUE+"Blue", blue, getGame());
+					sb.setStringScoreForBoard(ChatColor.BLUE+"Blue_Frozen", 0, getGame());
+					if(duration < 5) {
+						for(String name : game.getInLobby()) {
+							Player p = Bukkit.getPlayer(name);
+							if(p != null) {
+								p.playSound(p.getLocation(), Sound.CLICK, 1, 0);
+							}
+						}
+					}
 					if(duration == 0) {
 						if(game.getCurrentmap() == null) {
 							game.setCurrentmap("LoadingBay");
@@ -133,6 +142,7 @@ public class LobbyState implements GameState {
 						for(String s : game.getInLobby()) {
 							Player p = Bukkit.getPlayer(s);
 							if(p != null) {
+								p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 0);
 								if(game.requestedTeams.containsKey(p.getName())) {
 									game.findTeamWithId(game.requestedTeams.get(s).getId()).addPlayer(new BattlePlayer(p.getName()));
 

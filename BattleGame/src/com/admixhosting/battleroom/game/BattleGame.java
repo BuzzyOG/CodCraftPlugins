@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.WorldCreator;
@@ -70,10 +71,10 @@ public class BattleGame extends Game<BattleRoom> {
 		ScoreBoard scoreboard = plugin.api.getModuleForClass(ScoreBoard.class);
 		scoreboard.createScoreBoardForGame(this);
 		scoreboard.setObjective("Score", this);
-		scoreboard.addStringToBoard("Red", 0, this);
-		scoreboard.addStringToBoard("Red_Frozen", 0, this);
-		scoreboard.addStringToBoard("Blue", 0, this);
-		scoreboard.addStringToBoard("Blue_Frozen", 0, this);
+		scoreboard.setStringScoreForBoard(ChatColor.DARK_RED+"Red", 0, this);
+		scoreboard.setStringScoreForBoard(ChatColor.RED+"Red_Frozen", 0, this);
+		scoreboard.setStringScoreForBoard(ChatColor.DARK_BLUE+"Blue", 0, this);
+		scoreboard.setStringScoreForBoard(ChatColor.BLUE+"Blue_Frozen", 0, this);
 		if(!isFreezeTag()) {
 			genStars();
 		}

@@ -1,6 +1,7 @@
 package com.admixhosting.battleroom.states;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -237,10 +238,10 @@ public class InGameState implements GameState {
 					}
 					ScoreBoard sb = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
 					sb.getObjectiveForGame(getGame()).setDisplayName(getId() + ": " + duration);
-					sb.setStringScoreForBoard("Red", red, getGame());
-					sb.setStringScoreForBoard("Red_Frozen", redF, getGame());
-					sb.setStringScoreForBoard("Blue", blue, getGame());
-					sb.setStringScoreForBoard("Blue_Frozen", blueF, getGame());
+					sb.setStringScoreForBoard(ChatColor.DARK_RED+"Red", red, getGame());
+					sb.setStringScoreForBoard(ChatColor.RED+"Red_Frozen", redF, getGame());
+					sb.setStringScoreForBoard(ChatColor.DARK_BLUE+"Blue", blue, getGame());
+					sb.setStringScoreForBoard(ChatColor.BLUE+"Blue_Frozen", blueF, getGame());
 					
 				} else {
 					int redS = 0;
