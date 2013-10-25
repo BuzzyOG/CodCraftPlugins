@@ -48,7 +48,6 @@ public class CCCommands extends JavaPlugin {
 		getCommand("setwarp").setExecutor(new SetWarpCommand(this)); // Don't forget to add these to plugin.yml! :D
 		getCommand("delwarp").setExecutor(new SetWarpCommand(this));
 		getCommand("remwarp").setExecutor(new SetWarpCommand(this));
-		getCommand("setwarp").setExecutor(new SetWarpCommand(this));
 		getCommand("w").setExecutor(new SetWarpCommand(this));
 		
 		connect();
