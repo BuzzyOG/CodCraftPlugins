@@ -44,7 +44,12 @@ public class CCCommands extends JavaPlugin {
 		getCommand("a").setExecutor(new AdminCommand(this));
 		getCommand("gameinfo").setExecutor(new GameInfoCommand(this));
 		getCommand("CSP").setExecutor(new CSPCommand(this));
-		getCommand("class").setExecutor(new ClassCommand(this)); 
+		getCommand("class").setExecutor(new ClassCommand(this));
+		getCommand("setwarp").setExecutor(new SetWarpCommand(this)); // Don't forget to add these to plugin.yml! :D
+		getCommand("delwarp").setExecutor(new SetWarpCommand(this));
+		getCommand("remwarp").setExecutor(new SetWarpCommand(this));
+		getCommand("setwarp").setExecutor(new SetWarpCommand(this));
+		getCommand("w").setExecutor(new SetWarpCommand(this));
 		
 		connect();
 		Bukkit.getScheduler().runTaskTimer(this, new LeaderBoard(this), 0, 3600);
