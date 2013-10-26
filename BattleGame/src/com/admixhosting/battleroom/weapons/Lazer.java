@@ -163,6 +163,7 @@ public class Lazer extends Gun {
                                                                                                 proj1.setVelocity(vec.multiply(2));
                                                                                                 lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj1, Sound.HORSE_BREATHE);
                                                                                                 
+                                                                                                
                                                                                         }
                                                                                 }, 6);
                                                                                 p.setExp((float) .9);
@@ -180,6 +181,7 @@ public class Lazer extends Gun {
                                                                         plugin2.firework.put(proj.getUniqueId(), vec.multiply(2));
                                                                         proj.setVelocity(vec.multiply(2));
                                                                         lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj, Sound.HORSE_BREATHE);
+                                                                        
                                                                 } 
 
                                                         } else {
@@ -208,7 +210,7 @@ public class Lazer extends Gun {
                                                                         proj = (Snowball) p.launchProjectile(Snowball.class);
                                                                         plugin2.firework.put(proj.getUniqueId(), p.getEyeLocation().getDirection().multiply(3));
                                                                         proj.setVelocity(p.getEyeLocation().getDirection().multiply(3));
-                                                                        lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj, Sound.ENDERDRAGON_HIT);
+                                                                        lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj, Sound.ENDERDRAGON_HIT); // I think this is the red team?
                                                                 }
 
 
@@ -260,7 +262,9 @@ public class Lazer extends Gun {
                                                                                          
                         }
                 }, 20L);
-        }     
+        }
+
+
         @Override
         public void onDamage(Player hurt, Player hurter, Material mar, Action action, Event event) {
                 
