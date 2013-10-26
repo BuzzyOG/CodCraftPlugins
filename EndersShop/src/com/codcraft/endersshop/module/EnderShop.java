@@ -19,8 +19,8 @@ import com.codcraft.endersshop.shop.Item;
 public class EnderShop extends CCModule {
 	
 	private List<Item> items = new ArrayList<>();
-	List<Material> mats = new ArrayList<Material>();
-	List<String> lors = new ArrayList<String>();
+	public List<Material> mats = new ArrayList<Material>();
+	public List<String> lors = new ArrayList<String>();
 	
 	private EndersShop plugin;
 
@@ -30,9 +30,6 @@ public class EnderShop extends CCModule {
 	}
 	
 	public void teleportSetup(){
-		mats = new ArrayList<Material>();
-		lors = new ArrayList<String>();
-		
 		mats.add(Material.BOW); // to hub
 		mats.add(Material.WOOL); // to codcraft
 		mats.add(Material.FEATHER); // to battleroom
