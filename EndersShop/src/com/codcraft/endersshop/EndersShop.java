@@ -26,11 +26,13 @@ import com.CodCraft.api.modules.GameManager;
 import com.codcraft.endersshop.module.EnderShop;
 import com.codcraft.endersshop.shop.Item;
 import com.codcraft.lobby.event.PlayerToLobbyEvent;
+import com.codcraft.bunggie.*;
 
 public class EndersShop extends JavaPlugin implements Listener {
 	
 	public CCAPI api;
-
+	public Main bungee;
+	
 	public void onEnable() {
 		Plugin api = Bukkit.getPluginManager().getPlugin("CodCraftAPI");
 		if(api != null) {
@@ -146,64 +148,34 @@ public class EndersShop extends JavaPlugin implements Listener {
 		
 		switch (clickedItem){
 			case WOOL:
-				exeTP(p, "hub");
+				exeTP(p, "hub" //server here);
 			case BOW:
-				exeTP(p, "codcraft");
+				exeTP(p, "codcraft" //server here);
 			case FEATHER:
-				exeTP(p, "battleroom");
+				exeTP(p, "battleroom" //server here);
 			case ICE:
-				exeTP(p, "freezetag");
+				exeTP(p, "freezetag" //server here);
 			default:
 				p.sendMessage("Invalid warp!");
 			break;
 		}		
 	}
 
-	private void exeTP(Player p, String location) {
+	private void exeTP(Player p, String location, String server) {
 		
 		  File warpFile = new File("./plugins/CCCommands/Warps/" + location + ".yml");
 		  
 		  if (!warpFile.exists()) {
-			  p.sendMessage("Invalid warp!");
+			  p.sendMessage("Invalid warp did you set one at the coords on any server?");
 			  return;
 		  }
 	      
 		  YamlConfiguration warpLoad = YamlConfiguration.loadConfiguration(warpFile);
 	
-		  World w = Bukkit.getWorld(warpLoad.getString("world"));
-		  double x = warpLoad.getInt("x");
-		  double y = warpLoad.getInt("y");
-		  double z = warpLoad.getInt("z");
-		  float yaw = warpLoad.getInt("yaw");
-		  float pitch = warpLoad.getInt("pitch");
-		  Location warpTo = new Location(w, x, y+1, z, yaw, pitch);
+		  String x = warpLoad.getString("x");
+		  String y = warpLoad.getString("y");
+		  String z = warpLoad.getString("z");
 		  
-		  p.teleport(warpTo);
-	      List<Location> circleblocks = circle(p, p.getLocation(), 3, 1, true, false, 0);
-
-			for (Location l : circleblocks){
-				p.getWorld().playEffect(l, Effect.SMOKE, 0);
-				p.getWorld().playEffect(l, Effect.MOBSPAWNER_FLAMES, 0);
-				p.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 0);
-			}
-		
+		  bungee.utils.teleportAPlayerToServer(p.getName(), server, warpLoad.getString("world"),  x, y, z);
 	}
-	
-	  public List<Location> circle (Player player, Location loc, Integer r, Integer h, Boolean hollow, Boolean sphere, int plus_y) {
-	        List<Location> circleblocks = new ArrayList<Location>();
-	        int cx = loc.getBlockX();
-	        int cy = loc.getBlockY();
-	        int cz = loc.getBlockZ();
-	        for (int x = cx - r; x <= cx +r; x++)
-	            for (int z = cz - r; z <= cz +r; z++)
-	                for (int y = (sphere ? cy - r : cy); y < (sphere ? cy + r : cy + h); y++) {
-	                    double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z) + (sphere ? (cy - y) * (cy - y) : 0);
-	                    if (dist < r*r && !(hollow && dist < (r-1)*(r-1))) {
-	                        Location l = new Location(loc.getWorld(), x, y + plus_y, z);
-	                        circleblocks.add(l);
-	                        }
-	                    }
-	     
-	        return circleblocks;
-	  }
 }
