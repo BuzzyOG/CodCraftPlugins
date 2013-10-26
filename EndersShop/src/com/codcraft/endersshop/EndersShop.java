@@ -1,10 +1,16 @@
 package com.codcraft.endersshop;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,6 +54,7 @@ public class EndersShop extends JavaPlugin implements Listener {
 		permafrost.add("Allows to Perma-freeze one person");
 		this.api.getModuleForClass(EnderShop.class).makeItem("Permafrost", "Permafrost", 25000, "battleroom.permafrost", Material.ICE , "You now have the permafrost in game!", 3, permafrost);
 		 
+		this.api.getModuleForClass(EnderShop.class).teleportSetup();
 		
 		List<String> Ice = new ArrayList<>();
 		Ice.add("Points: 5000");
@@ -60,7 +67,7 @@ public class EndersShop extends JavaPlugin implements Listener {
 		List<String> Dragons = new ArrayList<>();
 		Dragons.add("Points: 25000");
 		Dragons.add("Unfreezes all players on your team");
-		this.api.getModuleForClass(EnderShop.class).makeItem("Dragons’ Breath", "Dragons’ Breath", 25000, "battleroom.DragonsBreath", Material.FIRE, "You now have the Dragons’ Breath in game!", 12, Dragons);
+		this.api.getModuleForClass(EnderShop.class).makeItem("Dragonsï¿½ Breath", "Dragonsï¿½ Breath", 25000, "battleroom.DragonsBreath", Material.FIRE, "You now have the Dragonsï¿½ Breath in game!", 12, Dragons);
 		List<String> Save = new ArrayList<>();
 		Save.add("Points: 2000");
 		Save.add("Unfreezes yourself");
@@ -75,11 +82,17 @@ public class EndersShop extends JavaPlugin implements Listener {
 			@Override
 			public void run() {
 				e.getPlayer().getInventory().remove(Material.DIAMOND);
+				e.getPlayer().getInventory().remove(Material.ENDER_PEARL);
 				ItemStack in = new ItemStack(Material.DIAMOND, 1);
+				ItemStack in2 = new ItemStack(Material.ENDER_PEARL, 1);
 				ItemMeta im = in.getItemMeta();
+				ItemMeta im2 = in.getItemMeta();
 				im.setDisplayName("Shop");
+				im2.setDisplayName("Teleports");
 				in.setItemMeta(im);
+				in2.setItemMeta(im2);
 				e.getPlayer().getInventory().addItem(in);
+				e.getPlayer().getInventory().addItem(in2);
 			}
 		}, 1);
 
@@ -91,6 +104,9 @@ public class EndersShop extends JavaPlugin implements Listener {
 		if(gm.getGameWithPlayer(e.getPlayer()) == null){
 			if(e.getPlayer().getItemInHand().getType() == Material.DIAMOND) {
 				e.getPlayer().openInventory(api.getModuleForClass(EnderShop.class).requestInventory(e.getPlayer()));
+			}
+			if(e.getPlayer().getItemInHand().getType() == Material.ENDER_PEARL) {
+				e.getPlayer().openInventory(api.getModuleForClass(EnderShop.class).teleportInventory(e.getPlayer()));
 			}
 		}
 	}
@@ -111,6 +127,83 @@ public class EndersShop extends JavaPlugin implements Listener {
 			}
 
 		}
+		
+		if(e.getInventory().getName().equalsIgnoreCase("Quick Teleport")){
+			if(e.getWhoClicked() instanceof Player) {
+				Player p =(Player) e.getWhoClicked();
+				Material clickedItem = e.getCurrentItem().getType();
+				
+				if(clickedItem != null) {
+					checkTeleport(clickedItem, p);
+				}
+				e.setCancelled(true);
+			}
+
+		}
 	}
 
+	private void checkTeleport(Material clickedItem, Player p) {
+		
+		switch (clickedItem){
+			case WOOL:
+				exeTP(p, "hub");
+			case BOW:
+				exeTP(p, "codcraft");
+			case FEATHER:
+				exeTP(p, "battleroom");
+			case ICE:
+				exeTP(p, "freezetag");
+			default:
+				p.sendMessage("Invalid warp!");
+			break;
+		}		
+	}
+
+	private void exeTP(Player p, String location) {
+		
+		  File warpFile = new File("./plugins/CCCommands/Warps/" + location + ".yml");
+		  
+		  if (!warpFile.exists()) {
+			  p.sendMessage("Invalid warp!");
+			  return;
+		  }
+	      
+		  YamlConfiguration warpLoad = YamlConfiguration.loadConfiguration(warpFile);
+	
+		  World w = Bukkit.getWorld(warpLoad.getString("world"));
+		  double x = warpLoad.getInt("x");
+		  double y = warpLoad.getInt("y");
+		  double z = warpLoad.getInt("z");
+		  float yaw = warpLoad.getInt("yaw");
+		  float pitch = warpLoad.getInt("pitch");
+		  Location warpTo = new Location(w, x, y+1, z, yaw, pitch);
+		  
+		  p.teleport(warpTo);
+	      List<Location> circleblocks = circle(p, p.getLocation(), 3, 1, true, false, 0);
+
+			for (Location l : circleblocks){
+				p.getWorld().playEffect(l, Effect.SMOKE, 0);
+				p.getWorld().playEffect(l, Effect.MOBSPAWNER_FLAMES, 0);
+				p.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 0);
+			}
+		
+	}
+	
+	  public List<Location> circle (Player player, Location loc, Integer r, Integer h, Boolean hollow, Boolean sphere, int plus_y) {
+	        List<Location> circleblocks = new ArrayList<Location>();
+	        int cx = loc.getBlockX();
+	        int cy = loc.getBlockY();
+	        int cz = loc.getBlockZ();
+	        for (int x = cx - r; x <= cx +r; x++)
+	            for (int z = cz - r; z <= cz +r; z++)
+	                for (int y = (sphere ? cy - r : cy); y < (sphere ? cy + r : cy + h); y++) {
+	                    double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z) + (sphere ? (cy - y) * (cy - y) : 0);
+	                    if (dist < r*r && !(hollow && dist < (r-1)*(r-1))) {
+	                        Location l = new Location(loc.getWorld(), x, y + plus_y, z);
+	                        circleblocks.add(l);
+	                        }
+	                    }
+	     
+	        return circleblocks;
+	  }
 }
