@@ -56,7 +56,7 @@ public class Teleports implements Listener {
 			GameManager gm = api.getModuleForClass(GameManager.class);
 			if(gm.getGameWithPlayer(e.getPlayer()) == null){
 				if(e.getPlayer().getItemInHand().getType() == Material.ENDER_PEARL) {
-					api.getModuleForClass(InventoryManager.class).openInv(e.getPlayer(), api.getModuleForClass(InventoryManager.class).getInv("§bTELEPORT MENU"));
+					e.getPlayer().openInventory(api.getModuleForClass(InventoryManager.class).invList.get("§bTELEPORT MENU"));
 				}
 			}
 		}
