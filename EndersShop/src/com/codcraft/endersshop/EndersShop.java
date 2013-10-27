@@ -55,8 +55,6 @@ public class EndersShop extends JavaPlugin implements Listener {
 		permafrost.add("Points: 25000");
 		permafrost.add("Allows to Perma-freeze one person");
 		this.api.getModuleForClass(EnderShop.class).makeItem("Permafrost", "Permafrost", 25000, "battleroom.permafrost", Material.ICE , "You now have the permafrost in game!", 3, permafrost);
-		 
-		this.api.getModuleForClass(EnderShop.class).teleportSetup();
 		
 		List<String> Ice = new ArrayList<>();
 		Ice.add("Points: 5000");

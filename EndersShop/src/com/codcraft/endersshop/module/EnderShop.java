@@ -21,45 +21,14 @@ public class EnderShop extends CCModule {
 	private List<Item> items = new ArrayList<>();
 	public List<Material> mats = new ArrayList<Material>();
 	public List<String> lors = new ArrayList<String>();
-	
+	 
 	private EndersShop plugin;
 
 	public EnderShop(CCAPI api, EndersShop plugin) {
 		super(api);
 		this.plugin = plugin;
 	}
-	
-	public void teleportSetup(){
-		mats.add(Material.BOW); // to hub
-		mats.add(Material.WOOL); // to codcraft
-		mats.add(Material.FEATHER); // to battleroom
-		mats.add(Material.ICE); // to freezetag
-		
-		lors.add("Teleport to Hub");
-		lors.add("Teleport to CodCraft");
-		lors.add("Teleport to BattleRoom");
-		lors.add("Teleport to FreezeTag");
-		
-		lors.add("§aHUB");
-		lors.add("§aCODCRAFT");
-		lors.add("§aBATTLEROOM");
-		lors.add("§aFREEZETAG");
-	}
-	
-	public Inventory teleportInventory(Player p) {
-		Inventory inv = Bukkit.createInventory(null, 9, "Quick Teleport");
-		for(int x = 0; x < 4; x++) {
-			List<String> newLore = new ArrayList<String>();
-			newLore.add(lors.get(x));
-			ItemStack is = new ItemStack(mats.get(x), 1);
-			ItemMeta im = is.getItemMeta();
-			im.setLore(newLore);
-			im.setDisplayName(lors.get(x+4));
-			is.setItemMeta(im);
-			inv.setItem(x, is);
-		}
-		return inv;
-	}
+
 	
 	public Inventory requestInventory(Player p) {
 		Inventory inv = Bukkit.createInventory(null, 18, "BattleShop");
