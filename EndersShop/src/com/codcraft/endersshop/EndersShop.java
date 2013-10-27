@@ -82,17 +82,11 @@ public class EndersShop extends JavaPlugin implements Listener {
 			@Override
 			public void run() {
 				e.getPlayer().getInventory().remove(Material.DIAMOND);
-				e.getPlayer().getInventory().remove(Material.ENDER_PEARL);
 				ItemStack in = new ItemStack(Material.DIAMOND, 1);
-				ItemStack in2 = new ItemStack(Material.ENDER_PEARL, 1);
 				ItemMeta im = in.getItemMeta();
-				ItemMeta im2 = in.getItemMeta();
 				im.setDisplayName("Shop");
-				im2.setDisplayName("Teleports");
 				in.setItemMeta(im);
-				in2.setItemMeta(im2);
 				e.getPlayer().getInventory().addItem(in);
-				e.getPlayer().getInventory().addItem(in2);
 			}
 		}, 1);
 
@@ -104,9 +98,6 @@ public class EndersShop extends JavaPlugin implements Listener {
 		if(gm.getGameWithPlayer(e.getPlayer()) == null){
 			if(e.getPlayer().getItemInHand().getType() == Material.DIAMOND) {
 				e.getPlayer().openInventory(api.getModuleForClass(EnderShop.class).requestInventory(e.getPlayer()));
-			}
-			if(e.getPlayer().getItemInHand().getType() == Material.ENDER_PEARL) {
-				e.getPlayer().openInventory(api.getModuleForClass(EnderShop.class).teleportInventory(e.getPlayer()));
 			}
 		}
 	}
@@ -127,57 +118,7 @@ public class EndersShop extends JavaPlugin implements Listener {
 			}
 
 		}
-		
-		if(e.getInventory().getName().equalsIgnoreCase("Quick Teleport")){
-			if(e.getWhoClicked() instanceof Player) {
-				Player p =(Player) e.getWhoClicked();
-				Material clickedItem = e.getCurrentItem().getType();
-				
-				if(clickedItem != null) {
-					checkTeleport(clickedItem, p);
-				}
-				e.setCancelled(true);
-			}
-
-		}
-	}
-
-	private void checkTeleport(Material clickedItem, Player p) {
-		
-		switch (clickedItem){
-			case WOOL:
-				exeTP(p, "hub" //server here);
-				break;
-			case BOW:
-				exeTP(p, "codcraft" //server here);
-				break;
-			case FEATHER:
-				exeTP(p, "battleroom" //server here);
-				break;
-			case ICE:
-				exeTP(p, "freezetag" //server here);
-				break;
-			default:
-				p.sendMessage("Invalid warp!");
-				break;
-		}		
-	}
-
-	private void exeTP(Player p, String location, String server) {
-		
-		  File warpFile = new File("./plugins/CCCommands/Warps/" + location + ".yml");
-		  
-		  if (!warpFile.exists()) {
-			  p.sendMessage("Invalid warp did you set one at the coords on any server?");
-			  return;
-		  }
-	      
-		  YamlConfiguration warpLoad = YamlConfiguration.loadConfiguration(warpFile);
 	
-		  String x = warpLoad.getString("x");
-		  String y = warpLoad.getString("y");
-		  String z = warpLoad.getString("z");
-		  
-		  bungee.utils.teleportAPlayerToServer(p.getName(), server, warpLoad.getString("world"),  x, y, z);
 	}
+
 }
