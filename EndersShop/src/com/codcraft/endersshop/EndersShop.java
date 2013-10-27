@@ -147,15 +147,19 @@ public class EndersShop extends JavaPlugin implements Listener {
 		switch (clickedItem){
 			case WOOL:
 				exeTP(p, "hub" //server here);
+				break;
 			case BOW:
 				exeTP(p, "codcraft" //server here);
+				break;
 			case FEATHER:
 				exeTP(p, "battleroom" //server here);
+				break;
 			case ICE:
 				exeTP(p, "freezetag" //server here);
+				break;
 			default:
 				p.sendMessage("Invalid warp!");
-			break;
+				break;
 		}		
 	}
 
