@@ -3,6 +3,10 @@ package com.codcraft.lobby;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
+
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,8 +17,13 @@ import org.bukkit.block.Sign;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.CodCraft.api.CCAPI;
+import com.CodCraft.api.modules.GUI;
+import com.CodCraft.api.modules.GameManager;
 import com.codcraft.lobby.ping.PingManager;
 
 
@@ -22,6 +31,9 @@ public class CCLobby extends JavaPlugin {
 		
 	public List<Module> configmap = new ArrayList<>();
 	public PingManager pingManager;
+	public CCAPI api;
+	public Chat chat;
+	public Permission permi;
 
 	
 	public void onDisable() {
@@ -39,6 +51,11 @@ public class CCLobby extends JavaPlugin {
 		
 		//register events
 		
+		final Plugin api = this.getServer().getPluginManager().getPlugin("CodCraftAPI");
+	    if(api != null || !(api instanceof CCAPI)) {
+	    	this.api = (CCAPI) api;
+	    }
+		
 		getServer().getPluginManager().registerEvents(new LobbyListener(this), this);
 		getServer().getPluginManager().registerEvents(new LobbyMaker(this), this);
 		getCommand("maker").setExecutor(new makercommand());
@@ -55,14 +72,37 @@ public class CCLobby extends JavaPlugin {
 		Timer();
 
 
+		setupPermissions();
+		setupChat();
+		
 	}
+    private boolean setupPermissions()
+    {
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null) {
+        	permi = permissionProvider.getProvider();
+        }
+        return (permi != null);
+    }
 
+    private boolean setupChat()
+    {
+        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (chatProvider != null) {
+            chat = chatProvider.getProvider();
+        }
+
+        return (chat != null);
+    }
+    
+    
 	private void Timer() {
 		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 			
 			@Override
 			public void run() {
 				for(Player p : Bukkit.getOnlinePlayers()) {
+					guiUpdate();
 					Location loc1 = new Location(Bukkit.getWorld("world"), -584, 20, 450);
 					Location loc2 = new Location(Bukkit.getWorld("world"), -347, 255, 203);
 					if(!isInside(p, loc1, loc2)) {
@@ -71,7 +111,31 @@ public class CCLobby extends JavaPlugin {
 				}
 				
 			}
-		}, 0, 60);
+		}, 0, 20);
+		
+	}
+	
+	public void guiUpdate() {
+		GameManager gm = api.getModuleForClass(GameManager.class);
+		GUI gui = api.getModuleForClass(GUI.class);
+		TreeMap<String, String> sorted = new TreeMap<>();
+		int i = 0;
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			i++;
+			if(gm.getGameWithPlayer(p) == null) {
+				String prefix = chat.getGroupPrefix(Bukkit.getWorld("world"), permi.getPrimaryGroup(p));
+				prefix = prefix.substring(0, 2);
+				prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+				sorted.put(""+i, prefix+p.getName());
+			}
+		}
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			if(gm.getGameWithPlayer(p) == null) {
+				
+				gui.updateplayerlist(p, sorted);
+			}
+
+		}
 		
 	}
 

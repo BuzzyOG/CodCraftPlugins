@@ -11,6 +11,8 @@ import org.bukkit.potion.PotionEffect;
 
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.modules.GameManager;
+import com.codcraft.codcraftplayer.CCPlayer;
+import com.codcraft.codcraftplayer.CCPlayerModule;
 
 public class SpawnCommand implements CommandExecutor {
 	private CCCommands plugin;
@@ -33,14 +35,18 @@ public class SpawnCommand implements CommandExecutor {
 				GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 				Game<?> g = gm.getGameWithPlayer(p);
 				if(g != null) {
-					g.findTeamWithPlayer(p).removePlayer(p);
+					if(g.findTeamWithPlayer(p) != null) {
+						g.findTeamWithPlayer(p).removePlayer(p);
+					}
 				}
 				p.teleport(new Location(Bukkit.getWorld("world"), x, y, z, 0, 0));
 				p.getInventory().clear();
 				for(PotionEffect pe : p.getActivePotionEffects()) {
 					p.removePotionEffect(pe.getType());
 				}
-				p.setLevel(0);
+				CCPlayerModule ccpm = plugin.api.getModuleForClass(CCPlayerModule.class);
+				CCPlayer ccp = ccpm.getPlayer(p);
+				p.setLevel(ccp.getCredits());
 				p.setAllowFlight(false);
 				p.setGameMode(GameMode.SURVIVAL);
 				p.setHealth(20D);

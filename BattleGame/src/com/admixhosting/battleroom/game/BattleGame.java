@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.TreeMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,9 +18,11 @@ import org.bukkit.entity.Player;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.GameState;
 import com.CodCraft.api.model.Team;
+import com.CodCraft.api.model.TeamPlayer;
 import com.CodCraft.api.model.hook.Hook;
 import com.CodCraft.api.model.hook.Rotation;
 import com.CodCraft.api.model.hook.TeamHook;
+import com.CodCraft.api.modules.GUI;
 import com.CodCraft.api.modules.ScoreBoard;
 import com.admixhosting.battleroom.BattleRoom;
 import com.admixhosting.battleroom.states.InGameState;
@@ -39,6 +43,59 @@ public class BattleGame extends Game<BattleRoom> {
 	public BattleGame(BattleRoom instance) {
 		super(instance);
 	}
+	
+	
+	@Override
+	public Team findTeamWithPlayer(Player player) {
+		if(requestedTeams.containsKey(player.getName())) {
+			return requestedTeams.get(player.getName());
+		}
+		for(Team team : teams) {
+			if(team.containsPlayer(player)) {
+				return team;
+	        }
+	    }
+		return null;
+	}
+	
+	@Override
+	public Team findTeamWithPlayer(TeamPlayer player) {
+		if(requestedTeams.containsKey(player.getName())) {
+			return requestedTeams.get(player.getName());
+		}
+		for(Team team : teams) {
+			if(team.containsPlayer(player)) {
+				return team;
+		    }
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean containsPlayer(Player p) {
+		if(requestedTeams.containsKey(p.getName())) {
+			return true;
+		}
+	    for(Team team : teams) {
+	    	if(team.containsPlayer(p)) {
+	    		return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	@Override
+	 public boolean containsPlayer(TeamPlayer player) {
+		if(requestedTeams.containsKey(player.getName())) {
+			return true;
+		}
+	    for(Team team : teams) {
+	    	if(team.containsPlayer(player)) {
+	    		return true;
+	        }
+	    }
+	    return false;
+	}
 
 	@Override
 	public void initialize() {
@@ -47,7 +104,6 @@ public class BattleGame extends Game<BattleRoom> {
 		if(!isFreezeTag()) {
 			setCurrentmap("Battle");
 		}
-		setCurrentmap("Battle");
 		addHook(new TeamHook(this));
 		if(isFreezeTag()) {
 			
@@ -82,6 +138,63 @@ public class BattleGame extends Game<BattleRoom> {
 			genStars();
 		}
 
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void updateGUI() {
+		GUI gui = getPlugin().api.getModuleForClass(GUI.class);
+		TreeMap<String, String> sorted = new TreeMap<>();
+		//ArrayList<String> tab = new ArrayList<>();
+		int i = 0;
+		for(Entry<String, Team> en : requestedTeams.entrySet()) {
+			i++;
+			Player p = Bukkit.getPlayer(en.getKey());
+			if(p != null) {
+				String prefix = getPlugin().chat.getGroupPrefix(Bukkit.getWorld(getName()), getPlugin().permi.getPrimaryGroup(p));
+				prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+				String full = prefix+en.getValue().getColor()+p.getName();
+				if(full.length() >= 17) {
+					sorted.put(""+i, full.substring(0, 15));
+				} else {
+					sorted.put(""+i, full);
+				}
+
+			}
+		}
+		i = 0;
+		for(Team t : getTeams()) {
+			for(TeamPlayer tp : t.getPlayers()) {
+				i++;
+				Player p = Bukkit.getPlayer(tp.getName());
+				if(p != null) {
+					String prefix = getPlugin().chat.getGroupPrefix(Bukkit.getWorld(getName()), getPlugin().permi.getPrimaryGroup(p));
+					prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+					String full = prefix+t.getColor()+tp.getName();
+					if(full.length() >= 17) {
+						sorted.put(""+i, full.substring(0, 15));
+					} else {
+						sorted.put(""+i, full);
+					}
+
+				}
+
+			}
+		}
+		for(Team t : getTeams()) {
+			for(TeamPlayer tp : t.getPlayers()) {
+				Player p = Bukkit.getPlayer(tp.getName());
+				if(p != null) {
+					gui.updateplayerlist(p, sorted);
+				}
+
+			}
+		}
+		for(Entry<String, Team> en : requestedTeams.entrySet()) {
+			Player p = Bukkit.getPlayer(en.getKey());
+			if(p != null) {
+				gui.updateplayerlist(p, sorted);
+			}
+		}
 	}
 	
 	public List<String> getInLobby() {

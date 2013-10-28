@@ -58,6 +58,7 @@ public class LobbyState implements GameState {
 				//ScoreBoard SB = getGame().getPlugin().api.getModuleForClass(ScoreBoard.class);
 				LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
 				Lobby l = lm.getLobby(game.getName());
+				
 				for(String s : game.getInLobby()) {
 					Player p = Bukkit.getPlayer(s);
 					if(p != null) {
@@ -85,7 +86,7 @@ public class LobbyState implements GameState {
 				int players = game.getInLobby().size();
 				if(players > min_players) {
 					duration--;
-
+					game.updateGUI();
 					ScoreBoard sb = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
 					int red = 0;
 					int blue = 0;

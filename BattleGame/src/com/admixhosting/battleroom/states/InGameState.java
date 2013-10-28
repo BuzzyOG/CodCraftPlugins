@@ -109,7 +109,7 @@ public class InGameState implements GameState {
 				}
 				if(duration > 0) {
 					duration--;
-					
+					game.updateGUI();
 					if(duration == time - 15) {
 						for(Team t : game.getTeams()) {
 							for(TeamPlayer tp : t.getPlayers()) {
@@ -275,7 +275,7 @@ public class InGameState implements GameState {
 					}
 					
 					Bukkit.getPluginManager().callEvent(event1);
-					Bukkit.broadcastMessage(game.getName() + "has finished!");
+					Bukkit.broadcastMessage(ChatColor.YELLOW + getGame().getName() + " has finished!");
 					game.setState(new LobbyState(getGame()));
 					if(!game.isFreezeTag()) {
 						/*new Location(Bukkit.getWorld(getGame().getName()), -392, 125, 409).getBlock().setType(Material.GLASS);

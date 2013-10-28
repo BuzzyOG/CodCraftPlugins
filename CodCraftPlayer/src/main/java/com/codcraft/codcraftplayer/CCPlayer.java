@@ -109,11 +109,15 @@ public class CCPlayer {
 	}
 	
 	public void setRawCredits(int i) {
-		rawCredits = i;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "rawCredits", rawCredits, i);
+		Bukkit.getPluginManager().callEvent(event);
+		rawCredits = event.getNewscore();
 	}
 	 
 	public void removeCredits(int i) {
-		credits -= i;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "rcredits", credits, credits - i);
+		Bukkit.getPluginManager().callEvent(event);
+		credits = event.getNewscore();
 	}
 	
 	public int getCredits() {
@@ -121,7 +125,9 @@ public class CCPlayer {
 	}
 	
 	public void setCredits(int i) {
-		credits = i;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "credits", credits, i);
+		Bukkit.getPluginManager().callEvent(event);
+		credits = event.getNewscore();
 	}
 	
 	public Map<Integer, CCClass> getMapClasses() {
@@ -149,59 +155,79 @@ public class CCPlayer {
 		return Losses;
 	}
 	public void setLosses(Integer losses) {
-		Losses = losses;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "Losses", Losses, losses);
+		Bukkit.getPluginManager().callEvent(event);
+		Losses = event.getNewscore();
 	}
 	public Integer getDeaths() {
 		return Deaths;
 	}
 	public void setDeaths(Integer deaths) {
-		Deaths = deaths;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "Deaths", Deaths, deaths);
+		Bukkit.getPluginManager().callEvent(event);
+		Deaths = event.getNewscore();
 	}
 	public Integer getWins() {
 		return Wins;
 	}
 	public void setWins(Integer wins) {
-		Wins = wins;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "Wins", Wins, wins);
+		Bukkit.getPluginManager().callEvent(event);
+		Wins = event.getNewscore();
 	}
 	public void setPoints(Integer points) {
-		CCPoints = points;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "CCPoints", CCPoints, points);
+		Bukkit.getPluginManager().callEvent(event);
+		CCPoints = event.getNewscore();
 	}
 	public Integer getPoints() {
 		return CCPoints;
 	}
 	
 	public void setLevel(Integer Level) {
-		CCLevel = Level;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "CCLevel", CCLevel, Level);
+		Bukkit.getPluginManager().callEvent(event);
+		CCLevel = event.getNewscore();
 	}
 	public Integer getKills() {
 		return Kills;
 	}
 	public void setKills(Integer kills) {
-		Kills = kills;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "Kills", Kills, kills);
+		Bukkit.getPluginManager().callEvent(event);
+		Kills = event.getNewscore();
 	}
 	public Integer getTDMKills() {
 		return TDMKills;
 	}
 	public void setTDMKills(Integer tDMKills) {
-		TDMKills = tDMKills;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "TDMKills", TDMKills, tDMKills);
+		Bukkit.getPluginManager().callEvent(event);
+		TDMKills = event.getNewscore();
 	}
 	public Integer getTDMDeaths() {
 		return TDMDeaths;
 	}
 	public void setTDMDeaths(Integer tDMDeaths) {
-		TDMDeaths = tDMDeaths;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "TDMDeaths", TDMDeaths, tDMDeaths);
+		Bukkit.getPluginManager().callEvent(event);
+		TDMDeaths = event.getNewscore();
 	}
 	public Integer getTDMWins() {
 		return TDMWins;
 	}
 	public void setTDMWins(Integer tDMWins) {
-		TDMWins = tDMWins;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "TDMWins", TDMWins, tDMWins);
+		Bukkit.getPluginManager().callEvent(event);
+		TDMWins = event.getNewscore();
 	}
 	public Integer getTDMLosses() {
 		return TDMLosses;
 	}
 	public void setTDMLosses(Integer tDMLosses) {
-		TDMLosses = tDMLosses;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "TDMLosses", TDMLosses, tDMLosses);
+		Bukkit.getPluginManager().callEvent(event);
+		TDMLosses = event.getNewscore();
 	}
 	public Integer getFFAKills() {
 		return FFAKills;
@@ -216,68 +242,87 @@ public class CCPlayer {
 		return freezes;
 	}
 	public void setFreezes(Integer freezes) {
-		this.freezes = freezes;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "freezes", this.freezes, freezes);
+		Bukkit.getPluginManager().callEvent(event);
+		this.freezes = event.getNewscore();
 	}
 	public Integer getFFALosses() {
 		return FFALosses;
 	}
 	public void setFFALosses(Integer fFALosses) {
-		FFALosses = fFALosses;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "FFALosses", FFALosses, fFALosses);
+		Bukkit.getPluginManager().callEvent(event);
+		FFALosses = event.getNewscore();
 	}
 	public void setFFAWins(Integer fFAWins) {
-		FFAWins = fFAWins;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "FFAWins", FFAWins, fFAWins);
+		Bukkit.getPluginManager().callEvent(event);
+		FFAWins = event.getNewscore();
 	}
 	public void setFFADeaths(Integer fFADeaths) {
-		FFADeaths = fFADeaths;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "FFADeaths", FFADeaths, fFADeaths);
+		Bukkit.getPluginManager().callEvent(event);
+		FFADeaths = event.getNewscore();
 	}
 	public void setFFAKills(Integer fFAKills) {
-		FFAKills = fFAKills;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "FFAKills", FFAKills, fFAKills);
+		Bukkit.getPluginManager().callEvent(event);
+		FFAKills = event.getNewscore();
 	}
 	public Integer getSSBKills() {
 		return SSBKills;
 	}
+	@Deprecated
 	public void setSSBKills(Integer sSBKills) {
 		SSBKills = sSBKills;
 	}
 	public Integer getSSBDeaths() {
 		return SSBDeaths;
 	}
+	@Deprecated
 	public void setSSBDeaths(Integer sSBDeaths) {
 		SSBDeaths = sSBDeaths;
 	}
+	
 	public Integer getSSBWins() {
 		return SSBWins;
 	}
+	@Deprecated
 	public void setSSBWins(Integer sSBWins) {
 		SSBWins = sSBWins;
 	}
 	public Integer getSSBLosses() {
 		return SSBLosses;
 	}
+	@Deprecated
 	public void setSSBLosses(Integer sSBLosses) {
 		SSBLosses = sSBLosses;
 	}
 	public Integer getUHCKills() {
 		return UHCKills;
 	}
+	@Deprecated
 	public void setUHCKills(Integer uHCKills) {
 		UHCKills = uHCKills;
 	}
 	public Integer getUHCDeaths() {
 		return UHCDeaths;
 	}
+	@Deprecated
 	public void setUHCDeaths(Integer uHCDeaths) {
 		UHCDeaths = uHCDeaths;
 	}
 	public Integer getUHCWins() {
 		return UHCWins;
 	}
+	@Deprecated
 	public void setUHCWins(Integer uHCWins) {
 		UHCWins = uHCWins;
 	}
 	public Integer getUHCLosses() {
 		return UHCLosses;
 	}
+	@Deprecated
 	public void setUHCLosses(Integer uHCLosses) {
 		UHCLosses = uHCLosses;
 	}
@@ -317,25 +362,38 @@ public class CCPlayer {
 		return CaCint;
 	}
 	public void setCaCint(Integer caCint) {
-		CaCint = caCint;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "CaCint", CaCint, caCint);
+		Bukkit.getPluginManager().callEvent(event);
+		CaCint = event.getNewscore();
 	}
 	public Integer getUnfreezes() {
 		return unfreezes;
 	}
 	public void setUnfreezes(Integer unfreezes) {
-		this.unfreezes = unfreezes;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "unfreezes", this.unfreezes, unfreezes);
+		Bukkit.getPluginManager().callEvent(event);
+		this.unfreezes = event.getNewscore();
 	}
 	public Integer getBGwins() {
 		return BGwins;
 	}
 	public void setBGwins(Integer bGwins) {
-		BGwins = bGwins;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "BGwins", BGwins, bGwins);
+		Bukkit.getPluginManager().callEvent(event);
+		BGwins = event.getNewscore();
 	}
 	public Integer getBGlosses() {
 		return BGlosses;
 	}
 	public void setBGlosses(Integer bGlosses) {
-		BGlosses = bGlosses;
+		PlayerStatUpdate event = new PlayerStatUpdate(this, "BGlosses", BGlosses, bGlosses);
+		Bukkit.getPluginManager().callEvent(event);
+		BGlosses = event.getNewscore();
+	}
+
+
+	public String getName() {
+		return name;
 	}
 
 	

@@ -42,7 +42,7 @@ public class EndersShop extends JavaPlugin implements Listener {
 		List<String> GalatialBlaster = new ArrayList<>();
 		GalatialBlaster.add("Points: 25000");
 		GalatialBlaster.add("Fire 2 Bullets");
-		this.api.getModuleForClass(EnderShop.class).makeItem("Galatial Blaster", "Galatial Blaster", 25000, "battleroom.diamond", Material.DIAMOND_BARDING , "You now have the Galatial Blaster in game!", 1, GalatialBlaster);
+		this.api.getModuleForClass(EnderShop.class).makeItem("Glacial Blaster", "Glacial Blaster", 25000, "battleroom.diamond", Material.DIAMOND_BARDING , "You now have the Galatial Blaster in game!", 1, GalatialBlaster);
 		List<String> permafrost = new ArrayList<>();
 		permafrost.add("Points: 25000");
 		permafrost.add("Allows to Perma-freeze one person");
@@ -60,7 +60,7 @@ public class EndersShop extends JavaPlugin implements Listener {
 		List<String> Dragons = new ArrayList<>();
 		Dragons.add("Points: 25000");
 		Dragons.add("Unfreezes all players on your team");
-		this.api.getModuleForClass(EnderShop.class).makeItem("Dragons’ Breath", "Dragons’ Breath", 25000, "battleroom.DragonsBreath", Material.FIRE, "You now have the Dragons’ Breath in game!", 12, Dragons);
+		this.api.getModuleForClass(EnderShop.class).makeItem("Dragonsï¿½ Breath", "Dragonsï¿½ Breath", 25000, "battleroom.DragonsBreath", Material.FIRE, "You now have the Dragonsï¿½ Breath in game!", 12, Dragons);
 		List<String> Save = new ArrayList<>();
 		Save.add("Points: 2000");
 		Save.add("Unfreezes yourself");

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +23,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.kitteh.tag.PlayerReceiveNameTagEvent;
+import org.kitteh.tag.TagAPI;
 
+import com.CodCraft.api.model.Game;
+import com.CodCraft.api.modules.GameManager;
+import com.codcraft.codcraftplayer.CCPlayer;
+import com.codcraft.codcraftplayer.CCPlayerModule;
 import com.codcraft.lobby.ping.Ping;
 
 public class LobbyListener implements Listener {
@@ -61,6 +68,8 @@ public class LobbyListener implements Listener {
 		}
 	}
 	
+
+	
 	@EventHandler
 	public void onjoin(final PlayerJoinEvent e) {
 		e.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -465, 52, 327, (float) 180, (float) 0.6));
@@ -72,12 +81,17 @@ public class LobbyListener implements Listener {
 			e.getPlayer().setAllowFlight(false);
 			e.getPlayer().setFlying(false);
 		}
+		CCPlayerModule ccpm = plugin.api.getModuleForClass(CCPlayerModule.class);
+		final CCPlayer ccp = ccpm.getPlayer(e.getPlayer());
+		TagAPI.refreshPlayer(e.getPlayer());
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			@Override
 			public void run() {
 				
 				plugin.updateSigns();
+				e.getPlayer().setLevel(ccp.getCredits());
+				plugin.guiUpdate();
 				
 			}
 		}, 5);
@@ -94,14 +108,30 @@ public class LobbyListener implements Listener {
 	}
 	
 	@EventHandler
+	public void onUpdaye(PlayerReceiveNameTagEvent e) {
+		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		Game<?> g = gm.getGameWithPlayer(e.getNamedPlayer());
+		if(g == null) {
+			String prefix = plugin.chat.getGroupPrefix(Bukkit.getWorld("world"), plugin.permi.getPrimaryGroup(e.getNamedPlayer()));
+			prefix = prefix.substring(0, 2);
+			prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+			e.setTag(prefix + e.getNamedPlayer().getName()); 
+		}
+
+	}
+	
+	@EventHandler
 	public void onleave(final PlayerQuitEvent e) {
 		e.setQuitMessage(null);
+		e.getPlayer().getInventory().clear();
+		//TagAPI.refreshPlayer(e.getPlayer());
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			@Override
 			public void run() {
 				
 				plugin.updateSigns();
+				plugin.guiUpdate();
 			}
 		}, 5);
 	}

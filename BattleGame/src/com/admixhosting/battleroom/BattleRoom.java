@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,6 +23,7 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
@@ -49,6 +53,8 @@ public class BattleRoom extends CCGamePlugin {
 	public CCAPI api;
 	public Map<UUID, Vector> firework = new HashMap<UUID, Vector>();
 	private Map<String, Integer> i = new HashMap<>();
+	public Chat chat;
+	public Permission permi;
 
 
 	public void onEnable() {
@@ -74,7 +80,27 @@ public class BattleRoom extends CCGamePlugin {
 		alwaysDay();
 
 		makegame("FT1", true);
+		setupPermissions();
+		setupChat();
 	}
+    private boolean setupPermissions()
+    {
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null) {
+        	permi = permissionProvider.getProvider();
+        }
+        return (permi != null);
+    }
+
+    private boolean setupChat()
+    {
+        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (chatProvider != null) {
+            chat = chatProvider.getProvider();
+        }
+
+        return (chat != null);
+    }
 	
 	private void alwaysDay() {
 		final BattleRoom ffa = this;

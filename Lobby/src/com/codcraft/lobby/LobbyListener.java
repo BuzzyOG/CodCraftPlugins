@@ -95,15 +95,49 @@ public class LobbyListener implements Listener {
 	}
 	
 	   private boolean isInside(Player p, double maxX, double maxY, double maxZ, double minX, double minY, double minZ) {
-		   Location loc = p.getLocation();
-		   if(loc.getX() < minX || loc.getX() > maxX)
-			   return false;
-		   if(loc.getZ() < minZ || loc.getZ() > maxZ)
-			   return false;
-		   if(loc.getY() < minY || loc.getY() > maxY)
-			   return false;
-		   return true;
+		   Location loc = new Location(p.getWorld(), minX, minY, minZ);
+		   Location loc1 = new Location(p.getWorld(), maxX, maxY, maxZ);
+		   return isInside(p, loc, loc1);
 	   }
+	   
+		private boolean isInside(Player p, Location loc1, Location loc2) {
+			Location loc = p.getLocation();
+			double minX;
+			double maxX;
+			double maxZ;
+			double minZ;
+			double maxY;
+			double minY;
+			if(loc1.getX() > loc2.getX()) {
+				maxX = loc1.getX();
+				minX = loc2.getX();
+			} else {
+				maxX = loc2.getX();
+				minX = loc1.getX();
+			}
+			if(loc1.getY() > loc2.getY()) {
+				maxY = loc1.getY();
+				minY = loc2.getY();
+			} else {
+				maxY = loc2.getY();
+				minY = loc1.getY();
+			}
+			if(loc1.getZ() > loc2.getZ()) {
+				maxZ = loc1.getZ();
+				minZ = loc2.getZ();
+			} else {
+				maxZ = loc2.getZ();
+				minZ = loc1.getZ();
+			}
+			
+			if(loc.getX() < minX || loc.getX() > maxX)
+				   return false;  
+			if(loc.getZ() < minZ || loc.getZ() > maxZ)
+				   return false;
+			if(loc.getY() < minY || loc.getY() > maxY)
+				   return false;   
+			return true;		
+		}
 	
 	
 

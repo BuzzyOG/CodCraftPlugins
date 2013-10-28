@@ -22,7 +22,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.CodCraft.api.event.team.TeamPlayerLostEvent;
 
 
 /**
@@ -131,10 +134,52 @@ public class ADListener implements Listener {
     }
     
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
+    public void te(TeamPlayerLostEvent e) {
+    	final Player p = Bukkit.getPlayer(e.getPlayer().getName());
+    	if(p != null) {
+    		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+    			
+    			@Override
+    			public void run() {
+    				ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
+    				BookMeta book1 = (BookMeta) book.getItemMeta();
+    				book1.setDisplayName("Guide");
+    				book1.addPage("Welcome to Cylum    please follow these"+ChatColor.BOLD+" rules."+ChatColor.BLACK+"" +
+    						"             Respect all Staff marked in "+ChatColor.DARK_RED+" red!"+ ChatColor.BLACK + "           No Hacking!" +
+    								"               No Advertising." +
+    								"           Use Common Sense!");
+    				
+    				book.setItemMeta(book1);
+    				p.getInventory().addItem(book);
+    				
+    			}
+    		}, 1);
+    	}
+
+    }
+    
+    @EventHandler
+    public void onJoin(final PlayerJoinEvent e) {
     	e.setJoinMessage(null);
     	//plugin.sendGlobalMessage(" ", ChatColor.GRAY + e.getPlayer().getName() + " has joined " + plugin.getConfig().getString("Name"));
     	plugin.players.put(e.getPlayer().getName(), ChatType.SERVER);
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
+				BookMeta book1 = (BookMeta) book.getItemMeta();
+				book1.setDisplayName("Guide");
+				book1.addPage("Welcome to Cylum    please follow these"+ChatColor.BOLD+" rules."+ChatColor.BLACK+"" +
+						"             Respect all Staff marked in "+ChatColor.DARK_RED+" red!"+ ChatColor.BLACK + "           No Hacking!" +
+								"               No Advertising." +
+								"           Use Common Sense!");
+				
+				book.setItemMeta(book1);
+				e.getPlayer().getInventory().addItem(book);
+				
+			}
+		}, 1);
     }
     
     @EventHandler

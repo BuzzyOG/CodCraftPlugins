@@ -30,6 +30,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.kitteh.tag.PlayerReceiveNameTagEvent;
@@ -42,6 +43,7 @@ import com.CodCraft.api.event.team.TeamPlayerLostEvent;
 import com.CodCraft.api.model.Game;
 import com.CodCraft.api.model.Team;
 import com.CodCraft.api.model.TeamPlayer;
+import com.CodCraft.api.modules.GUI;
 import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.modules.ScoreBoard;
 import com.CodCraft.api.modules.Weapons;
@@ -147,7 +149,10 @@ public class GameListener implements Listener {
 					}
 					for(String s : game.getInLobby()) {
 						Player p1 = Bukkit.getPlayer(s);
-						p1.sendMessage(p.getName() + " has joined the game ["+ game.getInLobby().size() +"/16]");
+						String prefix = plugin.chat.getGroupPrefix(Bukkit.getWorld(g.getName()), plugin.permi.getPrimaryGroup(p));
+						prefix = prefix.substring(0, 2);
+						prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+						p1.sendMessage(prefix + p.getName() + ChatColor.WHITE + " has joined the game ["+ game.getInLobby().size() +"/16]");
 					}
 				}
 			}
@@ -155,11 +160,21 @@ public class GameListener implements Listener {
 	}
 	
 	@EventHandler
+	public void onLoad(WorldLoadEvent e) {
+		e.getWorld().setStorm(false);
+		e.getWorld().setThundering(false);
+	}
+	
+	@EventHandler
 	public void onChange(WeatherChangeEvent e) {
 	    GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 	    for (Game<?> g : gm.getAllGames())
-	    	if ((g.getName().equalsIgnoreCase(e.getWorld().getName())) && (e.toWeatherState()))
-	    		e.setCancelled(true);
+	    	if (g.getName().equalsIgnoreCase(e.getWorld().getName())) {
+	    		if(e.toWeatherState()) {
+	    			e.setCancelled(true);
+	    			
+	    		}
+	    	}
 	  }
 	
 	@SuppressWarnings("deprecation")
@@ -438,7 +453,7 @@ public class GameListener implements Listener {
 							GameWinEvent event1 = new GameWinEvent(t1.getColor() + t1.getName() + " has won the game!", t1, g);
 							Bukkit.getPluginManager().callEvent(event1);
 							
-							Bukkit.broadcastMessage(g.getName() + "has finished!");
+							Bukkit.broadcastMessage(ChatColor.YELLOW + g.getName() + " has finished!");
 						}
 						
 					}
@@ -501,6 +516,7 @@ public class GameListener implements Listener {
 	public void onLose(TeamPlayerLostEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		Game<?> g = gm.getGameWithTeam(e.getTeam());
+		GUI gui = plugin.api.getModuleForClass(GUI.class);
 		if(g != null) {
 			if(g.getPlugin() == plugin) {
 				BattlePlayer bp = (BattlePlayer) e.getPlayer();
@@ -512,6 +528,8 @@ public class GameListener implements Listener {
 					BattleGame bg = (BattleGame) g;
 					bg.requestedTeams.remove(p.getName());
 					bg.removeInLobby(p);
+					gui.removeold(p);
+					gui.reset(p);
 				}
 			}
 		}
@@ -599,7 +617,6 @@ public class GameListener implements Listener {
 									}
 									fw.setFireworkMeta(meta);
 								}
-								BattleGame game = (BattleGame) e.getGame();
 								
 								
 							}

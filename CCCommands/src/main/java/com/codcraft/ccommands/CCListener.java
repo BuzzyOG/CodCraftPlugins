@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.TreeMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,6 +24,7 @@ import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -32,10 +34,16 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.util.Vector;
+import org.kitteh.tag.PlayerReceiveNameTagEvent;
+import org.kitteh.tag.TagAPI;
 
 import com.CodCraft.api.event.RequestJoinGameEvent;
+import com.CodCraft.api.event.team.TeamPlayerGainedEvent;
+import com.CodCraft.api.event.team.TeamPlayerLostEvent;
 import com.CodCraft.api.model.Game;
+import com.CodCraft.api.modules.GUI;
 import com.CodCraft.api.modules.GameManager;
+import com.codcraft.codcraftplayer.PlayerStatUpdate;
 
 public class CCListener implements Listener {
 	
@@ -86,6 +94,19 @@ public class CCListener implements Listener {
 		    e.getPlayer().sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
 		}
 	}
+	@EventHandler
+	public void onUpdaye(PlayerReceiveNameTagEvent e) {
+		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		Game<?> g = gm.getGameWithPlayer(e.getNamedPlayer());
+		if(g == null) {
+			String prefix = plugin.chat.getGroupPrefix(Bukkit.getWorld("world"), plugin.permi.getPrimaryGroup(e.getNamedPlayer()));
+			prefix = prefix.substring(0, 2);
+			prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+			e.setTag(prefix + e.getNamedPlayer().getName()); 
+		}
+
+	}
+	
 	
 	
 	@EventHandler
@@ -112,6 +133,15 @@ public class CCListener implements Listener {
 	}
 	
 	@EventHandler
+	public void onDrop(PlayerDropItemEvent e) {
+		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		if(gm.getGameWithPlayer(e.getPlayer()) == null) {
+			e.setCancelled(true);
+		}
+	}
+	
+	
+	@EventHandler
 	public void onInt(PlayerInteractEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		Game<?> g = gm.getGameWithPlayer(e.getPlayer());
@@ -129,6 +159,24 @@ public class CCListener implements Listener {
 			}
 		}
 
+	}
+	
+	@EventHandler
+	public void onPlayerStat(final PlayerStatUpdate e) {
+		if(e.getStat().equalsIgnoreCase("credits")) {
+			final Player p = Bukkit.getPlayer(e.getPlayer().getName());
+			if(p != null) {
+				Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+					
+					@Override
+					public void run() {
+						p.setLevel(e.getNewscore());
+						
+					}
+				}, 1);
+
+			}
+		}
 	}
 	
 	@EventHandler
@@ -189,6 +237,15 @@ public class CCListener implements Listener {
 	
 	@EventHandler
 	public void onLeave(PlayerQuitEvent e) {
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				guiUpdate();
+				
+			}
+		}, 1);
+
 		e.setQuitMessage(null);
 	}
 	
@@ -202,7 +259,13 @@ public class CCListener implements Listener {
 			Bukkit.dispatchCommand(e.getPlayer(), "lobby");
 		}
 		e.getPlayer().getInventory().setHelmet(null);
-
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				guiUpdate();
+			}
+		}, 1);
 	}
 	
 	
@@ -228,26 +291,44 @@ public class CCListener implements Listener {
 			e.getPlayer().setAllowFlight(false);
 			e.getPlayer().setFlying(false);
 		}
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-			
-			@Override
-			public void run() {
-				ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
-				BookMeta book1 = (BookMeta) book.getItemMeta();
-				book1.setDisplayName("Guide");
-				book1.addPage("Welcome to Cylum    please follow these"+ChatColor.BOLD+" rules."+ChatColor.BLACK+"" +
-						"             Respect all Staff marked in "+ChatColor.DARK_RED+" red!"+ ChatColor.BLACK + "           No Hacking!" +
-								"               No Advertising." +
-								"           Use Common Sense!");
-				
-				book.setItemMeta(book1);
-				e.getPlayer().getInventory().addItem(book);
-				
-			}
-		}, 1);
+		guiUpdate();
+
 
 	}
 	
+	private void guiUpdate() {
+		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		GUI gui = plugin.api.getModuleForClass(GUI.class);
+		TreeMap<String, String> sorted = new TreeMap<>();
+		int i = 0;
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			i++;
+			if(gm.getGameWithPlayer(p) == null) {
+				String prefix = plugin.chat.getGroupPrefix(Bukkit.getWorld("world"), plugin.permi.getPrimaryGroup(p));
+				prefix = prefix.substring(0, 2);
+				prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+				sorted.put(""+i, prefix+p.getName());
+			}
+		}
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			if(gm.getGameWithPlayer(p) == null) {
+				//TagAPI.refreshPlayer(p);
+				gui.updateplayerlist(p, sorted);
+			}
+
+		}
+		
+	}
+	
+	@EventHandler
+	public void on(TeamPlayerGainedEvent e) {
+		guiUpdate();
+	}
+	@EventHandler
+	public void of(TeamPlayerLostEvent e) {
+		guiUpdate();
+	}
+
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onRequest(RequestJoinGameEvent e) {
 		Player p = Bukkit.getPlayer(e.getPlayer().getName());

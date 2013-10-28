@@ -173,8 +173,7 @@ public class SetWarpCommand implements CommandExecutor {
 	  
 	  }
 	  
-	  public void paginate(CommandSender sender, SortedMap<Integer, String> map,
-			  int page, int pageLength, int warps) {
+	  public void paginate(CommandSender sender, SortedMap<Integer, String> map, int page, int pageLength, int warps) {
 		  
 		  	      StringBuilder sb = new StringBuilder();
 		  	      

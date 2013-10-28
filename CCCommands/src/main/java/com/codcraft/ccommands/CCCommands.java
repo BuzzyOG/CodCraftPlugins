@@ -6,9 +6,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.CodCraft.api.CCAPI;
@@ -19,7 +23,8 @@ public class CCCommands extends JavaPlugin {
 	public CCAPI api;
 	public Connection con;
 	public AntiAd cchat;
-	
+	public Chat chat;
+	public Permission permi;
 	
 
 
@@ -52,8 +57,29 @@ public class CCCommands extends JavaPlugin {
 		
 		connect();
 		Bukkit.getScheduler().runTaskTimer(this, new LeaderBoard(this), 0, 3600);
+		setupPermissions();
+		setupChat();
 		
 	}
+    private boolean setupPermissions()
+    {
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null) {
+        	permi = permissionProvider.getProvider();
+        }
+        return (permi != null);
+    }
+
+    private boolean setupChat()
+    {
+        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (chatProvider != null) {
+            chat = chatProvider.getProvider();
+        }
+
+        return (chat != null);
+    }
+	
 	
 	private boolean connect() {
 		con = null;

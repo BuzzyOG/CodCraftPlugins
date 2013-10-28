@@ -1,6 +1,7 @@
 name: CCLobbyMaker
 main: com.codcraft.lobby.CCLobby
 version: 0.1.001
+depend: [CodCraftPlayer, Vault]
 commands: 
     send:
       description: go to be f

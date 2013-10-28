@@ -21,4 +21,24 @@ commands:
       permission-message: You can't use the Admin Commands
    CSP:
       description: Got to 
-   class: 
+   class:
+      warp:
+      description: WC Warp Command
+      usage: /warp <dest> or /warp <page>
+      permission: codcraft.warp
+   w:
+      description: WC Warp Command
+      usage: /w <dest> or /w <page>
+      permission: codcraft.warp
+   remwarp:
+      description: WC Warp Command
+      usage: /remwarp <warp>
+      permission: codcraft.warp
+   delwarp:
+      description: WC Warp Command
+      usage: /delwarp <warp>
+      permission: codcraft.warp
+   setwarp:
+      description: WC Warp Command
+      usage: /setwarp <warp>
+      permission: codcraft.warp 

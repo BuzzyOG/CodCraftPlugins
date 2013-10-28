@@ -104,7 +104,7 @@ public class Lazer extends Gun {
                                         if(p.hasPermission("battleroom.diamond")) {
                                                 ItemStack it = new ItemStack(Material.DIAMOND_BARDING);
                                                 ItemMeta im = it.getItemMeta();
-                                                im.setDisplayName("Galatial Blaster");
+                                                im.setDisplayName("Glacial Blaster");
                                                 it.setItemMeta(im);
                                                 p.getInventory().addItem(it);
                                         } else if (p.hasPermission("battleroom.gold")) {
