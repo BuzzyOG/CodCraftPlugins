@@ -37,6 +37,7 @@ public class CCCommands extends JavaPlugin {
 		   }
 	    getServer().getScheduler().runTaskTimer(this, new Advertisment(), 0, 18000);
 	    getServer().getPluginManager().registerEvents(new CCListener(this), this);  
+	    getServer().getPluginManager().registerEvents(new DisguiseCommand(this), this); 
 	    YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("./plugins/CCCommands/ads.yml"));
 		double x = config.getDouble("x");
 		double y = config.getDouble("y");
