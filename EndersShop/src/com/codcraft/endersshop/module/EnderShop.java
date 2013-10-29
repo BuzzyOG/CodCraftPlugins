@@ -19,12 +19,16 @@ import com.codcraft.endersshop.shop.Item;
 public class EnderShop extends CCModule {
 	
 	private List<Item> items = new ArrayList<>();
+	public List<Material> mats = new ArrayList<Material>();
+	public List<String> lors = new ArrayList<String>();
+	 
 	private EndersShop plugin;
 
 	public EnderShop(CCAPI api, EndersShop plugin) {
 		super(api);
 		this.plugin = plugin;
 	}
+
 	
 	public Inventory requestInventory(Player p) {
 		Inventory inv = Bukkit.createInventory(null, 18, "BattleShop");

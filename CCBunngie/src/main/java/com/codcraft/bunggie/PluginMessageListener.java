@@ -29,6 +29,15 @@ public class PluginMessageListener implements Listener {
 				String format = in.readUTF();
 				plugin.utils.sendChatMessageToAllServers(sender, format);
 				return;
+			}else if(channel.equalsIgnoreCase("Teleport")) {
+				String player = in.readUTF();
+				String server = in.readUTF();
+				String world = in.readUTF();
+				String x = in.readUTF();
+				String y = in.readUTF();
+				String z = in.readUTF();
+				
+				plugin.utils.teleportAPlayerToServer(player, server, world, x, y, z);
 			}
 		} catch (IOException e2) {
 			e2.printStackTrace();

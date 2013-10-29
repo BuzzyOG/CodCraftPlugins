@@ -1,10 +1,16 @@
 package com.codcraft.endersshop;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,11 +26,13 @@ import com.CodCraft.api.modules.GameManager;
 import com.codcraft.endersshop.module.EnderShop;
 import com.codcraft.endersshop.shop.Item;
 import com.codcraft.lobby.event.PlayerToLobbyEvent;
+import com.codcraft.bunggie.*;
 
 public class EndersShop extends JavaPlugin implements Listener {
 	
 	public CCAPI api;
-
+	public Main bungee;
+	
 	public void onEnable() {
 		Plugin api = Bukkit.getPluginManager().getPlugin("CodCraftAPI");
 		if(api != null) {
@@ -47,7 +55,6 @@ public class EndersShop extends JavaPlugin implements Listener {
 		permafrost.add("Points: 25000");
 		permafrost.add("Allows to Perma-freeze one person");
 		this.api.getModuleForClass(EnderShop.class).makeItem("Permafrost", "Permafrost", 25000, "battleroom.permafrost", Material.ICE , "You now have the permafrost in game!", 3, permafrost);
-		 
 		
 		List<String> Ice = new ArrayList<>();
 		Ice.add("Points: 5000");
@@ -111,6 +118,7 @@ public class EndersShop extends JavaPlugin implements Listener {
 			}
 
 		}
+	
 	}
 
 }

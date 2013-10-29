@@ -10,13 +10,17 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.CodCraft.api.CCAPI;
+import com.CodCraft.api.modules.InventoryManager;
 import com.codcraft.cchat.AntiAd;
+import com.codcraft.ccinventory.Teleports;
 
 public class CCCommands extends JavaPlugin {
 
@@ -25,8 +29,10 @@ public class CCCommands extends JavaPlugin {
 	public AntiAd cchat;
 	public Chat chat;
 	public Permission permi;
-	
+	public static final String INCOMING_PLUGIN_CHANNEL = "CodCraftWarp";
+	public static final String OUTGOING_PLUGIN_CHANNEL = "CodCraft";
 
+	
 
 	public void onEnable() {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -40,6 +46,7 @@ public class CCCommands extends JavaPlugin {
 		   }
 	    getServer().getScheduler().runTaskTimer(this, new Advertisment(), 0, 18000);
 	    getServer().getPluginManager().registerEvents(new CCListener(this), this);  
+	    getServer().getPluginManager().registerEvents(new Teleports(this), this);  
 	    YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("./plugins/CCCommands/ads.yml"));
 		double x = config.getDouble("x");
 		double y = config.getDouble("y");
@@ -54,12 +61,13 @@ public class CCCommands extends JavaPlugin {
 		getCommand("delwarp").setExecutor(new SetWarpCommand(this));
 		getCommand("remwarp").setExecutor(new SetWarpCommand(this));
 		getCommand("w").setExecutor(new SetWarpCommand(this));
-		
+		invSetup();
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		connect();
 		Bukkit.getScheduler().runTaskTimer(this, new LeaderBoard(this), 0, 3600);
 		setupPermissions();
 		setupChat();
-		
+		registerChannels();
 	}
     private boolean setupPermissions()
     {
@@ -69,6 +77,11 @@ public class CCCommands extends JavaPlugin {
         }
         return (permi != null);
     }
+    
+    private void registerChannels() {
+        Bukkit.getMessenger().registerIncomingPluginChannel(this, INCOMING_PLUGIN_CHANNEL, new Teleportlistener(this));
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, OUTGOING_PLUGIN_CHANNEL);
+	}
 
     private boolean setupChat()
     {
@@ -93,6 +106,21 @@ public class CCCommands extends JavaPlugin {
 		}
 		return true;
 	}
+	
+	  public void invSetup(){
+	  Inventory inv = Bukkit.createInventory(null, 9, "§bTELEPORT MENU");
+	  api.getModuleForClass(InventoryManager.class).addToInv(Material.WOOL, "§b§lHUB", 0, "§9TP to the hub", 7, inv, false, "§bTELEPORT MENU");
+	  api.getModuleForClass(InventoryManager.class).addToInv(Material.BOW, "§b§lCODCRAFT", 1, "§9TP to codcraft", 1, inv, false, "§bTELEPORT MENU");
+	  api.getModuleForClass(InventoryManager.class).addToInv(Material.ICE, "§b§lFREEZE-TAG", 2, "§9TP to freeze-tag", 1, inv, false, "§bTELEPORT MENU");
+	  api.getModuleForClass(InventoryManager.class).addToInv(Material.FEATHER, "§b§lBATTLEROOM", 3, "§9TP to battleroom", 1, inv, false, "§bTELEPORT MENU");
+	  api.getModuleForClass(InventoryManager.class).addToInv(Material.FLINT, "§b§l<<---", 8, "§9§oPrevious Menu", 1, inv, true, "§bTELEPORT MENU");
+	  
+	  Teleports.itemList.add(Material.WOOL);
+	  Teleports.itemList.add(Material.BOW);
+	  Teleports.itemList.add(Material.FEATHER);
+	  Teleports.itemList.add(Material.ICE);
+	  Teleports.itemList.add(Material.FLINT);
+	  }
 	
 	
 }

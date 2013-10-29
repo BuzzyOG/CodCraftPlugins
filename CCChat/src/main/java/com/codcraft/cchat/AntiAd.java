@@ -101,7 +101,7 @@ public class AntiAd extends JavaPlugin {
     }
 	
 	  public void sendGlobalMessage(String sender, String format) {
-		  ByteArrayOutputStream b = new ByteArrayOutputStream();
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
 	    DataOutputStream out = new DataOutputStream(b);
 	    try {
 	      out.writeUTF("ChatMessage");

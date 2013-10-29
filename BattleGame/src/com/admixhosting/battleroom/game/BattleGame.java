@@ -38,7 +38,7 @@ public class BattleGame extends Game<BattleRoom> {
 	public final int xCenter = 578;
 	public final int yCenter = 122;
 	public final int zCenter = -369;
-	private boolean freezeTag;
+	private boolean freezeTag = false ;
 
 	public BattleGame(BattleRoom instance) {
 		super(instance);
@@ -101,9 +101,9 @@ public class BattleGame extends Game<BattleRoom> {
 	public void initialize() {
 		
 		WorldCreator creator = new WorldCreator(getName());
-		if(!isFreezeTag()) {
+		//if(!isFreezeTag()) {
 			setCurrentmap("Battle");
-		}
+		//}
 		addHook(new TeamHook(this));
 		if(isFreezeTag()) {
 			

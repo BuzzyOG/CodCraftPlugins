@@ -136,7 +136,10 @@ public class CCListener implements Listener {
 	public void onDrop(PlayerDropItemEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		if(gm.getGameWithPlayer(e.getPlayer()) == null) {
-			e.setCancelled(true);
+			if(!e.getPlayer().hasPermission("codcraft.build")) {
+				e.setCancelled(true);
+			}
+
 		}
 	}
 	
@@ -152,7 +155,7 @@ public class CCListener implements Listener {
 				}
 			}
 			
-			if (e.getAction() == Action.PHYSICAL && e.getPlayer().getLocation().getBlock().getType().equals(Material.STONE_PLATE)){
+			if (e.getAction() == Action.PHYSICAL && e.getPlayer().getLocation().getBlock().getType() == Material.STONE_PLATE){
 			    Vector vec = e.getPlayer().getEyeLocation().getDirection();
 			    e.getPlayer().setVelocity(vec.multiply(4));
 			    e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.GHAST_FIREBALL, 3.0F, 0.5F);

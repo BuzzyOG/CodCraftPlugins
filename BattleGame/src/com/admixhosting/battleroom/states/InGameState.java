@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
-import org.kitteh.tag.TagAPI;
 
 import com.CodCraft.api.event.GameWinEvent;
 import com.CodCraft.api.model.Game;

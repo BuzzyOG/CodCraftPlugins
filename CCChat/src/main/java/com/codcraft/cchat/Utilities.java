@@ -24,7 +24,6 @@ public class Utilities {
 			Player p = Bukkit.getPlayer(en.getKey());
 			if(p != null) {
 				continueChat(message, p, Player, en);
-					
 			}
 		}
 
