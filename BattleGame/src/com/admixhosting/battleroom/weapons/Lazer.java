@@ -197,7 +197,7 @@ public class Lazer extends Gun {
                                                                                                 Vector vec = p.getEyeLocation().getDirection();
                                                                                                 plugin2.firework.put(proj1.getUniqueId(), vec.multiply(2));
                                                                                                 proj1.setVelocity(vec.multiply(2));
-                                                                                                lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj1, Sound.ENDERDRAGON_HIT);
+                                                                                                lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj1, Sound.HORSE_BREATHE);
                                                                                         }
                                                                                 }, 6);
                                                                         } else if(p.hasPermission("battleroom.repeater")) {
@@ -210,7 +210,7 @@ public class Lazer extends Gun {
                                                                         proj = (Snowball) p.launchProjectile(Snowball.class);
                                                                         plugin2.firework.put(proj.getUniqueId(), p.getEyeLocation().getDirection().multiply(3));
                                                                         proj.setVelocity(p.getEyeLocation().getDirection().multiply(3));
-                                                                        lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj, Sound.ENDERDRAGON_HIT); // I think this is the red team?
+                                                                        lazerEffects(p, g.findTeamWithPlayer(p).getColorNew(), proj, Sound.HORSE_BREATHE); // I think this is the red team?
                                                                 }
 
 
