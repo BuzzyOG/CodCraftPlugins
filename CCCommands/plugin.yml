@@ -42,3 +42,11 @@ commands:
       description: WC Warp Command
       usage: /setwarp <warp>
       permission: codcraft.warp 
+   dis:
+      description: Dis Command
+      usage: /dis
+      permission: codcraft.dis 
+   undis:
+      description:  Undis Command
+      usage: /undis
+      permission: codcraft.dis 
