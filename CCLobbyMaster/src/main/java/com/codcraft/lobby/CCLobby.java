@@ -104,7 +104,7 @@ public class CCLobby extends JavaPlugin {
 				for(Player p : Bukkit.getOnlinePlayers()) {
 					guiUpdate();
 					Location loc1 = new Location(Bukkit.getWorld("world"), -584, 20, 450);
-					Location loc2 = new Location(Bukkit.getWorld("world"), -347, 255, 203);
+					Location loc2 = new Location(Bukkit.getWorld("world"), -347, 500, 203);
 					if(!isInside(p, loc1, loc2)) {
 						p.teleport(new Location(Bukkit.getWorld("world"), -465, 52, 327, (float) 180, (float) 0.6));
 					}

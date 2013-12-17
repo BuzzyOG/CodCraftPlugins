@@ -10,10 +10,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -22,7 +25,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.util.Vector;
 import org.kitteh.tag.PlayerReceiveNameTagEvent;
 import org.kitteh.tag.TagAPI;
 
@@ -108,6 +113,15 @@ public class LobbyListener implements Listener {
 	}
 	
 	@EventHandler
+	public void onEUJ(PlayerInteractEvent e) {
+		if (e.getAction() == Action.PHYSICAL && e.getPlayer().getLocation().getBlock().getType() == Material.STONE_PLATE){
+		    Vector vec = e.getPlayer().getEyeLocation().getDirection();
+		    e.getPlayer().setVelocity(vec.multiply(6));
+		    e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.GHAST_FIREBALL, 3.0F, 0.5F);
+		}
+	}
+	
+	@EventHandler
 	public void onUpdaye(PlayerReceiveNameTagEvent e) {
 		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
 		Game<?> g = gm.getGameWithPlayer(e.getNamedPlayer());
@@ -181,6 +195,11 @@ public class LobbyListener implements Listener {
 				}		
 			}
 		}
+	}
+	
+	@EventHandler
+	public void waterFlow(BlockFromToEvent e) {
+		e.setCancelled(true);
 	}
 	
 	@EventHandler
