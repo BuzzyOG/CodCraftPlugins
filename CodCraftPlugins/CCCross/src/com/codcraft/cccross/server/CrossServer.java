@@ -5,7 +5,10 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 
@@ -19,7 +22,7 @@ public class CrossServer implements Runnable {
 	private int port;
 	private ServerSocket ss;
 	private Thread read;
-	private List<ServerInfo> officalList = new ArrayList<>();
+	private Map<Long, ServerInfo> officalList = new HashMap<>();
 	private boolean debug = false;
 	private boolean running = false;
 	private CCCrossPlugin plugin;
@@ -40,9 +43,17 @@ public class CrossServer implements Runnable {
 			
 			@Override
 			public void run() {
-				//printDebugOfServers();
+				List<Long> longs = new ArrayList<>();
+				for(Entry<Long, ServerInfo> en : officalList.entrySet()) {
+					if(System.currentTimeMillis() - en.getKey() > 5000) {
+						longs.add(en.getKey());
+					}
+				}
+				for(Long l : longs) {
+					officalList.remove(l);
+				}
 			}
-		}, 600, 600);
+		}, 100, 100);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -80,19 +91,19 @@ public class CrossServer implements Runnable {
 							if(obj instanceof ServerInfo) {
 								ServerInfo info = (ServerInfo) obj;
 								boolean check = false;
-								ServerInfo infotoremove = null;
-								for(ServerInfo osi : officalList) {
-									if(check(info, osi)) {
-										infotoremove = osi;
+								Long infotoremove = null;
+								for(Entry<Long, ServerInfo> osi : officalList.entrySet()) {
+									if(check(info, osi.getValue())) {
+										infotoremove = osi.getKey();
 										check = true;
 									}
 								}
 								officalList.remove(infotoremove);
 								if(check) {
-									officalList.remove(info);
-									officalList.add(info);
+									officalList.remove(infotoremove);
+									officalList.put(System.currentTimeMillis(), info);
 								} else {
-									officalList.add(info);
+									officalList.put(System.currentTimeMillis(), info);
 								}
 								
 							} else {
@@ -132,7 +143,8 @@ public class CrossServer implements Runnable {
 	}
 	
 	public void printDebugOfServers() {
-		for(ServerInfo info : officalList) {
+		for(Entry<Long, ServerInfo> en : officalList.entrySet()) {
+			ServerInfo info = en.getValue();
 			System.out.println("======ServerInfo======");
 			System.out.println("Address: " + info.getAddress());
 			System.out.println("BungeeID: " + info.getBungeeid());
