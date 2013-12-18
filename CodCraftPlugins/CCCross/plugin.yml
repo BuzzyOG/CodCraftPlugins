@@ -1,0 +1,4 @@
+name: CCCross
+main: com.codcraft.cccross.CCCrossPlugin
+version: 0.0.001
+depend: [CodCraftAPI]
