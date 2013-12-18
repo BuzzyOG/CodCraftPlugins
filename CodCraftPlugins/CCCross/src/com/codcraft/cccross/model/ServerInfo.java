@@ -41,6 +41,11 @@ public class ServerInfo implements Serializable {
 
 	
 	
+	public ServerInfo(String id, String bid) {
+		this.id = id;
+		this.bungeeid = bid;
+	}
+
 	//Getters and setters
 	public String getName() {
 		return name;

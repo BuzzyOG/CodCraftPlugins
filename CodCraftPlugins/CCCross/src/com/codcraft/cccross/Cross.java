@@ -1,31 +1,17 @@
 package com.codcraft.cccross;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
 import java.net.Inet4Address;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.CodCraft.api.CCAPI;
-import com.CodCraft.api.model.Game;
-import com.CodCraft.api.model.GameState;
-import com.CodCraft.api.model.Team;
-import com.CodCraft.api.model.TeamPlayer;
-import com.CodCraft.api.model.hook.Hook;
-import com.CodCraft.api.modules.GameManager;
 import com.CodCraft.api.services.CCModule;
-import com.codcraft.cccross.model.GameInfo;
 import com.codcraft.cccross.model.ServerInfo;
 import com.codcraft.cccross.server.CrossServer;
 
@@ -37,11 +23,12 @@ import com.codcraft.cccross.server.CrossServer;
 public class Cross extends CCModule {
 	
 	private ServerInfo serverinfo;
-	private Map<String, GameInfo> gameInfos = new HashMap<>();
 	//Null inless server is being run.
 	private CrossServer server = null;
 	private CCCrossPlugin plugin;
 	private Socket sock;
+	private String id;
+	private String bid;
 
 	public Cross(CCCrossPlugin plugin, CCAPI api) {
 		super(api);
@@ -69,7 +56,7 @@ public class Cross extends CCModule {
 		if(runServer) {
 			String hostname = config.getString("serverHost");
 			int port = Integer.parseInt(config.getString("serverPort"));
-			server = new CrossServer(hostname, port);
+			server = new CrossServer(plugin, hostname, port);
 			try {
 				server.start();
 			} catch (IOException e) {
@@ -78,13 +65,22 @@ public class Cross extends CCModule {
 		}
 		
 		//Host for the master connection
-		String host = config.getString("host");
+		final String host = config.getString("host");
 		//Port for the connect to the master
-		String port = config.getString("port");
+		final String port = config.getString("port");
 		//Username for the conection
 		String username = config.getString("username");
 		//Password for the connection
 		String password = config.getString("password");
+		
+		
+		
+		//ID
+		String id = config.getString("id");
+		this.id = id;
+		//BunngeeID
+		String bid = config.getString("bungeeid");
+		this.bid = bid;
 		if(validConnectionSetting(host, port, username, password) != null) {
 			throw new IllegalArgumentException("Bad setting... " + validConnectionSetting(host, port, username, password));
 		}
@@ -99,29 +95,26 @@ public class Cross extends CCModule {
 				
 			}
 		}, 0, 20);
-		generateServerInfo();
-		try {
-			sock = new Socket(host, isInt(port));
-			ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
-			System.out.println("Pause 1 sec");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					sock = new Socket(host, isInt(port));
+					ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
+					out.writeByte(1);
+					out.writeObject(serverinfo);
+					out.flush();
+					sock.close();
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
 			}
-			System.out.println("Done waiting!");
-			out.writeByte(1);
-			System.out.println("Sending this object over " + serverinfo);
-			out.writeObject(serverinfo);
-			out.flush();
-			sock.close();
-			System.out.println("Got here");
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		}, 0, 60);
+
 	}
 	
 	private String validConnectionSetting(String host, String port, String username, String password) {
@@ -148,7 +141,7 @@ public class Cross extends CCModule {
 	}
 	
 	private void generateServerInfo() {
-		ServerInfo info = new ServerInfo();
+		ServerInfo info = new ServerInfo(id, bid);
 		info.gen(api);
 		serverinfo = info;
 	}
