@@ -54,7 +54,7 @@ public class LobbyState implements GameState {
 			public void run() {
 				if (duration >= 1) {
 					duration--;
-					ScoreBoard SB = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
+					ScoreBoard SB = game.getPlugin().getApi().getModuleForClass(ScoreBoard.class);
 			        int seconds = getGame().getCurrentState().getTimeLeft() % 60;
 			        String seconds1 = "";
 			        if (seconds < 10) {
@@ -64,7 +64,7 @@ public class LobbyState implements GameState {
 			        }
 			        int minutes = getGame().getCurrentState().getTimeLeft() / 60;
 			        SB.getObjectiveForGame(LobbyState.this.getGame()).setDisplayName(ChatColor.GRAY + "Pre Game " + minutes + ":" + seconds1);
-					LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
+					LobbyModule lm = game.getPlugin().getApi().getModuleForClass(LobbyModule.class);
 					Lobby l = lm.getLobby(game.getName());
 					if(l != null) {
 						lm.UpdateSign(lm.getLobby(getGame().getName()));
@@ -81,7 +81,7 @@ public class LobbyState implements GameState {
 						game.Map1 = game.getMaps().get(rnd.nextInt(game.getMaps().size()));
 					}
 					if(duration == 5) {
-						Broadcast b = game.getPlugin().api.getModuleForClass(Broadcast.class);
+						Broadcast b = game.getPlugin().getApi().getModuleForClass(Broadcast.class);
 						b.BroadCastMessage(getGame(), "Current Votes!");
 						b.BroadCastMessage(getGame(), game.Map1.getName()+": "+ game.map1);
 						b.BroadCastMessage(getGame(), game.Map2.getName()+": "+ game.map2);

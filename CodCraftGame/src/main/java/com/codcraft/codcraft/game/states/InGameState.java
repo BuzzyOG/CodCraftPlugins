@@ -50,9 +50,9 @@ public class InGameState implements GameState {
 			public void run() {
 				if(duration >= 1) {
 					duration--;
-					LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
+					LobbyModule lm = game.getPlugin().getApi().getModuleForClass(LobbyModule.class);
 					lm.UpdateSign(lm.getLobby(getGame().getName()));
-					ScoreBoard SB = game.getPlugin().api.getModuleForClass(ScoreBoard.class);
+					ScoreBoard SB = game.getPlugin().getApi().getModuleForClass(ScoreBoard.class);
 			        int seconds = InGameState.this.getGame().getCurrentState().getTimeLeft() % 60;
 			        String seconds1 = "";
 			        if (seconds < 10) {

@@ -127,7 +127,7 @@ public class CodCraftFFA extends CCGamePlugin {
 	
 	
 	@Override
-	public void makegame(String[] name) {
+	public void makeGame(String[] name) {
 		GameManager manger = this.api.getModuleForClass(GameManager.class);
 		FFAGame game = new FFAGame(this);
 	    game.setName(name[0]);

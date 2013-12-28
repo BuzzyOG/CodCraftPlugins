@@ -73,7 +73,7 @@ public class DiamondRun extends CCGamePlugin {
 	}
 
 	@Override
-	public void makegame(String[] name) {
+	public void makeGame(String[] name) {
 		DRGame game = new DRGame(this);
 		game.setName(name[0]);
 		api.getModuleForClass(GameManager.class).registerGame(game);

@@ -437,7 +437,7 @@ public class BattleRoom extends CCGamePlugin {
 	}
 
 	@Override
-	public void makegame(String[] args) {
+	public void makeGame(String[] args) {
 		BattleGame game = new BattleGame(this);
 		game.setName(args[0]);
 		api.getModuleForClass(GameManager.class).registerGame(game);

@@ -110,7 +110,7 @@ public class CodCraftInfected extends CCGamePlugin {
 	
 	
 	@Override
-	public void makegame(String[] name) {
+	public void makeGame(String[] name) {
 		GameManager manger = this.api.getModuleForClass(GameManager.class);
 		InfectedGame game = new InfectedGame(this);
 	    game.setName(name[0]);

@@ -58,7 +58,7 @@ public class KOTL extends CCGamePlugin {
 	}
 
 	@Override
-	public void makegame(String[] args) {
+	public void makeGame(String[] args) {
 	}
 
 }

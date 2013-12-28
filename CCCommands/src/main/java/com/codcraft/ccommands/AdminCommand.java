@@ -192,7 +192,7 @@ public class AdminCommand implements CommandExecutor {
 				Plugin plug = Bukkit.getPluginManager().getPlugin(args[1]);
 				if(plug instanceof CCGamePlugin) {
 					String[] args1 = {args[2]};
-					((CCGamePlugin)plug).makegame(args1);
+					((CCGamePlugin)plug).makeGame(args1);
 					
 				}
 				return true;

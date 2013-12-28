@@ -75,7 +75,7 @@ public class CCMM extends CCGamePlugin {
 	}
 
 	@Override
-	public void makegame(String[] args) {
+	public void makeGame(String[] args) {
 		GameManager gm = api.getModuleForClass(GameManager.class);
 		MapMaker mm = new MapMaker(this);
 		mm.setName(args[0]);

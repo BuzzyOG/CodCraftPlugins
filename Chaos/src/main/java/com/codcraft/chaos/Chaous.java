@@ -24,7 +24,7 @@ public class Chaous extends CCGamePlugin {
 	}
 
 	@Override
-	public void makegame(String[] name) {
+	public void makeGame(String[] name) {
 		// TODO Auto-generated method stub
 		
 	}

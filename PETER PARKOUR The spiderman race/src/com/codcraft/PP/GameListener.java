@@ -60,7 +60,7 @@ public class GameListener implements Listener {
 	public void onHurt(EntityDamageEvent e) {
 		if(e.getEntity() instanceof Player) {
 			Player p = (Player) e.getEntity();
-			GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+			GameManager gm = plugin.getApi().getModuleForClass(GameManager.class);
 			Game<?> g = gm.getGameWithPlayer(p);
 			if(g != null) {
 				if(g.getPlugin() == plugin) {
@@ -72,7 +72,7 @@ public class GameListener implements Listener {
 	
 	@EventHandler
 	public void onIn(final PlayerInteractEvent e) {
-		GameManager gm = plugin.api.getModuleForClass(GameManager.class);
+		GameManager gm = plugin.getApi().getModuleForClass(GameManager.class);
 		Game<?> g = gm.getGameWithPlayer(e.getPlayer());
 		if(g != null) {
 			if(g.getPlugin() == plugin) {

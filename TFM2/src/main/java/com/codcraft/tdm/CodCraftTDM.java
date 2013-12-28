@@ -117,7 +117,7 @@ public class CodCraftTDM extends CCGamePlugin {
 	
 	
 	@Override
-	public void makegame(String[] name) {
+	public void makeGame(String[] name) {
 		GameManager manger = this.api.getModuleForClass(GameManager.class);
 		TDMGame game = new TDMGame(this);
 	    game.setName(name[0]);

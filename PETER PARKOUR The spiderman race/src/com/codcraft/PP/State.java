@@ -37,7 +37,7 @@ public class State implements GameState {
 			
 			@Override
 			public void run() {
-				LobbyModule lm = game.getPlugin().api.getModuleForClass(LobbyModule.class);
+				LobbyModule lm = game.getPlugin().getApi().getModuleForClass(LobbyModule.class);
 				lm.UpdateSign(lm.getLobby(game.getName()));
 				
 			}

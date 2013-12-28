@@ -15,6 +15,7 @@ public class CCCrossPlugin extends JavaPlugin {
 		if(plug != null) {
 			api = (CCAPI) plug;
 		}
+		getLogger().info("Registering the Module!");
 		api.registerModule(Cross.class, new Cross(this, api));
 	}
 

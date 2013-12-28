@@ -81,7 +81,7 @@ public class PlotMe extends CCGamePlugin {
 		return pmi;
 	}
 	@Override
-	public void makegame(String[] string) {
+	public void makeGame(String[] string) {
 		PlotMeGame game = new PlotMeGame(this);
 		game.setName(string[0]);
 		api.getModuleForClass(GameManager.class).registerGame(game);

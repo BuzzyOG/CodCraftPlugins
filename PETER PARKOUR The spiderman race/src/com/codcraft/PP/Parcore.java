@@ -8,7 +8,6 @@ import com.CodCraft.api.services.CCGamePlugin;
 public class Parcore extends CCGamePlugin {
 	
 	public void onEnable() {
-		super.onEnable();
 		getServer().getPluginManager().registerEvents(new GameListener(this), this);
 		day();
 	}
@@ -31,10 +30,10 @@ public class Parcore extends CCGamePlugin {
 	}
 
 	@Override
-	public void makegame(String[] args) {
+	public void makeGame(String[] args) {
 		PPGame game = new PPGame(this);
 		game.setName(args[0]);
-		api.getModuleForClass(GameManager.class).registerGame(game);
+		getApi().getModuleForClass(GameManager.class).registerGame(game);
 	}
 
 }
