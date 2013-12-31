@@ -112,12 +112,13 @@ public class CCCommands extends JavaPlugin {
 	
 	
 	public void invSetup(Player p) {
-		Inv inv = api.getModuleForClass(InventoryManager.class).createInventory("TelportList");
+		Inv inv = new Inv("TelportList");
 		inv.addItem(new CCItem(this, Material.WOOL, "§b§lHUB", 0, "§9TP to the hub", 7, false), p);
 		inv.addItem(new CCItem(this, Material.BOW, "§b§lCODCRAFT", 1, "§9TP to CodCraft", 1, false), p);
 		inv.addItem(new CCItem(this, Material.ICE, "§b§lFREEZE-TAG", 2, "§9TP to freeze-tag", 1, false), p);
 		inv.addItem(new CCItem(this, Material.FEATHER, "§b§1BATTLEROOM", 3, "§9TP to battleroom", 3, false), p);
 		inv.addItem(new CCItem(this, Material.FLINT, "§b§l<<---", 8, "§9§oPrevious Menu", 1, false), p);
+		api.getModuleForClass(InventoryManager.class).createInventory("TelportList", inv);
 	}
 	
 	
