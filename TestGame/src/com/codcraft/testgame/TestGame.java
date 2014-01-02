@@ -11,7 +11,9 @@ public class TestGame extends Game<TestMain> {
 
 	@Override
 	public void initialize() {
-		// TODO Auto-generated method stub
+		knownStates.put(new TestState(this).getId(), new TestState(this));
+		setState(new TestState(this));
+		addHook(new TestHook(this));
 		
 	}
 
