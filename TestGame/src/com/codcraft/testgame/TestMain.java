@@ -6,7 +6,7 @@ import com.CodCraft.api.services.CCGamePlugin;
 public class TestMain extends CCGamePlugin {
 	
 	public void onEnable() {
-		getServer().getPluginManager().registerEvents(new TestListener(), this);
+		getServer().getPluginManager().registerEvents(new TestListener(this), this);
 	}
 
 	@Override
